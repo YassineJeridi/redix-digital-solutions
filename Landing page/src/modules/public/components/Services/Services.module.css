@@ -1,0 +1,280 @@
+/* Services.module.css */
+/* Premium Services Section — Infinite Carousel */
+
+.section {
+  padding: 5rem 0;
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+}
+
+.section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 20% 20%, rgba(193, 45, 224, 0.04) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 40% at 80% 80%, rgba(120, 23, 182, 0.03) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Header ── */
+.header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  max-width: 750px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.title {
+  font-size: clamp(2.75rem, 5.5vw, 4rem);
+  font-weight: 800;
+  color: var(--text-heading, white);
+  margin-bottom: 1.5rem;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  background: linear-gradient(135deg, var(--text-heading, #ffffff) 0%, var(--text-body, rgba(255, 255, 255, 0.85)) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-size: 1.2rem;
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.8;
+}
+
+/* ── Carousel ── */
+.carouselContainer {
+  position: relative;
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navArrow {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.7);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+  z-index: 10;
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.navArrow:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(193, 45, 224, 0.3);
+  color: white;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+  transform: scale(1.08);
+}
+
+.navArrow:active {
+  transform: scale(0.95);
+}
+
+.track {
+  flex: 1;
+  display: flex;
+  gap: 1.75rem;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1.5rem 0;
+  min-height: 520px;
+  align-items: stretch;
+}
+
+.cardSlot {
+  flex: 0 0 calc(33.333% - 1.2rem);
+  max-width: 400px;
+  min-width: 280px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Indicators ── */
+.indicators {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin-top: 2.5rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.35s ease;
+}
+
+.dot:hover {
+  background: rgba(255, 255, 255, 0.35);
+  transform: scale(1.2);
+}
+
+.dotActive {
+  background: linear-gradient(135deg, #c12de0, #7817b6);
+  width: 28px;
+  border-radius: 6px;
+  box-shadow: 0 0 16px rgba(193, 45, 224, 0.4);
+}
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2.5rem;
+  margin-top: 3rem;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.legendDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+/* ── Responsive ── */
+@media (max-width: 1100px) {
+  .cardSlot {
+    flex: 0 0 calc(50% - 0.875rem);
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 4rem 0;
+  }
+
+  .container {
+    padding: 0 1rem;
+  }
+
+  .title {
+    font-size: clamp(2rem, 6vw, 2.5rem);
+  }
+
+  .navArrow {
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
+  }
+
+  .track {
+    min-height: 480px;
+    gap: 1rem;
+  }
+
+  .cardSlot {
+    flex: 0 0 100%;
+    max-width: 380px;
+  }
+
+  .indicators {
+    margin-top: 2rem;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .dotActive {
+    width: 24px;
+  }
+
+  .legend {
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .section {
+    padding: 3rem 0;
+  }
+
+  .navArrow {
+    width: 40px;
+    height: 40px;
+    font-size: 1rem;
+  }
+
+  .cardSlot {
+    min-width: 260px;
+  }
+
+  .legend {
+    flex-direction: column;
+    gap: 0.875rem;
+  }
+}
+
+/* ── Light Mode ── */
+[data-public-theme="light"] .navArrow {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #4a4a6a;
+  backdrop-filter: none;
+}
+
+[data-public-theme="light"] .navArrow:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #1a1a2e;
+  border-color: rgba(120, 23, 182, 0.2);
+}
+
+[data-public-theme="light"] .dot {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+[data-public-theme="light"] .dot:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+[data-public-theme="light"] .dotActive {
+  background: linear-gradient(135deg, #c12de0, #7817b6);
+}
+
+[data-public-theme="light"] .legendItem {
+  color: #4a4a6a;
+}

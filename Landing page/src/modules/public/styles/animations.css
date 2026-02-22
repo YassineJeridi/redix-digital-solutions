@@ -1,0 +1,504 @@
+/* src/styles/animations.css */
+/* Premium Animation Library - Marketing Agency */
+/* All interaction durations: 150ms–400ms for fluid, consistent feel */
+
+/* ─── Global keyframes (150–400ms) ───────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes overlayOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+@keyframes modalContentIn {
+  from {
+    opacity: 0;
+    transform: scale(0.96) translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes modalContentOut {
+  from {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.96) translateY(16px);
+  }
+}
+
+@keyframes scalePress {
+  to { transform: scale(0.97); }
+}
+
+@keyframes dropdownIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes dropdownOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes cardReveal {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Keyframe Animations - Smoother Easing */
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes zoomInUp {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Premium Glow Pulse */
+@keyframes glowPulse {
+  0%, 100% {
+    opacity: 0.6;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.1);
+  }
+}
+
+/* Shimmer Effect for Badges */
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
+}
+
+/* Float Animation - More Subtle */
+@keyframes floatSubtle {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+/* Gradient Shift */
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}@keyframes bounce {
+  0%, 20%, 53%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40%, 43% {
+    transform: translateY(-15px);
+  }
+  70% {
+    transform: translateY(-7px);
+  }
+  90% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(193, 45, 224, 0.4);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(193, 45, 224, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(193, 45, 224, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(193, 45, 224, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(193, 45, 224, 0.6);
+  }
+}
+
+@keyframes typing {
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Utility Animation Classes (150–400ms) */
+.animate-fade-in {
+  animation: fadeIn var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-fade-in-left {
+  animation: fadeInLeft var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-fade-in-right {
+  animation: fadeInRight var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-slide-in-up {
+  animation: slideInUp var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-slide-in-down {
+  animation: slideInDown var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-zoom-in {
+  animation: zoomIn var(--anim-normal) var(--ease-smooth);
+}
+
+.animate-zoom-in-up {
+  animation: zoomInUp var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-modal-overlay {
+  animation: overlayIn var(--anim-normal) var(--ease-smooth);
+}
+
+.animate-modal-content {
+  animation: modalContentIn var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-dropdown {
+  animation: dropdownIn var(--anim-fast) var(--ease-smooth);
+}
+
+.animate-card-reveal {
+  animation: cardReveal var(--anim-medium) var(--ease-smooth);
+}
+
+.animate-page-in {
+  animation: pageFadeIn var(--anim-normal) var(--ease-smooth);
+}
+
+.animate-bounce {
+  animation: bounce 2s infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-rotate {
+  animation: rotate 2s linear infinite;
+}
+
+.animate-shake {
+  animation: shake 0.5s ease-in-out;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+.animate-gradient {
+  background: linear-gradient(-45deg, #c12de0, #e856ff, #c12de0, #9f1cc9);
+  background-size: 400% 400%;
+  animation: gradient 3s ease infinite;
+}
+
+/* Delay Classes */
+.animate-delay-100 { animation-delay: 0.1s; }
+.animate-delay-200 { animation-delay: 0.2s; }
+.animate-delay-300 { animation-delay: 0.3s; }
+.animate-delay-400 { animation-delay: 0.4s; }
+.animate-delay-500 { animation-delay: 0.5s; }
+.animate-delay-600 { animation-delay: 0.6s; }
+.animate-delay-700 { animation-delay: 0.7s; }
+.animate-delay-800 { animation-delay: 0.8s; }
+.animate-delay-900 { animation-delay: 0.9s; }
+.animate-delay-1000 { animation-delay: 1s; }
+
+/* Duration Classes */
+.animate-fast { animation-duration: 0.3s; }
+.animate-slow { animation-duration: 1.2s; }
+.animate-slower { animation-duration: 2s; }
+
+/* Hover & interaction (150–400ms) */
+.hover-float:hover {
+  transform: translateY(-4px);
+  transition: transform var(--anim-normal) var(--ease-smooth);
+}
+
+.hover-scale:hover {
+  transform: scale(1.03);
+  transition: transform var(--anim-normal) var(--ease-smooth);
+}
+
+.hover-rotate:hover {
+  transform: rotate(3deg);
+  transition: transform var(--anim-normal) var(--ease-smooth);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(193, 45, 224, 0.5);
+  transition: box-shadow var(--anim-normal) var(--ease-smooth);
+}
+
+.hover-pulse:hover {
+  animation: pulse 1s ease-in-out;
+}
+
+/* Click feedback – use on buttons/cards */
+.interact-press:active {
+  transform: scale(0.98);
+  transition: transform var(--anim-fast) var(--ease-smooth);
+}
+
+/* Loading Animations */
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(193, 45, 224, 0.1);
+  border-left-color: var(--primary-color);
+  border-radius: 50%;
+  animation: rotate 1s linear infinite;
+}
+
+.loading-dots::after {
+  content: '';
+  animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  40% {
+    color: var(--primary-color);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  60% {
+    text-shadow:
+      .25em 0 0 var(--primary-color),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 var(--primary-color),
+      .5em 0 0 var(--primary-color);
+  }
+}
+
+/* Intersection Observer Animations */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity var(--anim-smooth) var(--ease-smooth), transform var(--anim-smooth) var(--ease-smooth);
+}
+
+.animate-on-scroll.animated {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Reduced Motion Support */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

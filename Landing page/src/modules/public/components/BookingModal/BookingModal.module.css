@@ -1,0 +1,501 @@
+/* BookingModal.module.css */
+/* Two-Column Booking Modal — Floating Labels */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 1.5rem;
+}
+
+.modal {
+  position: relative;
+  width: 100%;
+  max-width: 860px;
+  background: rgba(12, 12, 28, 0.95);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(193, 45, 224, 0.08);
+}
+
+.modal::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(193, 45, 224, 0.4), transparent);
+}
+
+.closeBtn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+  z-index: 5;
+}
+
+.closeBtn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* ── Two-Column Layout ── */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  min-height: 480px;
+}
+
+/* ── Left: Form Side ── */
+.formSide {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.formHeader {
+  margin-bottom: 1.8rem;
+}
+
+.modalTitle {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.4rem;
+}
+
+.modalSubtitle {
+  font-size: 0.88rem;
+  color: rgba(255, 255, 255, 0.45);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Form ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+/* ── Floating Label Groups ── */
+.floatingGroup {
+  position: relative;
+}
+
+.floatingInput {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.2rem 1rem 0.5rem;
+  font-size: 0.92rem;
+  color: white;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+  box-sizing: border-box;
+}
+
+.floatingInput:focus {
+  border-color: #c12de0;
+  box-shadow: 0 0 0 3px rgba(193, 45, 224, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.floatingLabel {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.floatingInput:focus ~ .floatingLabel,
+.floatingInput.filled ~ .floatingLabel {
+  top: 0.55rem;
+  transform: translateY(0);
+  font-size: 0.7rem;
+  color: #c12de0;
+  font-weight: 600;
+}
+
+.textareaLabel {
+  top: 1.2rem;
+  transform: translateY(0);
+}
+
+.floatingInput:focus ~ .textareaLabel,
+.floatingInput.filled ~ .textareaLabel {
+  top: 0.45rem;
+}
+
+.floatingSelect {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+.floatingSelect option {
+  background: #1a1a2e;
+  color: white;
+}
+
+.floatingTextarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Error States */
+.hasError .floatingInput {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.hasError .floatingInput:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.fieldError {
+  display: block;
+  font-size: 0.72rem;
+  color: #ef4444;
+  margin-top: 0.3rem;
+  padding-left: 0.25rem;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  color: #fca5a5;
+  font-size: 0.82rem;
+}
+
+/* ── Submit Button ── */
+.submitBtn {
+  width: 100%;
+  background: linear-gradient(135deg, #c12de0, #7817b6);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  padding: 0.9rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.submitBtn:hover:not(:disabled) {
+  box-shadow: 0 8px 28px rgba(193, 45, 224, 0.4);
+  transform: translateY(-2px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.spin {
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Right: Summary Side ── */
+.summarySide {
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.12), rgba(120, 23, 182, 0.08));
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.summarySide::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(193, 45, 224, 0.1) 0%, transparent 70%);
+  top: -60px;
+  right: -60px;
+  pointer-events: none;
+}
+
+.summaryContent {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.summaryIllustration {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+}
+
+.glowOrb {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(193, 45, 224, 0.25) 0%, rgba(120, 23, 182, 0.08) 60%, transparent 100%);
+  animation: orbPulse 3s ease-in-out infinite;
+}
+
+@keyframes orbPulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+
+.summaryMainIcon {
+  position: absolute;
+  font-size: 2.2rem;
+  color: #c12de0;
+  filter: drop-shadow(0 0 16px rgba(193, 45, 224, 0.5));
+}
+
+.summaryTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: white;
+  margin: 0 0 0.5rem;
+}
+
+.summaryDesc {
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.5);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.summaryFeatures {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  margin-bottom: 1.5rem;
+}
+
+.summaryFeature {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.featureIcon {
+  color: #c12de0;
+  font-size: 0.8rem;
+  flex-shrink: 0;
+}
+
+.summaryStats {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.statItem {
+  text-align: center;
+}
+
+.statNum {
+  display: block;
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #c12de0;
+}
+
+.statLabel {
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.4);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ── Success State ── */
+.successState {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.successPulse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  animation: pulseSuccess 1.5s ease-in-out infinite;
+}
+
+@keyframes pulseSuccess {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.08); }
+}
+
+.successIcon {
+  font-size: 3.5rem;
+  color: #10b981;
+  filter: drop-shadow(0 0 24px rgba(16, 185, 129, 0.5));
+}
+
+.successState h3 {
+  color: white;
+  font-size: 1.5rem;
+  margin: 1rem 0 0.5rem;
+}
+
+.successState p {
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+/* ── Light Mode ── */
+[data-public-theme="light"] .modal {
+  background: rgba(255, 255, 255, 0.97);
+  border-color: rgba(0, 0, 0, 0.06);
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.12);
+}
+
+[data-public-theme="light"] .modalTitle {
+  color: #1a1a2e;
+}
+
+[data-public-theme="light"] .modalSubtitle {
+  color: #6b7280;
+}
+
+[data-public-theme="light"] .floatingInput {
+  background: rgba(0, 0, 0, 0.02);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #1a1a2e;
+}
+
+[data-public-theme="light"] .floatingInput:focus {
+  border-color: #7817b6;
+  box-shadow: 0 0 0 3px rgba(120, 23, 182, 0.08);
+}
+
+[data-public-theme="light"] .floatingLabel {
+  color: rgba(0, 0, 0, 0.4);
+}
+
+[data-public-theme="light"] .floatingInput:focus ~ .floatingLabel,
+[data-public-theme="light"] .floatingInput.filled ~ .floatingLabel {
+  color: #7817b6;
+}
+
+[data-public-theme="light"] .floatingSelect option {
+  background: #ffffff;
+  color: #1a1a2e;
+}
+
+[data-public-theme="light"] .closeBtn {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.08);
+  color: #4a4a6a;
+}
+
+[data-public-theme="light"] .summarySide {
+  background: linear-gradient(135deg, rgba(120, 23, 182, 0.06), rgba(193, 45, 224, 0.04));
+  border-left-color: rgba(0, 0, 0, 0.06);
+}
+
+[data-public-theme="light"] .summaryTitle {
+  color: #1a1a2e;
+}
+
+[data-public-theme="light"] .summaryDesc {
+  color: #6b7280;
+}
+
+[data-public-theme="light"] .summaryFeature {
+  color: #374151;
+}
+
+[data-public-theme="light"] .statLabel {
+  color: #6b7280;
+}
+
+[data-public-theme="light"] .successState h3 {
+  color: #1a1a2e;
+}
+
+[data-public-theme="light"] .successState p {
+  color: #6b7280;
+}
+
+[data-public-theme="light"] .summaryStats {
+  border-top-color: rgba(0, 0, 0, 0.06);
+}
+
+/* ── Responsive ── */
+@media (max-width: 700px) {
+  .modal {
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
+  .twoCol {
+    grid-template-columns: 1fr;
+  }
+
+  .summarySide {
+    display: none;
+  }
+
+  .formSide {
+    padding: 2rem 1.5rem;
+  }
+
+  .modalTitle {
+    font-size: 1.35rem;
+  }
+}

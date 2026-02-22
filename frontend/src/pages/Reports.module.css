@@ -1,0 +1,464 @@
+.container {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.exportBtns {
+    display: flex;
+    gap: 10px;
+}
+
+.csvBtn, .pdfBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.csvBtn {
+    background: #10b981;
+    color: white;
+}
+
+.pdfBtn {
+    background: #ef4444;
+    color: white;
+}
+
+.csvBtn:hover, .pdfBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.csvBtn:disabled, .pdfBtn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Filters */
+.filtersBar {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    padding: 20px;
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filterItem {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 140px;
+}
+
+.filterItem label {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+}
+
+.filterItem input, .filterItem select {
+    padding: 8px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 13px;
+    background: var(--card-bg, white);
+}
+
+.filterItem input:focus, .filterItem select:focus {
+    border-color: var(--primary-color);
+    outline: none;
+}
+
+.applyBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 18px;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    height: 38px;
+}
+
+.applyBtn:hover {
+    opacity: 0.9;
+}
+
+/* Tabs */
+.tabs {
+    display: flex;
+    gap: 4px;
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: var(--shadow);
+    margin-bottom: 24px;
+    overflow-x: auto;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border: none;
+    border-radius: 10px;
+    background: transparent;
+    color: var(--text-light);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.tab:hover {
+    background: var(--light-bg);
+    color: var(--text-dark);
+}
+
+.tabActive {
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+}
+
+.tabActive:hover {
+    color: white;
+}
+
+.tabContent {
+    animation: fadeIn 0.3s ease;
+}
+
+/* Summary Grid */
+.summaryGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.summaryCard {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.summaryCard:hover {
+    transform: translateY(-3px);
+}
+
+.sumLabel {
+    display: block;
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.sumValue {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Chart Card */
+.chartCard {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+}
+
+.chartCard h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.pieWrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    align-items: start;
+}
+
+/* Table */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+}
+
+.table thead {
+    background: var(--light-bg);
+}
+
+.table th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-light);
+    text-transform: uppercase;
+}
+
+.table td {
+    padding: 14px 16px;
+    font-size: 14px;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:hover {
+    background: rgba(193, 45, 224, 0.03);
+}
+
+.clientTable {
+    align-self: center;
+}
+
+.dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.amount {
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.memberName {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Profitability */
+.profitGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+}
+
+.profitCard {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.profitCard h4 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+
+.profitValue {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+/* Payments / Aging */
+.agingGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.agingCard {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    text-align: center;
+}
+
+.agingCard h4 {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.agingValue {
+    font-size: 22px;
+    font-weight: 700;
+    color: #10b981;
+}
+
+.paymentSummary {
+    padding: 20px;
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 30px;
+    font-size: 15px;
+    color: var(--text-dark);
+}
+
+/* Tools */
+.toolsGrid {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.toolItem {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+}
+
+.toolInfo {
+    min-width: 140px;
+}
+
+.toolInfo h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.toolPercent {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 600;
+}
+
+.toolBar {
+    flex: 1;
+    height: 8px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.toolBarFill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width 0.5s ease;
+}
+
+.toolAmount {
+    font-weight: 700;
+    color: var(--text-dark);
+    font-size: 14px;
+    min-width: 100px;
+    text-align: right;
+}
+
+/* Loading */
+.loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 400px;
+    gap: 16px;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--border-color);
+    border-top-color: var(--primary-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.noData {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@media (max-width: 768px) {
+    .filtersBar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterItem {
+        min-width: 100%;
+    }
+
+    .tabs {
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+
+    .pieWrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .summaryGrid, .profitGrid, .agingGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .paymentSummary {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

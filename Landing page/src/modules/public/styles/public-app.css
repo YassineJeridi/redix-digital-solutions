@@ -1,0 +1,44 @@
+/* Premium Chat Button - Marketing Agency */
+.chat-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 56px;
+    height: 56px;
+    background: var(--primary-gradient);
+    border: none;
+    border-radius: 50%;
+    color: white;
+    font-size: 1.375rem;
+    cursor: pointer;
+    box-shadow: 
+        0 8px 24px rgba(168, 85, 247, 0.35),
+        0 0 0 1px rgba(168, 85, 247, 0.2);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chat-button:hover {
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 
+        0 12px 32px rgba(168, 85, 247, 0.5),
+        0 0 0 1px rgba(168, 85, 247, 0.3);
+}
+
+.chat-button:active {
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .chat-button {
+        width: 52px;
+        height: 52px;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        font-size: 1.25rem;
+    }
+}

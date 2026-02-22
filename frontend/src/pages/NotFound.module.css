@@ -1,0 +1,204 @@
+.container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #0a0b10;
+    color: #e5e7eb;
+    position: relative;
+    overflow: hidden;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Background glow blobs */
+.glowA {
+    position: absolute;
+    top: -120px;
+    left: -120px;
+    width: 480px;
+    height: 480px;
+    background: radial-gradient(circle, rgba(193, 45, 224, 0.18) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+.glowB {
+    position: absolute;
+    bottom: -80px;
+    right: -80px;
+    width: 360px;
+    height: 360px;
+    background: radial-gradient(circle, rgba(120, 23, 182, 0.14) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+}
+
+/* Main content */
+.content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    text-align: center;
+    z-index: 1;
+}
+
+.code {
+    font-size: clamp(96px, 20vw, 160px);
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, #c12de0 0%, #7817b6 60%, rgba(193, 45, 224, 0.3) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -4px;
+    user-select: none;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 600;
+    color: #e5e7eb;
+    margin: 0;
+}
+
+.subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    max-width: 320px;
+    line-height: 1.6;
+}
+
+/* Lock / passkey area */
+.lockArea {
+    position: fixed;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 10;
+}
+
+/* Passkey input box */
+.passkeyBox {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(26, 29, 46, 0.85);
+    border: 1px solid rgba(193, 45, 224, 0.25);
+    border-radius: 40px;
+    padding: 8px 8px 8px 18px;
+    backdrop-filter: blur(12px);
+    animation: slideUp 0.25s ease;
+    position: relative;
+}
+
+.passkeyInput {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: #e5e7eb;
+    font-size: 14px;
+    width: 180px;
+    letter-spacing: 2px;
+}
+
+.passkeyInput::placeholder {
+    letter-spacing: 0;
+    color: #4b5563;
+}
+
+.passkeyBtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.2s;
+}
+
+.passkeyBtn:hover:not(:disabled) {
+    opacity: 0.85;
+    transform: scale(1.05);
+}
+
+.passkeyBtn:disabled {
+    opacity: 0.5;
+    cursor: default;
+    transform: none;
+}
+
+.errorMsg {
+    position: absolute;
+    bottom: -24px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #ef4444;
+    white-space: nowrap;
+}
+
+/* Lock icon button */
+.lockBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(30, 34, 53, 0.7);
+    border: 1px solid rgba(193, 45, 224, 0.18);
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.25s, color 0.25s, background 0.25s;
+    backdrop-filter: blur(8px);
+}
+
+.lockBtn svg {
+    width: 18px;
+    height: 18px;
+    pointer-events: none;
+}
+
+.lockBtn:hover {
+    border-color: rgba(193, 45, 224, 0.5);
+    color: #c12de0;
+    background: rgba(193, 45, 224, 0.08);
+    transform: none;
+    opacity: 1;
+}
+
+.lockActive {
+    border-color: rgba(193, 45, 224, 0.5);
+    color: #c12de0;
+    background: rgba(193, 45, 224, 0.1);
+}
+
+/* Animations */
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.shake {
+    animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    15%       { transform: translateX(-6px); }
+    35%       { transform: translateX(6px); }
+    55%       { transform: translateX(-4px); }
+    75%       { transform: translateX(4px); }
+}

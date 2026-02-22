@@ -1,0 +1,155 @@
+.page {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+}
+
+.settingsGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 24px;
+}
+
+.card {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+}
+
+.cardTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.field label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-light);
+    text-transform: uppercase;
+}
+
+.field input,
+.field select {
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.field input:focus,
+.field select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(193, 45, 224, 0.08);
+}
+
+.saveBtn {
+    padding: 12px 24px;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    align-self: flex-start;
+}
+
+.saveBtn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+.aboutContent {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.appName {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.version {
+    font-size: 13px;
+    color: var(--primary-color);
+    font-weight: 600;
+    background: rgba(193, 45, 224, 0.08);
+    padding: 4px 12px;
+    border-radius: 20px;
+    display: inline-block;
+    width: fit-content;
+}
+
+.desc {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.6;
+}
+
+.links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.link {
+    padding: 8px 14px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-dark);
+    font-weight: 500;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (max-width: 768px) {
+    .settingsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.cardDesc {
+    font-size: 13.5px;
+    color: var(--text-muted, #6b7280);
+    margin: -8px 0 14px;
+    line-height: 1.5;
+}
+
+.errorMsg {
+    color: #dc2626;
+    font-size: 13px;
+    font-weight: 500;
+    margin: 0;
+}

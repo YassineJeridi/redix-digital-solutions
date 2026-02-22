@@ -1,0 +1,337 @@
+.page {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+}
+
+.statusGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.statusCard {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.statusCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+.statusIcon {
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+}
+
+.statusIcon.success {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+.statusIcon.failed {
+    background: rgba(239, 68, 68, 0.12);
+    color: #ef4444;
+}
+
+.statusIcon.pending {
+    background: rgba(234, 179, 8, 0.12);
+    color: #eab308;
+}
+
+.statusIcon.info {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+}
+
+.statusInfo h3 {
+    font-size: 13px;
+    color: var(--text-light);
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.statusInfo p {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text-dark);
+}
+
+.statusInfo p.small {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.statusInfo .sub {
+    font-size: 12px;
+    color: var(--text-light);
+    margin-top: 2px;
+    display: block;
+}
+
+/* Action section */
+.actionSection {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 32px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+}
+
+.actionInfo h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 8px;
+}
+
+.actionInfo p {
+    font-size: 14px;
+    color: var(--text-light);
+    max-width: 500px;
+    line-height: 1.6;
+}
+
+.triggerBtn {
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s;
+    white-space: nowrap;
+}
+
+.triggerBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(193, 45, 224, 0.35);
+}
+
+.triggerBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.triggerBtn .spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    top: 80px;
+    right: 24px;
+    padding: 14px 24px;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 14px;
+    z-index: 2000;
+    animation: slideInRight 0.3s ease-out;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.toast.success {
+    background: #22c55e;
+    color: white;
+}
+
+.toast.error {
+    background: #ef4444;
+    color: white;
+}
+
+/* History table */
+.historySection {
+    background: var(--card-bg, white);
+    border-radius: 14px;
+    box-shadow: var(--shadow);
+    padding: 24px;
+}
+
+.historySection h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.historyTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.historyTable thead th {
+    text-align: left;
+    padding: 12px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    color: var(--text-light);
+    background: var(--table-header-bg, linear-gradient(135deg, #f8fafc, #f1f5f9));
+    border-bottom: 2px solid var(--border-color);
+}
+
+.historyTable thead th:first-child {
+    border-radius: 10px 0 0 0;
+}
+
+.historyTable thead th:last-child {
+    border-radius: 0 10px 0 0;
+}
+
+.historyTable tbody td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-dark);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.historyTable tbody tr:hover {
+    background: var(--hover-bg, rgba(0, 0, 0, 0.02));
+}
+
+.badge {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge.manual {
+    background: rgba(99, 102, 241, 0.12);
+    color: #6366f1;
+}
+
+.badge.scheduled {
+    background: rgba(34, 197, 94, 0.12);
+    color: #22c55e;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 40px;
+    color: var(--text-light);
+    font-size: 14px;
+}
+
+.emptyState .emptyIcon {
+    font-size: 48px;
+    margin-bottom: 12px;
+    opacity: 0.4;
+}
+
+/* Loading skeleton */
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 60px;
+    color: var(--text-light);
+    font-size: 16px;
+    gap: 12px;
+}
+
+.loading .spinner {
+    width: 24px;
+    height: 24px;
+    border: 3px solid rgba(193, 45, 224, 0.2);
+    border-top-color: #c12de0;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+}
+
+/* Telegram info */
+.telegramInfo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.telegramInfo .telegramIcon {
+    color: #0088cc;
+    font-size: 16px;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+@keyframes slideInRight {
+    from { opacity: 0; transform: translateX(40px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+/* Dark mode overrides */
+:global([data-theme='dark']) .statusCard:hover {
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+:global([data-theme='dark']) .historyTable tbody tr:hover {
+    background: rgba(255, 255, 255, 0.04);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .statusGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .actionSection {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .actionInfo p {
+        max-width: 100%;
+    }
+}

@@ -1,0 +1,30 @@
+.layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--light-bg);
+}
+
+.main {
+    flex: 1;
+    margin-left: 260px;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.main.collapsedMain {
+    margin-left: 64px;
+}
+
+.content {
+    padding: 24px;
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

@@ -1,0 +1,43 @@
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+// ─── Theme ───
+import { ThemeProvider } from './context/ThemeContext';
+
+// ─── Public module imports ───
+import PublicLayout from './modules/public/PublicLayout';
+import Home from './modules/public/pages/Home';
+import Furniture from './modules/public/pages/Furniture';
+import Travel from './modules/public/pages/Travel';
+import Fashion from './modules/public/pages/Fashion';
+import Chef from './modules/public/pages/Chef';
+import NotFound from './modules/public/pages/NotFound';
+
+function App() {
+    return (
+        <ThemeProvider>
+            <Router
+                future={{
+                    v7_startTransition: true,
+                    v7_relativeSplatPath: true,
+                }}
+            >
+                <Routes>
+                    {/* ──────── PUBLIC WEBSITE ROUTES ──────── */}
+                    <Route element={<PublicLayout />}>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/furniture" element={<Furniture />} />
+                        <Route path="/travel" element={<Travel />} />
+                        <Route path="/fashion" element={<Fashion />} />
+                        <Route path="/chef" element={<Chef />} />
+                    </Route>
+
+                    {/* ──────── CATCH-ALL 404 ──────── */}
+                    <Route path="*" element={<NotFound />} />
+                </Routes>
+            </Router>
+        </ThemeProvider>
+    );
+}
+
+export default App;

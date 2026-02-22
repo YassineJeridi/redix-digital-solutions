@@ -1,0 +1,114 @@
+/* src/components/LoadingScreen/LoadingScreen.module.css */
+
+.loadingScreen {
+  position: fixed;
+  inset: 0;
+  background: var(--dark-bg, #0a0a0a);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.loadingScreen::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(193, 45, 224, 0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+  position: relative;
+  z-index: 1;
+}
+
+.logoContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo {
+  width: 120px;
+  height: auto;
+  position: relative;
+  z-index: 2;
+  filter: drop-shadow(0 0 30px rgba(193, 45, 224, 0.4));
+}
+
+.glowRing {
+  position: absolute;
+  width: 180px;
+  height: 180px;
+  border-radius: 50%;
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  background: radial-gradient(circle, rgba(193, 45, 224, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.loadingBar {
+  width: 200px;
+  height: 2px;
+  background: rgba(193, 45, 224, 0.15);
+  border-radius: 100px;
+  overflow: hidden;
+}
+
+.loadingProgress {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(193, 45, 224, 0.5), #c12de0, rgba(193, 45, 224, 0.5));
+  border-radius: 100px;
+}
+
+.loadingText {
+  font-size: 0.8rem;
+  color: rgba(193, 45, 224, 0.6);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(193, 45, 224, 0.5);
+  border-radius: 50%;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .logo {
+    width: 80px;
+  }
+
+  .glowRing {
+    width: 140px;
+    height: 140px;
+  }
+
+  .loadingBar {
+    width: 150px;
+  }
+
+  .loadingText {
+    font-size: 0.7rem;
+  }
+}

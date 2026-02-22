@@ -1,0 +1,633 @@
+/* src/components/DevProject/ProjectModal/ProjectModal.module.css */
+
+.modalBackdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.95);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    padding: 2rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    animation: overlayIn var(--anim-normal) var(--ease-smooth);
+}
+
+.modalContainer {
+    background: rgba(10, 10, 10, 0.98);
+    border: 1px solid rgba(193, 45, 224, 0.2);
+    border-radius: 30px;
+    max-width: 1200px;
+    width: 100%;
+    max-height: 95vh;
+    overflow-y: auto;
+    position: relative;
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    box-shadow:
+        0 40px 80px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(193, 45, 224, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    animation: modalContentIn var(--anim-smooth) var(--ease-smooth);
+}
+
+/* Header */
+.modalHeader {
+    padding: 2rem 2rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.headerContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 2rem;
+    padding-bottom: 2rem;
+}
+
+.titleSection {
+    flex: 1;
+}
+
+.titleSection h2 {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: white;
+    margin: 0 0 0.5rem 0;
+    background: linear-gradient(135deg, #ffffff 0%, var(--primary-color) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    color: var(--primary-color);
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.featuredBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-top: 1rem;
+    box-shadow: 0 4px 15px rgba(193, 45, 224, 0.4);
+}
+
+.closeButton {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.closeButton:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+/* Gallery Section */
+.gallerySection {
+    padding: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mainImageContainer {
+    position: relative;
+    width: 100%;
+    height: 500px;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 1.5rem;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.mainImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.fullscreenBtn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 50px;
+    height: 50px;
+    background: rgba(0, 0, 0, 0.7);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.fullscreenBtn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.navBtn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 60px;
+    height: 60px;
+    background: rgba(0, 0, 0, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(15px);
+}
+
+.prevBtn {
+    left: 1rem;
+}
+
+.nextBtn {
+    right: 1rem;
+}
+
+.navBtn:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Thumbnail Navigation */
+.thumbnailNav {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 100%;
+    overflow-x: auto;
+    padding: 0.5rem 0;
+}
+
+.thumbnail {
+    position: relative;
+    width: 100px;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+}
+
+.thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.thumbnail:hover {
+    border-color: rgba(193, 45, 224, 0.5);
+    transform: translateY(-2px);
+}
+
+.thumbnail.active {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(193, 45, 224, 0.3);
+}
+
+.mainLabel {
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Content Section */
+.contentSection {
+    padding: 2rem;
+}
+
+/* Info Grid */
+.infoGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.infoCard {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    backdrop-filter: blur(10px);
+}
+
+.infoCard h4 {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.detailsList {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.detail:last-child {
+    border-bottom: none;
+}
+
+.detail span:first-child {
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+}
+
+.detail span:last-child {
+    color: white;
+    font-weight: 600;
+}
+
+.metricsGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+}
+
+.metricItem {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(193, 45, 224, 0.1);
+    border-radius: 15px;
+    border: 1px solid rgba(193, 45, 224, 0.2);
+}
+
+.metricValue {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-color);
+    margin-bottom: 0.25rem;
+}
+
+.metricLabel {
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Description */
+.description {
+    margin-bottom: 2rem;
+}
+
+.description h4 {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.description p {
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.8;
+    font-size: 1.1rem;
+}
+
+/* Technologies */
+.techSection {
+    margin-bottom: 2rem;
+}
+
+.techSection h4 {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.techGrid {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+}
+
+.techBadge {
+    background: rgba(193, 45, 224, 0.15);
+    border: 1px solid rgba(193, 45, 224, 0.3);
+    color: var(--primary-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+}
+
+.techBadge:hover {
+    background: rgba(193, 45, 224, 0.25);
+    transform: translateY(-2px);
+}
+
+/* Features */
+.featuresSection {
+    margin-bottom: 3rem;
+}
+
+.featuresSection h4 {
+    color: white;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+.featuresList {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.featureItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    color: rgba(255, 255, 255, 0.9);
+    transition: all 0.3s ease;
+}
+
+.featureItem:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(193, 45, 224, 0.3);
+    transform: translateY(-2px);
+}
+
+.featureIcon {
+    width: 24px;
+    height: 24px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    font-weight: 700;
+    flex-shrink: 0;
+}
+
+/* Action Section */
+.actionSection {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    flex-wrap: wrap;
+}
+
+.primaryBtn,
+.secondaryBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.primaryBtn {
+    background: var(--primary-color);
+    color: white;
+    border: 2px solid var(--primary-color);
+}
+
+.primaryBtn:hover {
+    background: transparent;
+    color: var(--primary-color);
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(193, 45, 224, 0.4);
+}
+
+.secondaryBtn {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.secondaryBtn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-3px);
+}
+
+.screenshotsBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 2px solid rgba(251, 191, 36, 0.3);
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+/* Fullscreen Modal */
+.fullscreenModal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.98);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 4000;
+    cursor: zoom-out;
+}
+
+.fullscreenImage {
+    max-width: 95%;
+    max-height: 95%;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.fullscreenClose {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    color: white;
+    cursor: pointer;
+    font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.fullscreenClose:hover {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    transform: rotate(90deg);
+}
+
+/* Responsive Design */
+@media (max-width: 968px) {
+    .modalContainer {
+        margin: 1rem;
+        max-height: calc(100vh - 2rem);
+    }
+
+    .infoGrid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .mainImageContainer {
+        height: 300px;
+    }
+
+    .metricsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .featuresList {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .modalBackdrop {
+        padding: 1rem;
+    }
+
+    .modalContainer {
+        border-radius: 20px;
+    }
+
+    .modalHeader,
+    .gallerySection,
+    .contentSection {
+        padding: 1.5rem;
+    }
+
+    .headerContent {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .titleSection h2 {
+        font-size: 2rem;
+    }
+
+    .mainImageContainer {
+        height: 250px;
+    }
+
+    .thumbnail {
+        width: 80px;
+        height: 48px;
+    }
+
+    .actionSection {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .primaryBtn,
+    .secondaryBtn,
+    .screenshotsBtn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .thumbnailNav {
+        gap: 0.5rem;
+    }
+
+    .thumbnail {
+        width: 60px;
+        height: 36px;
+    }
+
+    .navBtn {
+        width: 50px;
+        height: 50px;
+    }
+
+    .prevBtn {
+        left: 0.5rem;
+    }
+
+    .nextBtn {
+        right: 0.5rem;
+    }
+}

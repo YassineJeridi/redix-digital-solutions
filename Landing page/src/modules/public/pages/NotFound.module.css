@@ -1,0 +1,478 @@
+/* ============================================
+   STEALTH 404 PAGE — "Signal Lost" Theme
+   Hidden gateway to admin dashboard
+   ============================================ */
+
+.notFoundPage {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  overflow: hidden;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ---- Animated scanlines ---- */
+.scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(193, 45, 224, 0.015) 2px,
+    rgba(193, 45, 224, 0.015) 4px
+  );
+  pointer-events: none;
+  z-index: 1;
+  animation: scanMove 8s linear infinite;
+}
+
+@keyframes scanMove {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(4px); }
+}
+
+/* ---- Grid background ---- */
+.gridBg {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(193, 45, 224, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(193, 45, 224, 0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ---- Floating particles ---- */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.particle {
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: rgba(193, 45, 224, 0.6);
+  border-radius: 50%;
+  animation: floatParticle 6s ease-in-out infinite;
+  box-shadow: 0 0 6px rgba(193, 45, 224, 0.4);
+}
+
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.4; }
+  50% { transform: translateY(-30px) scale(1.5); opacity: 1; }
+}
+
+/* ---- Glowing orbs ---- */
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.15;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, #c12de0, transparent 70%);
+  top: -10%;
+  left: -10%;
+  animation: orbFloat1 12s ease-in-out infinite;
+}
+
+.orb2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, #7817b6, transparent 70%);
+  bottom: -10%;
+  right: -10%;
+  animation: orbFloat2 15s ease-in-out infinite;
+}
+
+.orb3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, #a020c0, transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbFloat3 10s ease-in-out infinite;
+}
+
+@keyframes orbFloat1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(40px, 30px); }
+}
+@keyframes orbFloat2 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-40px, -30px); }
+}
+@keyframes orbFloat3 {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.2); }
+}
+
+/* ---- Main content ---- */
+.content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  padding: 2rem;
+  max-width: 700px;
+}
+
+/* ---- Glitch 404 text ---- */
+.glitchWrapper {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+
+.errorCode {
+  font-size: clamp(6rem, 15vw, 12rem);
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.05em;
+  line-height: 1;
+  text-shadow:
+    0 0 20px rgba(193, 45, 224, 0.5),
+    0 0 60px rgba(193, 45, 224, 0.2);
+  animation: glitchText 4s ease-in-out infinite;
+  user-select: none;
+}
+
+/* The hidden period — THIS is the trigger */
+.hiddenTrigger {
+  cursor: default; /* intentionally default to avoid suspicion */
+  color: #c12de0;
+  position: relative;
+  display: inline-block;
+  transition: text-shadow 0.3s ease;
+}
+
+
+/* Glitch pseudo-elements */
+.errorCode::before,
+.errorCode::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.errorCode::before {
+  color: #ff2d5f;
+  animation: glitchBefore 3s ease-in-out infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
+}
+
+.errorCode::after {
+  color: #00f0ff;
+  animation: glitchAfter 3s ease-in-out infinite;
+  clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
+}
+
+@keyframes glitchText {
+  0%, 90%, 100% { transform: none; }
+  92% { transform: skewX(-2deg) translateX(2px); }
+  94% { transform: skewX(3deg) translateX(-3px); }
+  96% { transform: skewX(-1deg) translateX(1px); }
+}
+
+@keyframes glitchBefore {
+  0%, 80%, 100% { transform: translate(0); opacity: 0; }
+  82% { transform: translate(-4px, -2px); opacity: 0.7; }
+  84% { transform: translate(4px, 2px); opacity: 0.7; }
+  86% { transform: translate(-2px, 1px); opacity: 0; }
+}
+
+@keyframes glitchAfter {
+  0%, 85%, 100% { transform: translate(0); opacity: 0; }
+  87% { transform: translate(4px, 2px); opacity: 0.7; }
+  89% { transform: translate(-4px, -2px); opacity: 0.7; }
+  91% { transform: translate(2px, -1px); opacity: 0; }
+}
+
+/* ---- Subtitle ---- */
+.subtitle {
+  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.description {
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 2.5rem;
+  line-height: 1.6;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- "Go Home" button ---- */
+.homeBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 2rem;
+  background: linear-gradient(135deg, #c12de0, #7817b6);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 20px rgba(193, 45, 224, 0.3);
+  text-decoration: none;
+}
+
+.homeBtn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(193, 45, 224, 0.5);
+}
+
+.homeBtn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ---- Access Denied flash ---- */
+.accessDenied {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  animation: deniedFlash 1.5s ease forwards;
+  pointer-events: none;
+}
+
+.deniedText {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  font-weight: 900;
+  color: #ff2d5f;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  text-shadow:
+    0 0 20px rgba(255, 45, 95, 0.6),
+    0 0 60px rgba(255, 45, 95, 0.3);
+  animation: deniedGlitch 0.3s steps(2) 3;
+}
+
+@keyframes deniedFlash {
+  0% { background: rgba(255, 45, 95, 0.15); opacity: 1; }
+  70% { background: rgba(255, 45, 95, 0.05); opacity: 1; }
+  100% { background: transparent; opacity: 0; }
+}
+
+@keyframes deniedGlitch {
+  0% { transform: translate(0); }
+  25% { transform: translate(-5px, 3px) skewX(-5deg); }
+  50% { transform: translate(5px, -3px) skewX(5deg); }
+  75% { transform: translate(-3px, -2px); }
+  100% { transform: translate(0); }
+}
+
+/* ---- Terminal Modal ---- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(5, 5, 16, 0.85);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  animation: overlayIn 0.3s ease;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.terminal {
+  background: #0a0b14;
+  border: 1px solid rgba(193, 45, 224, 0.25);
+  border-radius: 12px;
+  width: min(480px, 90vw);
+  box-shadow:
+    0 0 40px rgba(193, 45, 224, 0.1),
+    0 20px 60px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  animation: terminalIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes terminalIn {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.terminalHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(193, 45, 224, 0.06);
+  border-bottom: 1px solid rgba(193, 45, 224, 0.15);
+}
+
+.terminalDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.dotRed { background: #ff5f57; }
+.dotYellow { background: #febc2e; }
+.dotGreen { background: #28c840; }
+
+.terminalTitle {
+  margin-left: 8px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  letter-spacing: 0.05em;
+}
+
+.terminalBody {
+  padding: 1.5rem;
+}
+
+.terminalLine {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.85rem;
+}
+
+.prompt {
+  color: #c12de0;
+  margin-right: 0.5rem;
+  user-select: none;
+}
+
+.lineText {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.inputLine {
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+.terminalInput {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #00f0ff;
+  font-family: inherit;
+  font-size: 0.9rem;
+  caret-color: #c12de0;
+  padding: 0;
+}
+
+.terminalInput::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.inputError {
+  color: #ff2d5f !important;
+  animation: inputShake 0.4s ease;
+}
+
+@keyframes inputShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-8px); }
+  40% { transform: translateX(8px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+.errorLine {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  color: #ff2d5f;
+  animation: fadeInError 0.3s ease;
+}
+
+@keyframes fadeInError {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.successLine {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+  font-size: 0.8rem;
+  color: #28c840;
+  animation: fadeInError 0.3s ease;
+}
+
+.loadingDots::after {
+  content: '';
+  animation: dots 1.2s steps(4) infinite;
+}
+
+@keyframes dots {
+  0% { content: ''; }
+  25% { content: '.'; }
+  50% { content: '..'; }
+  75% { content: '...'; }
+}
+
+/* ---- Close hint ---- */
+.closeHint {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.7rem;
+  color: rgba(255, 255, 255, 0.2);
+  font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
+}
+
+.closeHint kbd {
+  background: rgba(255, 255, 255, 0.08);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.65rem;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 480px) {
+  .content {
+    padding: 1.5rem;
+  }
+  .terminal {
+    width: 95vw;
+  }
+}

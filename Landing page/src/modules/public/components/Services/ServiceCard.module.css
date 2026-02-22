@@ -1,0 +1,534 @@
+/* ServiceCard.module.css */
+/* Premium Service Card — Glassmorphism + Overflow-Safe */
+
+.card {
+  position: relative;
+  width: 100%;
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow: hidden;
+  transition: transform var(--anim-smooth) var(--ease-smooth), border-color var(--anim-smooth) var(--ease-smooth), box-shadow var(--anim-smooth) var(--ease-smooth), background var(--anim-smooth) var(--ease-smooth);
+  cursor: pointer;
+  z-index: 1;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card:active {
+  transform: scale(0.99);
+}
+
+/* Top-edge shimmer (hidden by default, revealed on hover) */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent);
+  opacity: 0;
+  transition: opacity var(--anim-smooth) var(--ease-smooth);
+}
+
+.card:hover {
+  border-color: rgba(193, 45, 224, 0.35);
+  background: var(--glass-bg-hover);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(193, 45, 224, 0.1);
+  transform: translateY(-2px);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* ── Most Popular Card ── */
+.card.popular {
+  border-color: rgba(193, 45, 224, 0.3);
+  background: linear-gradient(
+    160deg,
+    rgba(193, 45, 224, 0.1) 0%,
+    rgba(120, 23, 182, 0.05) 40%,
+    var(--glass-bg) 100%
+  );
+  box-shadow:
+    0 8px 32px rgba(193, 45, 224, 0.12),
+    0 0 0 1px rgba(193, 45, 224, 0.12);
+}
+
+.card.popular:hover {
+  border-color: rgba(193, 45, 224, 0.55);
+  box-shadow:
+    0 20px 56px rgba(193, 45, 224, 0.2),
+    0 0 0 1px rgba(193, 45, 224, 0.2),
+    0 0 60px rgba(193, 45, 224, 0.08);
+}
+
+/* Inner gradient glow for popular — stays within border-radius */
+.card.popular::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  background: linear-gradient(
+    135deg,
+    rgba(193, 45, 224, 0.06) 0%,
+    transparent 50%
+  );
+  pointer-events: none;
+  z-index: 0;
+  animation: innerGlow 3s ease-in-out infinite;
+}
+
+@keyframes innerGlow {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ── Common Card ── */
+.card.common {
+  border-color: rgba(255, 255, 255, 0.06);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.04) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+}
+
+.card.common:hover {
+  border-color: rgba(255, 255, 255, 0.18);
+  box-shadow:
+    0 16px 48px rgba(0, 0, 0, 0.25),
+    0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ── Badges ── */
+.popularBadge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: linear-gradient(135deg, #c12de0, #7817b6);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  box-shadow: 0 4px 20px rgba(193, 45, 224, 0.35);
+  z-index: 5;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  pointer-events: none;
+  animation: badgePulse 2.5s ease-in-out infinite;
+}
+
+.popularBadge svg {
+  color: #fbbf24;
+  filter: drop-shadow(0 0 3px rgba(251, 191, 36, 0.5));
+}
+
+@keyframes badgePulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(193, 45, 224, 0.35); }
+  50% { box-shadow: 0 4px 28px rgba(193, 45, 224, 0.55); }
+}
+
+.commonBadge {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  padding: 0.45rem 1rem;
+  border-radius: 100px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  z-index: 5;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  pointer-events: none;
+}
+
+/* ── Icon ── */
+.iconWrapper {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  z-index: 1;
+}
+
+.iconGlow {
+  position: absolute;
+  inset: -8px;
+  border-radius: 24px;
+  background: radial-gradient(circle, rgba(193, 45, 224, 0.2) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.card:hover .iconGlow {
+  opacity: 1;
+}
+
+.card.popular .iconGlow {
+  opacity: 0.6;
+  background: radial-gradient(circle, rgba(193, 45, 224, 0.3) 0%, transparent 70%);
+}
+
+.card.popular:hover .iconGlow {
+  opacity: 1;
+}
+
+.iconContainer {
+  position: relative;
+  width: 68px;
+  height: 68px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.85rem;
+  color: rgba(255, 255, 255, 0.85);
+  transition: all 0.4s ease;
+  z-index: 1;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+}
+
+.card.popular .iconContainer {
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.18), rgba(120, 23, 182, 0.08));
+  border-color: rgba(193, 45, 224, 0.25);
+  color: #c12de0;
+  box-shadow: 0 8px 24px rgba(193, 45, 224, 0.15);
+}
+
+.card.common .iconContainer {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.card:hover .iconContainer {
+  transform: scale(1.06) rotate(2deg);
+  border-color: rgba(193, 45, 224, 0.2);
+  color: white;
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.18);
+}
+
+/* ── Content ── */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.title {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-heading, white);
+  margin: 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.description {
+  color: var(--text-secondary, rgba(255, 255, 255, 0.55));
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Pricing */
+.pricing {
+  display: flex;
+  align-items: center;
+  margin: 0.25rem 0;
+}
+
+.price {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-body, rgba(255, 255, 255, 0.85));
+  padding: 0.45rem 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* Features */
+.features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.features li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-body, rgba(255, 255, 255, 0.7));
+  font-size: 0.9rem;
+}
+
+.features li svg {
+  width: 14px;
+  height: 14px;
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.card.popular .features li svg {
+  color: #c12de0;
+}
+
+.card.common .features li svg {
+  color: rgba(255, 255, 255, 0.4);
+}
+
+/* ── Button ── */
+.btn {
+  width: 100%;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  color: white;
+  padding: 1rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.7rem;
+  transition: all 0.35s ease;
+  margin-top: auto;
+  position: relative;
+  z-index: 2;
+}
+
+.btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(255, 255, 255, 0.95);
+  color: #0a0a12;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 28px rgba(255, 255, 255, 0.12);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.card.popular .btn {
+  background: linear-gradient(135deg, #c12de0, #7817b6);
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 6px 20px rgba(193, 45, 224, 0.3);
+}
+
+.card.popular .btn:hover {
+  background: linear-gradient(135deg, #d65aec, #c12de0);
+  box-shadow: 0 12px 36px rgba(193, 45, 224, 0.45);
+  transform: translateY(-2px);
+}
+
+.card.common .btn {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.03));
+}
+
+.card.common .btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0a0a12;
+  box-shadow: 0 10px 28px rgba(255, 255, 255, 0.12);
+}
+
+.btn svg {
+  transition: transform 0.3s ease;
+}
+
+.btn:hover svg {
+  transform: translateX(4px);
+}
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+  .card {
+    padding: 2rem 1.5rem;
+  }
+
+  .title {
+    font-size: 1.25rem;
+  }
+
+  .description {
+    font-size: 0.9rem;
+  }
+
+  .iconWrapper {
+    width: 58px;
+    height: 58px;
+  }
+
+  .iconContainer {
+    width: 58px;
+    height: 58px;
+    font-size: 1.55rem;
+    border-radius: 16px;
+  }
+
+  .btn {
+    padding: 0.9rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .card {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .popularBadge,
+  .commonBadge {
+    padding: 0.4rem 0.875rem;
+    font-size: 0.65rem;
+  }
+
+  .features li {
+    font-size: 0.85rem;
+  }
+
+  .iconWrapper {
+    width: 52px;
+    height: 52px;
+  }
+
+  .iconContainer {
+    width: 52px;
+    height: 52px;
+    font-size: 1.4rem;
+  }
+}
+
+/* ── Light Mode Overrides ── */
+[data-public-theme="light"] .card {
+  background: #ffffff !important;
+  border: 1px solid rgba(0, 0, 0, 0.06) !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.04) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+[data-public-theme="light"] .card:hover {
+  background: #ffffff !important;
+  border-color: rgba(120, 23, 182, 0.18) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.07), 0 0 0 1px rgba(120, 23, 182, 0.06) !important;
+}
+
+[data-public-theme="light"] .card.popular {
+  border-color: rgba(193, 45, 224, 0.15) !important;
+  background: linear-gradient(160deg, rgba(193, 45, 224, 0.03), #ffffff) !important;
+  box-shadow: 0 4px 24px rgba(193, 45, 224, 0.08), 0 0 0 1px rgba(193, 45, 224, 0.08) !important;
+}
+
+[data-public-theme="light"] .card.popular:hover {
+  border-color: rgba(193, 45, 224, 0.3) !important;
+  box-shadow: 0 12px 40px rgba(193, 45, 224, 0.12), 0 0 0 1px rgba(193, 45, 224, 0.12) !important;
+}
+
+[data-public-theme="light"] .card.popular::after {
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.04), transparent 50%) !important;
+}
+
+[data-public-theme="light"] .title {
+  color: #1a1a2e !important;
+  -webkit-text-fill-color: #1a1a2e !important;
+}
+
+[data-public-theme="light"] .description {
+  color: #4a4a6a !important;
+}
+
+[data-public-theme="light"] .features li {
+  color: #4a4a6a !important;
+}
+
+[data-public-theme="light"] .features li svg {
+  color: #7817b6 !important;
+}
+
+[data-public-theme="light"] .card.popular .features li svg {
+  color: #c12de0 !important;
+}
+
+[data-public-theme="light"] .iconGlow {
+  background: radial-gradient(circle, rgba(120, 23, 182, 0.1) 0%, transparent 70%) !important;
+}
+
+[data-public-theme="light"] .iconContainer {
+  background: rgba(120, 23, 182, 0.05) !important;
+  border-color: rgba(120, 23, 182, 0.1) !important;
+  color: #7817b6 !important;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04) !important;
+}
+
+[data-public-theme="light"] .card.popular .iconContainer {
+  background: rgba(193, 45, 224, 0.07) !important;
+  border-color: rgba(193, 45, 224, 0.12) !important;
+  color: #c12de0 !important;
+}
+
+[data-public-theme="light"] .price {
+  background: rgba(120, 23, 182, 0.04) !important;
+  border-color: rgba(120, 23, 182, 0.08) !important;
+  color: #1a1a2e !important;
+}
+
+[data-public-theme="light"] .btn {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border: 1px solid rgba(0, 0, 0, 0.08) !important;
+  color: #1a1a2e !important;
+}
+
+[data-public-theme="light"] .btn:hover {
+  background: #1a1a2e !important;
+  color: white !important;
+}
+
+[data-public-theme="light"] .card.popular .btn {
+  background: linear-gradient(135deg, #c12de0, #7817b6) !important;
+  border-color: transparent !important;
+  color: white !important;
+}
+
+[data-public-theme="light"] .popularBadge {
+  color: white !important;
+  -webkit-text-fill-color: white !important;
+}
+
+[data-public-theme="light"] .commonBadge {
+  background: rgba(0, 0, 0, 0.03) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #4a4a6a !important;
+}

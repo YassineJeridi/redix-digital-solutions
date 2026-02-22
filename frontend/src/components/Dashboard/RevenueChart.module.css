@@ -1,0 +1,26 @@
+.chartContainer {
+    background: var(--card-bg, white);
+    border-radius: 12px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    animation: fadeIn 0.7s ease-in;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: var(--text-dark);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

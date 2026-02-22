@@ -1,0 +1,698 @@
+/* src/components/Portfolio/PortfolioGallery.module.css */
+/* PREMIUM FURNITURE GALLERY DESIGN */
+
+.gallery {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+/* ==================== HEADER SECTION ==================== */
+.header {
+  text-align: center;
+  margin-bottom: 4rem;
+  position: relative;
+}
+
+.header::after {
+  content: '';
+  position: absolute;
+  bottom: -2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #c12de0, transparent);
+}
+
+.headerIcon {
+  font-size: 4rem;
+  margin-bottom: 1.5rem;
+  display: inline-block;
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 20px rgba(193, 45, 224, 0.5));
+  animation: iconPulse 3s ease-in-out infinite;
+}
+
+@keyframes iconPulse {
+  0%, 100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(193, 45, 224, 0.5)); }
+  50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(193, 45, 224, 0.7)); }
+}
+
+.header h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #ffffff 0%, #c12de0 50%, #7817b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  position: relative;
+}
+
+.header p {
+  font-size: 1.25rem;
+  color: rgba(255, 255, 255, 0.6);
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+/* ==================== STATS SECTION ==================== */
+.stats {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+  margin-bottom: 3rem;
+  padding: 2rem;
+}
+
+.stat {
+  text-align: center;
+  position: relative;
+  padding: 1.5rem 2.5rem;
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.1) 0%, rgba(120, 23, 182, 0.05) 100%);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.stat:hover {
+  transform: translateY(-5px);
+  border-color: #c12de0;
+  box-shadow: 
+    0 20px 40px rgba(193, 45, 224, 0.2),
+    0 0 30px rgba(193, 45, 224, 0.1);
+}
+
+.statNumber {
+  display: block;
+  font-size: 3rem;
+  font-weight: 800;
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1;
+}
+
+.statLabel {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-top: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ==================== TABS SECTION ==================== */
+.tabs {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 3rem;
+  padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 20px;
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 2.5rem;
+  background: transparent;
+  border: none;
+  border-radius: 16px;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.tab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 16px;
+}
+
+.tab:hover {
+  color: white;
+}
+
+.tab:hover::before {
+  opacity: 0.15;
+}
+
+.tab svg {
+  font-size: 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.tab span {
+  position: relative;
+  z-index: 1;
+}
+
+.activeTab {
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%) !important;
+  color: white !important;
+  box-shadow: 
+    0 10px 30px rgba(193, 45, 224, 0.4),
+    0 0 40px rgba(193, 45, 224, 0.2);
+  transform: scale(1.02);
+}
+
+.activeTab::before {
+  opacity: 0 !important;
+}
+
+/* ==================== FILTER SECTION ==================== */
+.filterContainer {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 3rem;
+  flex-wrap: wrap;
+  padding: 0 1rem;
+}
+
+.filterBtn {
+  padding: 0.85rem 1.75rem;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(193, 45, 224, 0.2);
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.filterBtn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.filterBtn:hover {
+  border-color: #c12de0;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(193, 45, 224, 0.2);
+}
+
+.filterBtn:hover::before {
+  opacity: 0.1;
+}
+
+.filterBtn span {
+  position: relative;
+  z-index: 1;
+}
+
+.activeFilter {
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%) !important;
+  border-color: transparent !important;
+  color: white !important;
+  box-shadow: 
+    0 10px 30px rgba(193, 45, 224, 0.4),
+    0 0 20px rgba(193, 45, 224, 0.2);
+}
+
+.activeFilter::before {
+  opacity: 0 !important;
+}
+
+/* ==================== GRID SECTION ==================== */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* ==================== GALLERY ITEM ==================== */
+.item {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.1) 0%, rgba(120, 23, 182, 0.05) 100%);
+  border: 1px solid rgba(193, 45, 224, 0.15);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.item::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.3) 0%, rgba(120, 23, 182, 0.2) 100%);
+  opacity: 0;
+  z-index: 1;
+  transition: opacity 0.5s ease;
+}
+
+.item:hover {
+  transform: translateY(-10px) scale(1.02);
+  border-color: #c12de0;
+  box-shadow: 
+    0 30px 60px rgba(193, 45, 224, 0.3),
+    0 0 50px rgba(193, 45, 224, 0.15),
+    inset 0 0 30px rgba(193, 45, 224, 0.05);
+}
+
+.item:hover::before {
+  opacity: 1;
+}
+
+.item img,
+.item video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.item:hover img,
+.item:hover video {
+  transform: scale(1.1);
+}
+
+/* ==================== ITEM OVERLAY ==================== */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    rgba(10, 10, 10, 0.3) 40%,
+    rgba(193, 45, 224, 0.9) 100%
+  );
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  padding: 2rem;
+  opacity: 0;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  color: white;
+  z-index: 2;
+}
+
+.item:hover .overlay {
+  opacity: 1;
+}
+
+.playIcon {
+  font-size: 4rem;
+  margin-bottom: 0.5rem;
+  color: white;
+  filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.5));
+  transform: translateY(20px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.item:hover .playIcon {
+  transform: translateY(0);
+}
+
+.videoTitle {
+  font-size: 1rem;
+  font-weight: 600;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1) 0.1s;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.item:hover .videoTitle {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==================== BRAND & CATEGORY TAGS ==================== */
+.brandTag,
+.categoryTag {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.95) 0%, rgba(120, 23, 182, 0.95) 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  z-index: 3;
+  box-shadow: 0 5px 20px rgba(193, 45, 224, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==================== MODAL ==================== */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 10, 0.98);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  backdrop-filter: blur(20px);
+}
+
+.modal::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: 
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(193, 45, 224, 0.1) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.modal img,
+.modal video {
+  max-width: 90%;
+  max-height: 85vh;
+  border-radius: 20px;
+  box-shadow: 
+    0 50px 100px rgba(0, 0, 0, 0.5),
+    0 0 100px rgba(193, 45, 224, 0.3);
+  border: 1px solid rgba(193, 45, 224, 0.3);
+  position: relative;
+  z-index: 1;
+}
+
+.modalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.modalContent h3 {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0;
+  text-align: center;
+}
+
+.brandLabel,
+.categoryLabel {
+  display: inline-block;
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 700;
+  font-size: 1.1rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(193, 45, 224, 0.5);
+  border-radius: 30px;
+  position: relative;
+}
+
+.brandLabel::before,
+.categoryLabel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(193, 45, 224, 0.1) 0%, rgba(120, 23, 182, 0.05) 100%);
+  border-radius: 30px;
+  z-index: -1;
+}
+
+.modalVideo {
+  max-width: 90vw;
+  max-height: 80vh;
+  border-radius: 20px;
+  box-shadow: 
+    0 50px 100px rgba(0, 0, 0, 0.5),
+    0 0 100px rgba(193, 45, 224, 0.3);
+}
+
+/* ==================== CLOSE BUTTON ==================== */
+.closeBtn {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  background: linear-gradient(135deg, #c12de0 0%, #7817b6 100%);
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10000;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 
+    0 10px 30px rgba(193, 45, 224, 0.5),
+    0 0 30px rgba(193, 45, 224, 0.3);
+}
+
+.closeBtn:hover {
+  transform: scale(1.1) rotate(90deg);
+  box-shadow: 
+    0 15px 40px rgba(193, 45, 224, 0.6),
+    0 0 50px rgba(193, 45, 224, 0.4);
+}
+
+/* ==================== RESPONSIVE DESIGN ==================== */
+@media (max-width: 1024px) {
+  .gallery {
+    padding: 2rem 1.5rem;
+  }
+  
+  .header h1 {
+    font-size: 2.75rem;
+  }
+  
+  .stats {
+    gap: 2rem;
+    flex-wrap: wrap;
+  }
+  
+  .stat {
+    padding: 1.25rem 2rem;
+  }
+  
+  .statNumber {
+    font-size: 2.5rem;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .gallery {
+    padding: 1.5rem 1rem;
+  }
+  
+  .header {
+    margin-bottom: 3rem;
+  }
+  
+  .headerIcon {
+    font-size: 3rem;
+  }
+  
+  .header h1 {
+    font-size: 2rem;
+  }
+  
+  .header p {
+    font-size: 1rem;
+  }
+  
+  .stats {
+    gap: 1rem;
+    padding: 1rem;
+  }
+  
+  .stat {
+    padding: 1rem 1.5rem;
+  }
+  
+  .statNumber {
+    font-size: 2rem;
+  }
+  
+  .statLabel {
+    font-size: 0.8rem;
+  }
+  
+  .tabs {
+    padding: 0.25rem;
+    flex-direction: column;
+    width: 90%;
+  }
+  
+  .tab {
+    justify-content: center;
+    padding: 0.875rem 1.5rem;
+  }
+  
+  .filterContainer {
+    gap: 0.75rem;
+  }
+  
+  .filterBtn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.85rem;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 1rem;
+  }
+  
+  .item {
+    border-radius: 16px;
+  }
+  
+  .overlay {
+    padding: 1rem;
+  }
+  
+  .playIcon {
+    font-size: 2.5rem;
+  }
+  
+  .brandTag,
+  .categoryTag {
+    top: 0.75rem;
+    right: 0.75rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.7rem;
+  }
+  
+  .modal {
+    padding: 1rem;
+  }
+  
+  .closeBtn {
+    width: 50px;
+    height: 50px;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.25rem;
+  }
+  
+  .modalContent h3 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .stats {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .stat {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  
+  .item {
+    border-radius: 12px;
+  }
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.item {
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+}
+
+.item:nth-child(1) { animation-delay: 0.1s; }
+.item:nth-child(2) { animation-delay: 0.15s; }
+.item:nth-child(3) { animation-delay: 0.2s; }
+.item:nth-child(4) { animation-delay: 0.25s; }
+.item:nth-child(5) { animation-delay: 0.3s; }
+.item:nth-child(6) { animation-delay: 0.35s; }
+.item:nth-child(7) { animation-delay: 0.4s; }
+.item:nth-child(8) { animation-delay: 0.45s; }
+.item:nth-child(9) { animation-delay: 0.5s; }
+
+/* ==================== EMPTY STATE ==================== */
+.emptyState {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.emptyState svg {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  color: rgba(193, 45, 224, 0.5);
+}
+
+.emptyState h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.emptyState p {
+  font-size: 1rem;
+}

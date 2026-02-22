@@ -1,0 +1,20 @@
+.page {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.pageTitle {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 24px;
+    color: var(--text-dark);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}

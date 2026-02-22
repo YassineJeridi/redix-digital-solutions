@@ -1,0 +1,470 @@
+/* ═══════════════════════════════════════════════════
+   KANBAN BOARD PAGE STYLES
+   ═══════════════════════════════════════════════════ */
+
+.page {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Page Header */
+.pageHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.pageTitle {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-dark);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.pageTitle svg {
+    color: var(--primary-color);
+}
+
+.pageSubtitle {
+    font-size: 14px;
+    color: var(--text-light);
+    margin-top: 4px;
+}
+
+.headerActions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.refreshBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.refreshBtn:hover {
+    background: var(--hover-bg);
+    color: var(--primary-color);
+    transform: none;
+}
+
+.addTaskBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addTaskBtn:hover {
+    opacity: 0.9;
+    transform: none;
+}
+
+/* Filter Toggle Button */
+.filterToggleBtn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--card-bg);
+    color: var(--text-light);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+}
+
+.filterToggleBtn:hover {
+    background: var(--hover-bg);
+    color: #c12de0;
+}
+
+.filterToggleBtn.filterActive {
+    border-color: #c12de0;
+    color: #c12de0;
+    background: rgba(193, 45, 224, 0.08);
+}
+
+.filterDot {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #c12de0;
+}
+
+/* Filter Bar */
+.filterBar {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 16px 20px;
+    background: var(--card-bg, #1e1e3a);
+    border-radius: 12px;
+    border: 1px solid var(--border-color, #3d3d5c);
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filterGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 160px;
+    flex: 1;
+}
+
+.filterLabel {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-light, #a0a0b8);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.searchInputWrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 10px;
+    color: var(--text-light, #a0a0b8);
+    font-size: 16px;
+    pointer-events: none;
+}
+
+.filterInput {
+    width: 100%;
+    padding: 8px 12px 8px 32px;
+    border: 2px solid var(--border-color, #3d3d5c);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-dark, #ffffff);
+    background: var(--table-header-bg, #2d2d44);
+    outline: none;
+    transition: all 0.2s;
+}
+
+.filterInput::placeholder {
+    color: var(--text-light, #6b7280);
+}
+
+.filterInput:focus {
+    border-color: #c12de0;
+    box-shadow: 0 0 0 3px rgba(193, 45, 224, 0.12);
+}
+
+.filterSelect {
+    padding: 8px 12px;
+    border: 2px solid var(--border-color, #3d3d5c);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--text-dark, #ffffff);
+    background: var(--table-header-bg, #2d2d44);
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath d='M6 8L1 3h10z' fill='%23a0a0b8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    padding-right: 28px;
+}
+
+.filterSelect option {
+    background: var(--card-bg, #1e1e3a);
+    color: var(--text-dark, #ffffff);
+}
+
+.filterSelect:focus {
+    border-color: #c12de0;
+    box-shadow: 0 0 0 3px rgba(193, 45, 224, 0.12);
+}
+
+.clearFiltersBtn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.clearFiltersBtn:hover {
+    background: rgba(239, 68, 68, 0.2);
+}
+
+/* Board */
+.board {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 16px;
+    min-height: calc(100vh - 180px);
+}
+
+.board::-webkit-scrollbar {
+    height: 6px;
+}
+
+.board::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.board::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 3px;
+}
+
+/* Skeleton loading */
+.skeletonColumn {
+    width: 340px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.skeletonHeader {
+    height: 48px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeletonBar {
+    height: 3px;
+    background: var(--border-color);
+    border-radius: 2px;
+    animation: shimmer 1.5s infinite;
+    animation-delay: 0.1s;
+}
+
+.skeletonCard {
+    height: 120px;
+    background: var(--card-bg);
+    border-radius: 12px;
+    animation: shimmer 1.5s infinite;
+}
+
+.skeletonCard:nth-child(3) {
+    animation-delay: 0.2s;
+}
+
+.skeletonCard:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+.skeletonCard:nth-child(5) {
+    animation-delay: 0.6s;
+}
+
+@keyframes shimmer {
+    0% { opacity: 1; }
+    50% { opacity: 0.4; }
+    100% { opacity: 1; }
+}
+
+/* Error state */
+.errorState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+.errorState p {
+    font-size: 16px;
+    color: #ef4444;
+    font-weight: 500;
+}
+
+.retryBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--card-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.retryBtn:hover {
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    transform: none;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .board {
+        gap: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .pageTitle {
+        font-size: 22px;
+    }
+
+    .filterBar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .filterGroup {
+        min-width: unset;
+    }
+}
+
+/* ── Add List Column ───────────────────────────────── */
+.addListColumn {
+    width: 280px;
+    min-width: 280px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 4px;
+}
+
+.addListBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    padding: 14px 20px;
+    border: 2px dashed var(--border-color, #3d3d5c);
+    border-radius: 12px;
+    background: transparent;
+    color: var(--text-light, #a0a0b8);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addListBtn:hover {
+    border-color: #c12de0;
+    color: #c12de0;
+    background: rgba(193, 45, 224, 0.06);
+}
+
+.addListForm {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    padding: 12px;
+    background: var(--card-bg, #1e1e3a);
+    border: 1px solid var(--border-color, #3d3d5c);
+    border-radius: 12px;
+}
+
+.addListInput {
+    padding: 10px 12px;
+    border: 2px solid var(--border-color, #3d3d5c);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--text-dark, #ffffff);
+    background: var(--table-header-bg, #2d2d44);
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.addListInput::placeholder {
+    color: var(--text-light, #6b7280);
+}
+
+.addListInput:focus {
+    border-color: #c12de0;
+}
+
+.addListActions {
+    display: flex;
+    gap: 8px;
+}
+
+.addListConfirm {
+    flex: 1;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.addListConfirm:hover {
+    opacity: 0.9;
+}
+
+.addListCancel {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color, #3d3d5c);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-light, #a0a0b8);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.addListCancel:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+    border-color: rgba(239, 68, 68, 0.3);
+}

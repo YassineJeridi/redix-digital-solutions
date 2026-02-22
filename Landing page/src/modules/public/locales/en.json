@@ -1,0 +1,245 @@
+{
+  "nav": {
+    "about": "About",
+    "services": "Services",
+    "ourWork": "Our Work",
+    "contact": "Contact",
+    "quickOverview": "Quick Overview",
+    "furniture": "Furniture/Meuble",
+    "travelAgency": "Travel Agency",
+    "fashion": "Fashion / Clothing",
+    "chef": "Chef / Restaurant",
+    "lightMode": "Light mode",
+    "darkMode": "Dark mode",
+    "switchToLight": "Switch to light mode",
+    "switchToDark": "Switch to dark mode",
+    "toggleMenu": "Toggle menu"
+  },
+  "banner": {
+    "title": "Transform Your Digital Presence with",
+    "highlight": " Redix Digital Solutions",
+    "subtitle": "We're a Tunisia-based digital solutions agency specializing in cutting-edge web development, mobile apps, and digital marketing.",
+    "getStarted": "Get Started",
+    "viewWork": "View Our Work"
+  },
+  "services": {
+    "title": "Our Services",
+    "subtitle": "Transform your business with our cutting-edge digital solutions",
+    "prevService": "Previous service",
+    "nextService": "Next service",
+    "mostPopular": "Most Popular",
+    "common": "Common",
+    "getQuote": "Get Quote",
+    "webDev": "Web Development",
+    "webDevDesc": "Modern, responsive websites built with cutting-edge technologies",
+    "mobileDev": "Mobile Development",
+    "mobileDevDesc": "Native and cross-platform mobile applications",
+    "digitalMarketing": "Digital Marketing",
+    "digitalMarketingDesc": "Comprehensive digital marketing strategies that drive results",
+    "uiux": "UI/UX Design",
+    "uiuxDesc": "User-centered design that converts visitors into customers",
+    "videoProd": "Video Production",
+    "videoProdDesc": "Professional video content that tells your brand story",
+    "hosting": "Hosting Services",
+    "hostingDesc": "Reliable and secure hosting solutions for your digital presence",
+    "graphicDesign": "Graphic Design",
+    "graphicDesignDesc": "Creative and visually stunning designs for your brand"
+  },
+  "whyChooseUs": {
+    "tag": "Why Choose Us",
+    "title": "Why Choose ",
+    "highlight": "Redix Digital Solutions?",
+    "subtitle": "We combine creativity, technology, and strategy to deliver exceptional digital experiences",
+    "fastDelivery": "Fast Delivery",
+    "fastDeliveryDesc": "We deliver high-quality projects within tight deadlines without compromising quality.",
+    "creativeSolutions": "Creative Solutions",
+    "creativeSolutionsDesc": "Our team brings innovative ideas and cutting-edge technologies to every project.",
+    "resultsDriven": "Results-Driven",
+    "resultsDrivenDesc": "We focus on measurable results that directly impact your business growth.",
+    "dedicatedSupport": "Dedicated Support",
+    "dedicatedSupportDesc": "24/7 support and maintenance to ensure your digital presence runs smoothly.",
+    "premiumQuality": "Premium Quality",
+    "premiumQualityDesc": "We maintain the highest standards in design, development, and digital marketing.",
+    "provenTrack": "Proven Track Record",
+    "provenTrackDesc": "Successfully delivered 100+ projects for clients across various industries."
+  },
+  "videoShowcase": {
+    "badge": "Portfolio",
+    "title": "Our Creative Work",
+    "subtitle": "Stunning video content that captivates audiences and elevates brands",
+    "prevVideo": "Previous video",
+    "nextVideo": "Next video",
+    "pauseVideo": "Pause video"
+  },
+  "bookCall": {
+    "title": "Book Your Free Consultation",
+    "subtitle": "Get expert advice tailored to your project. No commitment, just valuable insights.",
+    "chatDirectly": "Prefer to chat directly?",
+    "whatsapp": "WhatsApp",
+    "email": "Email",
+    "quickForm": "Or fill out this quick form",
+    "fullName": "Full Name",
+    "emailAddress": "Email Address",
+    "phoneNumber": "Phone Number",
+    "serviceInterested": "Service Interested In",
+    "projectDetails": "Tell us about your project or your needs",
+    "projectPlaceholder": "Describe your project, goals, timeline, budget, or any specific requirements...",
+    "sending": "Sending...",
+    "getFreeConsultation": "Get Free Consultation",
+    "thankYou": "Thank You!",
+    "successMessage": "Your consultation request has been received. Our team will contact you within 24 hours to schedule your free call.",
+    "needImmediate": "Need immediate assistance?",
+    "messageWhatsApp": "Message us on WhatsApp",
+    "continueTour": "continue your tour",
+    "sendingRequest": "Sending your request...",
+    "successStatus": "Request sent successfully! We'll contact you within 24 hours.",
+    "errorStatus": "Failed to send. Please contact us directly via WhatsApp."
+  },
+  "booking": {
+    "title": "Book a Service",
+    "subtitle": "Fill in your details and we'll get back to you within 24 hours.",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "email": "Email Address",
+    "serviceType": "Service Type",
+    "message": "Message (optional)",
+    "bookNow": "Book Now",
+    "sending": "Sending...",
+    "confirmed": "Booking Confirmed!",
+    "confirmedMsg": "We'll reach out to you shortly to discuss your project.",
+    "errorMsg": "Failed to send — please try again.",
+    "getStarted": "Get Started",
+    "summaryDesc": "Let's bring your vision to life with our expert team and proven process.",
+    "freeConsultation": "Free Consultation",
+    "noCommitment": "No Commitment",
+    "fastTurnaround": "Fast Turnaround",
+    "projects": "Projects",
+    "clients": "Clients",
+    "response": "Response",
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "invalidEmail": "Invalid email",
+    "phoneRequired": "Phone is required",
+    "invalidPhone": "Invalid phone"
+  },
+  "testimonials": {
+    "tag": "Client Stories",
+    "title": "What Our Clients Say",
+    "subtitle": "Real feedback from our valued clients who trust us with their digital success",
+    "items": {
+      "1": {
+        "text": "Working with Redix Digital Solutions has been a real turning point for our brand. Their team knew how to capture the essence of our concept and showcase it on social media.",
+        "position": "Frita CEO",
+        "service": "Brand Management & Marketing"
+      },
+      "2": {
+        "text": "Redix Digital Solutions perfectly translated our human and educational values through coherent and inspiring visual communication.",
+        "position": "DR and EFPHQ Director",
+        "service": "Management Marketing"
+      },
+      "3": {
+        "text": "I'm impressed by Redix's professionalism. They are attentive and very responsive in content creation.",
+        "position": "Teeth Doctor",
+        "service": "Content Creation"
+      },
+      "4": {
+        "text": "Redix has been a solid partner in taking Flayes' digital presence to the next level. From creative visuals to strategic marketing moves.",
+        "position": "FLAYES CTO",
+        "service": "Brand Management"
+      },
+      "5": {
+        "text": "The Redix team is young, dynamic, and above all very professional. Thanks to their digital strategy, we've seen significant growth.",
+        "position": "Frita Product Quality Manager",
+        "service": "Brand Management & Marketing"
+      },
+      "6": {
+        "text": "Working with Redix for our event showcasing was exceptional. They captured every moment perfectly and delivered outstanding results.",
+        "position": "AIESEC OCP President",
+        "service": "Event Showcasing"
+      },
+      "7": {
+        "text": "Redix delivered professional event showcasing services that exceeded our expectations. Highly recommended!",
+        "position": "JCI President",
+        "service": "Event Showcasing"
+      },
+      "8": {
+        "text": "Amazing collaboration with Redix! They understand our vision and deliver creative solutions that resonate with our community.",
+        "position": "ESEN Ambassadors",
+        "service": "Community Engagement"
+      },
+      "9": {
+        "text": "Redix handled the logistical organization of our events with remarkable efficiency. Their coordination and attention to detail made our events run perfectly smoothly.",
+        "position": "Logistics Manager at ESEN Ambassadors Club",
+        "service": "Event Management"
+      },
+      "10": {
+        "text": "The Redix team created the perfect e-commerce site for my needs. The design is modern, the navigation intuitive, and the features match exactly what I expected. Excellent work!",
+        "position": "Client",
+        "service": "E-commerce Development"
+      },
+      "11": {
+        "text": "We've worked with them many times in our committee and they've always done an amazing job 🫡👏\nA very talented team always available and ready to help 💯💯",
+        "position": "Marketing Manager at ESEN Ambassadors Club",
+        "service": "Event Preparation"
+      },
+      "12": {
+        "text": "Redix brought an exceptional creative dimension to our marketing campaigns. Their understanding of our JCI vision and their professional execution exceeded our expectations.",
+        "position": "JCI Marketing Manager",
+        "service": "Event Marketing"
+      },
+      "13": {
+        "text": "ROAR's voice is now being heard. Thank you for the incredible strategy and execution that has our brand truly living up to its name. We're thrilled with the results.",
+        "position": "Founder of Roar",
+        "service": "Brand Marketing Strategy"
+      },
+      "14": {
+        "text": "Collaborating with Redix on development projects has been an enriching experience. Their technical team is competent and their collaborative approach greatly facilitates teamwork.",
+        "position": "Developer",
+        "service": "Development Collaboration"
+      }
+    }
+  },
+  "trustedBy": {
+    "tag": "Partners",
+    "title": "Trusted By",
+    "subtitle": "Proud to work with amazing brands and organizations worldwide",
+    "projectsCompleted": "Projects Completed",
+    "happyClients": "Happy Clients",
+    "yearsExperience": "Years Experience",
+    "supportAvailable": "Support Available"
+  },
+  "devProject": {
+    "badge": "Our Portfolio",
+    "title": "Crafting Digital\n Experiences",
+    "subtitle": "Explore our collection of cutting-edge web applications and digital solutions, each crafted with precision, creativity, and the latest technologies.",
+    "featured": "Featured",
+    "viewProject": "View Project",
+    "speed": "Speed",
+    "score": "Score",
+    "livePreview": "Live Preview",
+    "viewScreenshots": "View Screenshots",
+    "all": "All"
+  },
+  "footer": {
+    "companyName": "Redix Digital Solutions",
+    "companyDesc": "Transforming businesses through innovative digital solutions. Based in Tunisia, serving clients worldwide with cutting-edge technology.",
+    "ourServices": "Our Services",
+    "webDev": "Web Development",
+    "mobileApps": "Mobile Apps",
+    "digitalMarketing": "Digital Marketing",
+    "uiux": "UI/UX Design",
+    "getInTouch": "Get In Touch",
+    "address": "Smart Technopark Manouba, Tunisia",
+    "phone": "(+216) 21-999-898",
+    "emailAddress": "contact@redixsolutions.pro",
+    "stayUpdated": "Stay Updated",
+    "newsletterDesc": "Subscribe to our newsletter for the latest updates and digital insights",
+    "enterEmail": "Enter your email",
+    "copyright": "© 2024 Redix Digital Solutions. All rights reserved. Made with ❤️ in Tunisia"
+  },
+  "language": {
+    "en": "English",
+    "fr": "Français",
+    "ar": "العربية"
+  }
+}

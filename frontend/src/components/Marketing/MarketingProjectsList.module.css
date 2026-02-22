@@ -1,0 +1,383 @@
+.container {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.searchBar {
+    position: relative;
+    flex: 1;
+    max-width: 400px;
+}
+
+.searchIcon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+    color: var(--text-light);
+}
+
+.searchInput {
+    width: 100%;
+    padding: 12px 12px 12px 40px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.addBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: var(--primary-color);
+    color: white;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.emptyState {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-light);
+    font-size: 16px;
+}
+
+.projectsList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.projectCard {
+    background: var(--card-bg, white);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    overflow: hidden;
+    animation: slideIn 0.5s ease-out;
+}
+
+.projectCard:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cardHeader:hover {
+    background: var(--light-bg);
+}
+
+.headerLeft {
+    flex: 1;
+}
+
+.cardHeader h3 {
+    font-size: 18px;
+    margin-bottom: 6px;
+    color: var(--text-dark);
+    font-weight: 600;
+}
+
+.clientName {
+    font-size: 14px;
+    color: var(--text-light);
+}
+
+.cardHeaderRight {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.budget {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--success-color);
+    padding: 8px 16px;
+    background: rgba(16, 185, 129, 0.1);
+    border-radius: 8px;
+}
+
+.actionButtons {
+    display: flex;
+    gap: 8px;
+}
+
+.editBtn,
+.deleteBtn {
+    background: transparent;
+    font-size: 20px;
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.editBtn {
+    color: var(--primary-color);
+}
+
+.editBtn:hover {
+    background: rgba(99, 102, 241, 0.1);
+    transform: scale(1.1);
+}
+
+.deleteBtn {
+    color: var(--danger-color);
+}
+
+.deleteBtn:hover {
+    background: rgba(239, 68, 68, 0.1);
+    transform: scale(1.1);
+}
+
+.expandBtn {
+    background: var(--light-bg);
+    font-size: 24px;
+    color: var(--primary-color);
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.expandBtn:hover {
+    background: var(--primary-color);
+    color: white;
+}
+
+.cardDetails {
+    padding: 0 20px 20px 20px;
+    border-top: 2px solid var(--border-color);
+    animation: slideDown 0.3s ease-out;
+}
+
+.detailSection {
+    margin-top: 20px;
+}
+
+.detailSection h4 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Revenue Distribution */
+.distributionGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+}
+
+.distributionItem {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: 10px;
+    border-left: 4px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.distributionItem:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.distributionItem .label {
+    font-size: 12px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.distributionItem .value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+/* Services */
+.servicesList {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.serviceItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: var(--light-bg);
+    border-radius: 8px;
+    border-left: 3px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.serviceItem:hover {
+    transform: translateX(4px);
+    background: rgba(99, 102, 241, 0.05);
+}
+
+.serviceName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.serviceDetails {
+    font-size: 13px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+/* Tools and Team Usage */
+.usageList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.usageItem {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--light-bg);
+    border-radius: 10px;
+    border: 2px solid var(--border-color);
+    transition: all 0.3s ease;
+}
+
+.usageItem:hover {
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+}
+
+.usageInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.toolName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.toolCategory {
+    font-size: 12px;
+    color: var(--text-light);
+}
+
+.usageStats {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.percentage {
+    font-weight: 700;
+    color: var(--primary-color);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+.revenue {
+    font-weight: 700;
+    color: var(--success-color);
+    background: rgba(16, 185, 129, 0.1);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        max-height: 0;
+    }
+
+    to {
+        opacity: 1;
+        max-height: 2000px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cardHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .cardHeaderRight {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .distributionGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .usageItem {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+    }
+
+    .usageStats {
+        width: 100%;
+        justify-content: space-between;
+    }
+}

@@ -1,0 +1,83 @@
+.card {
+    background: var(--card-bg, white);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-5px);
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.businessName {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.revenue {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success-color);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ownerName {
+    font-size: 14px;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.contact {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contactItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-light);
+}
+
+.contactItem svg {
+    font-size: 16px;
+    color: var(--primary-color);
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}

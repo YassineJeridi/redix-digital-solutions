@@ -1,0 +1,249 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.modal {
+    background: var(--card-bg, white);
+    border-radius: 16px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease-out;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.header h2 {
+    font-size: 22px;
+    color: var(--text-dark);
+}
+
+.closeBtn {
+    background: var(--light-bg);
+    font-size: 24px;
+    color: var(--text-light);
+    padding: 8px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.closeBtn:hover {
+    background: var(--danger-color);
+    color: white;
+    transform: rotate(90deg);
+}
+
+.form {
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.balanceInfo {
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(139, 92, 246, 0.05));
+    border-radius: 12px;
+    border: 2px solid var(--border-color);
+}
+
+.balanceItem {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.balanceLabel {
+    font-size: 11px;
+    color: var(--text-light);
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.balanceValue {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.balanceValue.negative {
+    color: var(--danger-color);
+}
+
+.warningBox {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: rgba(239, 68, 68, 0.1);
+    border-left: 4px solid var(--danger-color);
+    border-radius: 8px;
+    font-size: 14px;
+    color: var(--danger-color);
+    font-weight: 600;
+    animation: shake 0.5s ease;
+}
+
+.warningBox svg {
+    font-size: 20px;
+}
+
+.formGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.formGroup label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.formGroup input,
+.formGroup select,
+.formGroup textarea {
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: var(--card-bg, white);
+}
+
+.formGroup input:focus,
+.formGroup select:focus,
+.formGroup textarea:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+    outline: none;
+}
+
+.formGroup textarea {
+    resize: vertical;
+    font-family: inherit;
+}
+
+.row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.cancelBtn,
+.submitBtn {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.cancelBtn {
+    background: var(--light-bg);
+    color: var(--text-dark);
+}
+
+.cancelBtn:hover {
+    background: var(--border-color);
+}
+
+.submitBtn {
+    background: var(--primary-color);
+    color: white;
+}
+
+.submitBtn:hover {
+    background: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.submitBtn:disabled {
+    background: var(--border-color);
+    color: var(--text-light);
+    cursor: not-allowed;
+    transform: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-5px);
+    }
+
+    75% {
+        transform: translateX(5px);
+    }
+}
+
+@media (max-width: 768px) {
+    .modal {
+        width: 95%;
+        max-height: 95vh;
+    }
+
+    .row {
+        grid-template-columns: 1fr;
+    }
+
+    .balanceInfo {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,29 @@
+.backgroundWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.gradientLayer {
+  position: absolute;
+  inset: 0;
+  background: var(--bg-page, linear-gradient(to bottom, #02020a, #0d0d1a));
+  transition: background 0.5s ease;
+}
+
+[data-public-theme="light"] .gradientLayer {
+  background: linear-gradient(135deg, #f8f9fa 0%, #f0f0f5 50%, #f8f9fa 100%);
+}
+
+.canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
