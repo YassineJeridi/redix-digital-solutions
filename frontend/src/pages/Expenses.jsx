@@ -198,7 +198,7 @@ const Expenses = () => {
                     </div>
                     <div className={styles.cardContent}>
                         <span className={styles.cardLabel}>Redix Caisse</span>
-                        <span className={styles.cardValue}>{summary.totalRedixCaisse.toFixed(2)} TND</span>
+                        <span className={styles.cardValue}>{summary.balance.toFixed(2)} TND</span>
                     </div>
                 </div>
 

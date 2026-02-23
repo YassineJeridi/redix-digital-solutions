@@ -32,6 +32,10 @@ export const getDashboardStats = async (req, res) => {
         redixCaisse += manualDeposits;
 
         const totalExpenses = allExpenses.reduce((s, e) => s + (e.amount || 0), 0);
+
+        // Subtract total expenses from Redix Caisse
+        // New Redix Caisse = Redix Caisse - Total Expenses
+        redixCaisse -= totalExpenses;
         const netProfit = totalRevenue - totalExpenses;
 
         // Revenue by department (last 12 months)
