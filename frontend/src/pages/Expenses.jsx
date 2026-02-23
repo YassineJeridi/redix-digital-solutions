@@ -38,18 +38,27 @@ const Expenses = () => {
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [depositData, setDepositData] = useState({ amount: '', description: '' });
     const [depositError, setDepositError] = useState('');
+    const [chartPeriod, setChartPeriod] = useState('month');
 
     const categories = ['Tools', 'Salaries', 'Office', 'Marketing', 'Utilities', 'Other'];
 
-    useEffect(() => {
-        loadData();
-    }, []);
+    useEffect(() => { loadData(); }, []);
+    useEffect(() => { if (!loading) loadSummary(); }, [chartPeriod]);
+
+    const loadSummary = async () => {
+        try {
+            const summaryData = await ExpensesService.getFinancialSummary(chartPeriod);
+            setSummary(summaryData);
+        } catch (error) {
+            console.error('Error loading summary:', error);
+        }
+    };
 
     const loadData = async () => {
         try {
             setLoading(true);
             const [summaryData, expensesData] = await Promise.all([
-                ExpensesService.getFinancialSummary(),
+                ExpensesService.getFinancialSummary(chartPeriod),
                 ExpensesService.getExpenses()
             ]);
             setSummary(summaryData);
@@ -65,16 +74,6 @@ const Expenses = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
-        // Validate that adding this expense won't make balance negative
-        if (!editingExpense && summary) {
-            const newBalance = summary.balance - parseFloat(formData.amount);
-            if (newBalance < 0) {
-                setError(`Cannot add expense. Current balance is ${summary.balance.toFixed(2)} TND. This expense would result in negative balance.`);
-                return;
-            }
-        }
-
         try {
             if (editingExpense) {
                 await ExpensesService.updateExpense(editingExpense._id, formData);
@@ -184,7 +183,6 @@ const Expenses = () => {
                         <button 
                             className={styles.addBtn}
                             onClick={() => setShowForm(true)}
-                            disabled={!summary || summary.balance <= 0}
                         >
                             <MdAdd /> Add Expense
                         </button>
@@ -214,32 +212,26 @@ const Expenses = () => {
                     </div>
                 </div>
 
-                <div className={styles.summaryCard} style={{ borderColor: summary.balance >= 0 ? '#6366f1' : '#ef4444' }}>
-                    <div className={styles.cardIcon} style={{ background: summary.balance >= 0 ? 'rgba(99, 102, 241, 0.1)' : 'rgba(239, 68, 68, 0.1)' }}>
-                        <MdAccountBalance style={{ color: summary.balance >= 0 ? '#6366f1' : '#ef4444' }} />
-                    </div>
-                    <div className={styles.cardContent}>
-                        <span className={styles.cardLabel}>Balance</span>
-                        <span className={styles.cardValue} style={{ color: summary.balance >= 0 ? '#10b981' : '#ef4444' }}>
-                            {summary.balance.toFixed(2)} TND
-                        </span>
-                    </div>
-                </div>
             </div>
-
-            {summary && summary.balance <= 0 && (
-                <div className={styles.warningBox}>
-                    ⚠️ Balance is {summary.balance === 0 ? 'zero' : 'negative'}. Cannot add new expenses until more revenue is received.
-                </div>
-            )}
 
             {/* Evolution Chart */}
             <div className={styles.chartCard}>
-                <h3>Financial Evolution (Last 6 Months)</h3>
+                <div className={styles.chartHeader}>
+                    <h3>Financial Evolution</h3>
+                    <div className={styles.periodFilters}>
+                        {[{ key: 'day', label: 'Day' }, { key: 'week', label: 'Week' }, { key: 'month', label: 'Month' }, { key: '3months', label: '3 Months' }, { key: '1year', label: '1 Year' }].map(p => (
+                            <button
+                                key={p.key}
+                                className={`${styles.periodBtn} ${chartPeriod === p.key ? styles.periodBtnActive : ''}`}
+                                onClick={() => setChartPeriod(p.key)}
+                            >{p.label}</button>
+                        ))}
+                    </div>
+                </div>
                 <ResponsiveContainer width="100%" height={400}>
-                    <LineChart data={summary.monthlyData}>
+                    <LineChart data={summary.chartData || []}>
                         <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="month" />
+                        <XAxis dataKey="label" tick={{ fontSize: 12 }} />
                         <YAxis label={{ value: 'Amount (TND)', angle: -90, position: 'insideLeft' }} />
                         <Tooltip
                             formatter={(value) => `${value.toFixed(2)} TND`}
@@ -386,57 +378,74 @@ const Expenses = () => {
                 </div>
             )}
 
-            {/* Expenses List */}
-            <div className={styles.tableCard}>
-                <h3>Expenses History</h3>
-                {expenses.length > 0 ? (
-                    <table className={styles.table}>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Description</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {expenses.map((expense) => (
-                                <tr key={expense._id}>
-                                    <td>{new Date(expense.date).toLocaleDateString()}</td>
-                                    <td>{expense.description}</td>
-                                    <td>
-                                        <span className={styles.categoryBadge}>
-                                            {expense.category}
-                                        </span>
-                                    </td>
-                                    <td className={styles.amount}>{expense.amount.toFixed(2)} TND</td>
-                                    <td className={styles.actions}>
-                                        <button 
-                                            className={styles.editBtn}
-                                            onClick={() => handleEdit(expense)}
-                                            title="Edit"
-                                        >
-                                            <MdEdit />
-                                        </button>
-                                        <button 
-                                            className={styles.deleteBtn}
-                                            onClick={() => handleDelete(expense._id)}
-                                            title="Delete"
-                                        >
-                                            <MdDelete />
-                                        </button>
-                                    </td>
+            {/* Tables Row */}
+            <div className={styles.tablesRow}>
+                {/* Expenses History */}
+                <div className={styles.tableCard}>
+                    <h3>Expenses History</h3>
+                    {expenses.length > 0 ? (
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                    <th>Actions</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                ) : (
-                    <div className={styles.emptyState}>
-                        <MdReceipt />
-                        <p>No expenses recorded yet</p>
-                    </div>
-                )}
+                            </thead>
+                            <tbody>
+                                {expenses.map((expense) => (
+                                    <tr key={expense._id}>
+                                        <td>{new Date(expense.date).toLocaleDateString()}</td>
+                                        <td>{expense.description}</td>
+                                        <td><span className={styles.categoryBadge}>{expense.category}</span></td>
+                                        <td className={styles.amount}>{expense.amount.toFixed(2)} TND</td>
+                                        <td className={styles.actions}>
+                                            <button className={styles.editBtn} onClick={() => handleEdit(expense)} title="Edit"><MdEdit /></button>
+                                            <button className={styles.deleteBtn} onClick={() => handleDelete(expense._id)} title="Delete"><MdDelete /></button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <div className={styles.emptyState}>
+                            <MdReceipt />
+                            <p>No expenses recorded yet</p>
+                        </div>
+                    )}
+                </div>
+
+                {/* Redix Caisse History */}
+                <div className={styles.tableCard}>
+                    <h3>Redix Caisse History</h3>
+                    {summary.depositHistory && summary.depositHistory.length > 0 ? (
+                        <table className={styles.table}>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Description</th>
+                                    <th>Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {summary.depositHistory.map((dep, idx) => (
+                                    <tr key={idx}>
+                                        <td>{new Date(dep.date).toLocaleDateString()}</td>
+                                        <td>{dep.description}</td>
+                                        <td className={styles.depositAmount}>+{dep.amount.toFixed(2)} TND</td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    ) : (
+                        <div className={styles.emptyState}>
+                            <MdSavings />
+                            <p>No deposits yet</p>
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );

@@ -28,6 +28,11 @@ const invoiceSchema = new mongoose.Schema(
             ref: 'MarketingProject',
             default: null,
         },
+        service: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Service',
+            default: null,
+        },
         issueDate: { type: Date, default: Date.now },
         dueDate:   { type: Date, required: true },
         status: {

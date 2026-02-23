@@ -19,6 +19,7 @@ import {
     MdReceiptLong,
     MdChevronLeft,
     MdChevronRight,
+    MdFactCheck,
 } from 'react-icons/md';
 import { useAuth } from '../../context/AuthContext';
 import redixLogo from '../../assets/redix_logo.png';
@@ -39,6 +40,7 @@ const menuSections = [
             { text: 'Services', icon: <MdWork />, path: '/services' },
             { text: 'Tasks', icon: <MdAssignment />, path: '/tasks' },
             { text: 'Clients', icon: <MdPeople />, path: '/clients' },
+            { text: 'Invoice Status', icon: <MdFactCheck />, path: '/work/invoice-status' },
         ],
     },
     {

@@ -1,0 +1,125 @@
+You are an expert MERN stack developer. Create a comprehensive digital agency management platform 
+
+use modular css for each component 
+make a little bit of animations 
+use react icons and charts 
+
+give step by step how to create this project and give me all the code for all the files 
+
+
+This is the project architecture
+├───backend
+│   │   .env
+│   │   package-lock.json
+│   │   package.json
+│   │   server.js
+│   │
+│   ├───config
+│   │       db.js
+│   │
+│   ├───controllers
+│   │       clientController.js
+│   │       dashboardController.js
+│   │       marketingController.js
+│   │       settingsController.js
+│   │       toolsController.js
+│   │
+│   ├───middleware
+│   │       auth.js
+│   │       errorHandler.js
+│   │
+│   ├───models
+│   │       Client.js
+│   │       MarketingProject.js
+│   │       Project.js
+│   │       TeamMember.js
+│   │       Tool.js
+│   │
+│   └───routes
+│           clients.js
+│           dashboard.js
+│           marketing.js
+│           projects.js
+│           settings.js
+│           tools.js
+│
+└───frontend
+    │   index.html
+    │   package-lock.json
+    │   package.json
+    │   vite.config.js
+    │
+    ├───public
+    └───src
+        │   App.jsx
+        │   App.css
+        │   main.jsx
+        │
+        ├───components
+        │   ├───Clients
+        │   │       ClientCard.jsx
+        │   │       ClientCard.module.css
+        │   │       ClientForm.jsx
+        │   │       ClientForm.module.css
+        │   │       ClientsList.jsx
+        │   │       ClientsList.module.css
+        │   │
+        │   ├───Dashboard
+        │   │       FinancialCard.jsx
+        │   │       FinancialCard.module.css
+        │   │       MetricCard.jsx
+        │   │       MetricCard.module.css
+        │   │       RecentRevenue.jsx
+        │   │       RecentRevenue.module.css
+        │   │       RevenueChart.jsx
+        │   │       RevenueChart.module.css
+        │   │
+        │   ├───Layout
+        │   │       Layout.jsx
+        │   │       Layout.module.css
+        │   │       Navbar.jsx
+        │   │       Navbar..module.css
+        │   │       Sidebar.jsx
+        │   │       Sidebar.module.css
+        │   │
+        │   ├───Marketing
+        │   │       MarketingProjectForm.jsx
+        │   │       MarketingProjectForm.module.css
+        │   │       MarketingProjectsList.jsx
+        │   │       MarketingProjectsList.module.css
+        │   │
+        │   ├───Settings
+        │   │       TeamMemberForm.jsx
+        │   │       TeamMemberForm.module.css
+        │   │       TeamMembersList.jsx
+        │   │       TeamMembersList.module.css
+        │   │
+        │   └───Tools
+        │           ToolForm.jsx
+        │           ToolForm.module.css
+        │           ToolsList.jsx
+        │           ToolsList.module.css
+        │
+        │
+        ├───context
+        │       AppContext.jsx
+        │
+        ├───pages
+        │       Clients.jsx
+        │       Clients.module.css
+        │       Dashboard.jsx
+        │       Dashboard.module.css
+        │       Marketing.jsx
+        │       Marketing.module.css
+        │       Settings.jsx
+        │       Settings.module.css
+        │       Tools.jsx
+        │       Tools.module.css
+        │
+        └───services
+                ClientsServices.js
+                DashboardServices.js
+                MarketingServices.js
+                ProjectsServices.js
+                SettingsServices.js
+                ToolsServices.js

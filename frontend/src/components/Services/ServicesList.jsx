@@ -2,13 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { 
     MdAdd, MdEdit, MdDelete, MdSearch, MdFileDownload, 
     MdFilterList, MdSort, MdChevronLeft, MdChevronRight, MdPayment,
-    MdReceiptLong,
+    MdReceiptLong, MdLock, MdCheckCircle, MdLinkOff,
 } from 'react-icons/md';
 import ServiceForm from './ServiceForm';
 import DeleteConfirmModal from './DeleteConfirmModal';
 import InvoiceForm from '../Invoices/InvoiceForm';
 import * as ServicesService from '../../services/ServicesServices';
 import * as ClientsService from '../../services/ClientsServices';
+import * as InvoiceService from '../../services/InvoiceServices';
+import { verifyPasskey } from '../../services/SettingsServices';
 import styles from './ServicesList.module.css';
 
 const ServicesList = () => {
@@ -31,6 +33,14 @@ const ServicesList = () => {
     const [editingService, setEditingService] = useState(null);
     const [deletingService, setDeletingService] = useState(null);
     const [userRole, setUserRole] = useState('Admin'); // TODO: Get from context/auth
+    // Invoice lookup map: serviceId → invoice
+    const [invoiceMap, setInvoiceMap] = useState({});
+
+    // Passkey modal
+    const [passkeyModal, setPasskeyModal] = useState(null); // { service, action: 'generate'|'detach', invoice? }
+    const [passkeyInput, setPasskeyInput] = useState('');
+    const [passkeyError, setPasskeyError] = useState('');
+    const [passkeyLoading, setPasskeyLoading] = useState(false);
 
     useEffect(() => {
         fetchServices();
@@ -38,7 +48,20 @@ const ServicesList = () => {
 
     useEffect(() => {
         ClientsService.getClients().then(setClients).catch(() => {});
+        loadInvoiceMap();
     }, []);
+
+    const loadInvoiceMap = async () => {
+        try {
+            const invoices = await InvoiceService.getInvoices();
+            const map = {};
+            (invoices || []).forEach(inv => {
+                const sid = inv.service?._id || inv.service;
+                if (sid) map[sid] = inv;
+            });
+            setInvoiceMap(map);
+        } catch {}
+    };
 
     // Debounce search
     useEffect(() => {
@@ -174,6 +197,7 @@ const ServicesList = () => {
         const remaining = service.totalPrice - (service.amountPaid || 0);
         setInvoicePrefill({
             client:        service.client?._id || service.client,
+            serviceId:     service._id,
             category:      service.serviceProvided,
             dueDate:       service.endDate,
             notes:         `Service: ${service.projectName}`,
@@ -186,6 +210,35 @@ const ServicesList = () => {
                 total:       remaining > 0 ? remaining : service.totalPrice,
             }],
         });
+    };
+
+    const openPasskeyModal = (service, action, invoice = null) => {
+        setPasskeyModal({ service, action, invoice });
+        setPasskeyInput('');
+        setPasskeyError('');
+    };
+
+    const handlePasskeyConfirm = async () => {
+        if (!passkeyInput.trim()) { setPasskeyError('Enter the passkey'); return; }
+        setPasskeyLoading(true);
+        setPasskeyError('');
+        try {
+            const result = await verifyPasskey(passkeyInput.trim());
+            if (!result.valid) { setPasskeyError('Incorrect passkey'); setPasskeyLoading(false); return; }
+            const { service, action, invoice } = passkeyModal;
+            setPasskeyModal(null);
+            setPasskeyInput('');
+            if (action === 'generate') {
+                handleGenerateInvoice(service);
+            } else if (action === 'detach' && invoice) {
+                await InvoiceService.updateInvoice(invoice._id, { service: null });
+                await loadInvoiceMap();
+            }
+        } catch {
+            setPasskeyError('Verification failed. Try again.');
+        } finally {
+            setPasskeyLoading(false);
+        }
     };
 
     const handleInlinePaymentStatus = async (e, service) => {
@@ -343,13 +396,14 @@ const ServicesList = () => {
                                     <th onClick={() => handleSort('totalPrice')}>
                                         Total Price {sortBy === 'totalPrice' && (sortOrder === 'asc' ? '↑' : '↓')}
                                     </th>
+                                    <th>Invoice</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {(!services || services.length === 0) ? (
                                     <tr>
-                                        <td colSpan="8" className={styles.noData}>No services found</td>
+                                        <td colSpan="9" className={styles.noData}>No services found</td>
                                     </tr>
                                 ) : (
                                     services.map((service) => (
@@ -385,6 +439,29 @@ const ServicesList = () => {
                                                 </select>
                                             </td>
                                             <td className={styles.price}>{service.totalPrice.toLocaleString()} TND</td>
+                                            <td className={styles.invoiceCol} onClick={(e) => e.stopPropagation()}>
+                                                {invoiceMap[service._id] ? (
+                                                    <button
+                                                        className={`${styles.invoiceBadge} ${invoiceMap[service._id].status === 'Sent' ? styles.invoiceBadge_Given : styles['invoiceBadge_' + (invoiceMap[service._id].status || 'Draft').replace(/\s/g, '')]}`}
+                                                        title="Click to detach invoice (passkey required)"
+                                                        onClick={() => openPasskeyModal(service, 'detach', invoiceMap[service._id])}
+                                                    >
+                                                        {invoiceMap[service._id].status === 'Sent' ? (
+                                                            <><MdCheckCircle style={{ fontSize: 13, marginRight: 4 }} /> Given<span style={{ opacity: 0.7, marginLeft: 4, fontSize: 11 }}>{invoiceMap[service._id].invoiceNumber}</span></>
+                                                        ) : (
+                                                            invoiceMap[service._id].invoiceNumber
+                                                        )}
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className={styles.invoiceBadgeNone}
+                                                        title="Click to generate invoice (passkey required)"
+                                                        onClick={() => openPasskeyModal(service, 'generate')}
+                                                    >
+                                                        No Invoice
+                                                    </button>
+                                                )}
+                                            </td>
                                             <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                                                 {canCreateEdit && (
                                                     <button
@@ -477,9 +554,48 @@ const ServicesList = () => {
                 <InvoiceForm
                     invoice={invoicePrefill}
                     clients={clients}
-                    onSave={() => { setInvoicePrefill(null); }}
+                    onSave={() => { setInvoicePrefill(null); loadInvoiceMap(); }}
                     onClose={() => setInvoicePrefill(null)}
                 />
+            )}
+
+            {/* Passkey Modal */}
+            {passkeyModal && (
+                <div className={styles.passkeyOverlay} onClick={() => setPasskeyModal(null)}>
+                    <div className={styles.passkeyModal} onClick={(e) => e.stopPropagation()}>
+                        <div className={styles.passkeyIconWrap}>
+                            {passkeyModal.action === 'detach' ? <MdLinkOff /> : <MdLock />}
+                        </div>
+                        <h3 className={styles.passkeyTitle}>
+                            {passkeyModal.action === 'detach' ? 'Detach Invoice' : 'Generate Invoice'}
+                        </h3>
+                        <p className={styles.passkeyDesc}>
+                            {passkeyModal.action === 'detach'
+                                ? `Remove the invoice link from "${passkeyModal.service.projectName}"?`
+                                : `Create an invoice for "${passkeyModal.service.projectName}"?`}
+                        </p>
+                        <input
+                            type="password"
+                            placeholder="Enter passkey..."
+                            value={passkeyInput}
+                            onChange={(e) => { setPasskeyInput(e.target.value); setPasskeyError(''); }}
+                            onKeyDown={(e) => e.key === 'Enter' && handlePasskeyConfirm()}
+                            className={`${styles.passkeyInput} ${passkeyError ? styles.passkeyInputError : ''}`}
+                            autoFocus
+                        />
+                        {passkeyError && <p className={styles.passkeyError}>{passkeyError}</p>}
+                        <div className={styles.passkeyActions}>
+                            <button className={styles.cancelBtn} onClick={() => setPasskeyModal(null)}>Cancel</button>
+                            <button
+                                className={passkeyModal.action === 'detach' ? styles.detachBtn : styles.confirmPayBtn}
+                                onClick={handlePasskeyConfirm}
+                                disabled={passkeyLoading}
+                            >
+                                {passkeyLoading ? '...' : passkeyModal.action === 'detach' ? <><MdLinkOff /> Detach</> : <><MdReceiptLong /> Generate</>}
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
 
             {partialPaymentService && (

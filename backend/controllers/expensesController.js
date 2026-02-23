@@ -113,15 +113,23 @@ export const addManualDeposit = async (req, res) => {
             return res.status(400).json({ message: 'Amount must be greater than 0' });
         }
 
+        const parsedAmount = parseFloat(amount);
         const metrics = await FinancialMetrics.getInstance();
-        metrics.manualDeposits = (metrics.manualDeposits || 0) + parseFloat(amount);
+        metrics.manualDeposits = (metrics.manualDeposits || 0) + parsedAmount;
+        metrics.totalRevenue = (metrics.totalRevenue || 0) + parsedAmount;
+        if (!metrics.depositHistory) metrics.depositHistory = [];
+        metrics.depositHistory.push({
+            amount: parsedAmount,
+            description: description || 'Manual deposit to Redix Caisse',
+            date: new Date()
+        });
         await metrics.save();
 
         await logAudit({
             action: 'create',
             entityType: 'ManualDeposit',
             entityId: metrics._id,
-            details: { amount: parseFloat(amount), description: description || 'Manual deposit to Redix Caisse' }
+            details: { amount: parsedAmount, description: description || 'Manual deposit to Redix Caisse' }
         }, req);
 
         res.json({ message: 'Deposit added successfully', manualDeposits: metrics.manualDeposits });
@@ -131,69 +139,128 @@ export const addManualDeposit = async (req, res) => {
     }
 };
 
+// Helper: build chart data for a given period
+const buildChartData = async (period, allProjects, allExpenses, depositHistory) => {
+    const now = new Date();
+    const chartData = [];
+
+    if (period === 'day') {
+        // Last 14 days, grouped by day
+        for (let i = 13; i >= 0; i--) {
+            const dayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate() - i);
+            const dayEnd = new Date(dayStart); dayEnd.setDate(dayEnd.getDate() + 1);
+            const dayProjects = allProjects.filter(p => {
+                const d = new Date(p.createdAt); return d >= dayStart && d < dayEnd;
+            });
+            const redix = dayProjects.reduce((s, p) => s + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+            const expTotal = allExpenses.filter(e => { const d = new Date(e.date); return d >= dayStart && d < dayEnd; }).reduce((s, e) => s + e.amount, 0);
+            const deposits = (depositHistory || []).filter(d => { const dt = new Date(d.date); return dt >= dayStart && dt < dayEnd; }).reduce((s, d) => s + d.amount, 0);
+            chartData.push({
+                label: dayStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
+                redixCaisse: redix + deposits, expenses: expTotal
+            });
+        }
+    } else if (period === 'week') {
+        // Last 10 weeks, grouped by week
+        for (let i = 9; i >= 0; i--) {
+            const weekEnd = new Date(now); weekEnd.setDate(weekEnd.getDate() - i * 7);
+            const weekStart = new Date(weekEnd); weekStart.setDate(weekStart.getDate() - 7);
+            const weekProjects = allProjects.filter(p => { const d = new Date(p.createdAt); return d >= weekStart && d < weekEnd; });
+            const redix = weekProjects.reduce((s, p) => s + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+            const expTotal = allExpenses.filter(e => { const d = new Date(e.date); return d >= weekStart && d < weekEnd; }).reduce((s, e) => s + e.amount, 0);
+            const deposits = (depositHistory || []).filter(d => { const dt = new Date(d.date); return dt >= weekStart && dt < weekEnd; }).reduce((s, d) => s + d.amount, 0);
+            chartData.push({
+                label: `${weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`,
+                redixCaisse: redix + deposits, expenses: expTotal
+            });
+        }
+    } else if (period === '3months') {
+        // Last 3 months, grouped by month
+        for (let i = 2; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+            const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+            const monthProjects = allProjects.filter(p => { const d = new Date(p.createdAt); return d >= monthStart && d <= monthEnd; });
+            const redix = monthProjects.reduce((s, p) => s + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+            const expTotal = allExpenses.filter(e => { const d = new Date(e.date); return d >= monthStart && d <= monthEnd; }).reduce((s, e) => s + e.amount, 0);
+            const deposits = (depositHistory || []).filter(d => { const dt = new Date(d.date); return dt >= monthStart && dt <= monthEnd; }).reduce((s, d) => s + d.amount, 0);
+            chartData.push({
+                label: monthStart.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                redixCaisse: redix + deposits, expenses: expTotal
+            });
+        }
+    } else if (period === '1year') {
+        // Last 12 months, grouped by month
+        for (let i = 11; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+            const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+            const monthProjects = allProjects.filter(p => { const d = new Date(p.createdAt); return d >= monthStart && d <= monthEnd; });
+            const redix = monthProjects.reduce((s, p) => s + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+            const expTotal = allExpenses.filter(e => { const d = new Date(e.date); return d >= monthStart && d <= monthEnd; }).reduce((s, e) => s + e.amount, 0);
+            const deposits = (depositHistory || []).filter(d => { const dt = new Date(d.date); return dt >= monthStart && dt <= monthEnd; }).reduce((s, d) => s + d.amount, 0);
+            chartData.push({
+                label: monthStart.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                redixCaisse: redix + deposits, expenses: expTotal
+            });
+        }
+    } else {
+        // Default: last 6 months, grouped by month
+        for (let i = 5; i >= 0; i--) {
+            const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
+            const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
+            const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59);
+            const monthProjects = allProjects.filter(p => { const d = new Date(p.createdAt); return d >= monthStart && d <= monthEnd; });
+            const redix = monthProjects.reduce((s, p) => s + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+            const expTotal = allExpenses.filter(e => { const d = new Date(e.date); return d >= monthStart && d <= monthEnd; }).reduce((s, e) => s + e.amount, 0);
+            const deposits = (depositHistory || []).filter(d => { const dt = new Date(d.date); return dt >= monthStart && dt <= monthEnd; }).reduce((s, d) => s + d.amount, 0);
+            chartData.push({
+                label: monthStart.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
+                redixCaisse: redix + deposits, expenses: expTotal
+            });
+        }
+    }
+    return chartData;
+};
+
 // Get financial summary (Redix Caisse - Expenses)
 export const getFinancialSummary = async (req, res) => {
     try {
+        const { period = 'month' } = req.query;
+
         // Calculate total Redix Caisse from all projects
         const projects = await Service.find({ paymentStatus: 'Done' });
+        const allExpenses = await Expense.find();
         
-        const totalRedixCaisse = projects.reduce((sum, project) => {
-            const redixAmount = (project.totalPrice * project.revenueDistribution.redixCaisse) / 100;
+        const redixFromProjects = projects.reduce((sum, project) => {
+            const redixAmount = (project.totalPrice * (project.revenueDistribution?.redixCaisse || 0)) / 100;
             return sum + redixAmount;
         }, 0);
         
         // Calculate total expenses
-        const expenses = await Expense.find();
-        const totalExpenses = expenses.reduce((sum, exp) => sum + exp.amount, 0);
+        const totalExpenses = allExpenses.reduce((sum, exp) => sum + exp.amount, 0);
         
-        // Calculate balance (must be >= 0)
         // Account for tips given and manual deposits
         const metrics = await FinancialMetrics.getInstance();
         const tipsGiven = metrics.tipsGiven || 0;
         const manualDeposits = metrics.manualDeposits || 0;
-        const balance = totalRedixCaisse - totalExpenses - tipsGiven + manualDeposits;
+        const depositHistory = metrics.depositHistory || [];
+
+        // Total Redix Caisse includes manual deposits
+        const totalRedixCaisse = redixFromProjects + manualDeposits;
+        const balance = totalRedixCaisse - totalExpenses - tipsGiven;
         
-        // Get monthly data for chart
-        const sixMonthsAgo = new Date();
-        sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
-        
-        const monthlyData = [];
-        for (let i = 5; i >= 0; i--) {
-            const date = new Date();
-            date.setMonth(date.getMonth() - i);
-            const monthStart = new Date(date.getFullYear(), date.getMonth(), 1);
-            const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-            
-            // Get projects for this month
-            const monthProjects = await Service.find({
-                paymentStatus: 'Done',
-                createdAt: { $gte: monthStart, $lte: monthEnd }
-            });
-            
-            const monthRedix = monthProjects.reduce((sum, project) => {
-                return sum + (project.totalPrice * project.revenueDistribution.redixCaisse) / 100;
-            }, 0);
-            
-            // Get expenses for this month
-            const monthExpenses = await Expense.find({
-                date: { $gte: monthStart, $lte: monthEnd }
-            });
-            
-            const monthExpenseTotal = monthExpenses.reduce((sum, exp) => sum + exp.amount, 0);
-            
-            monthlyData.push({
-                month: monthStart.toLocaleDateString('en-US', { month: 'short', year: 'numeric' }),
-                redixCaisse: monthRedix,
-                expenses: monthExpenseTotal,
-                balance: monthRedix - monthExpenseTotal
-            });
-        }
+        // Build chart data based on period
+        const chartData = await buildChartData(period, projects, allExpenses, depositHistory);
+        // Add balance to each data point
+        chartData.forEach(d => { d.balance = d.redixCaisse - d.expenses; });
         
         res.json({
             totalRedixCaisse,
             totalExpenses,
             balance,
-            monthlyData,
+            chartData,
+            depositHistory: depositHistory.slice().sort((a, b) => new Date(b.date) - new Date(a.date)),
             canAddExpense: balance >= 0
         });
     } catch (error) {

@@ -64,6 +64,7 @@ export default function InvoiceForm({ invoice, clients = [], onSave, onClose }) 
         notes:         invoice?.notes     || '',
         paymentMethod: invoice?.paymentMethod || 'Bank Transfer',
         status:        invoice?.status    || 'Draft',
+        service:       invoice?.serviceId || invoice?.service || null,
         lineItems:     invoice?.lineItems?.length
             ? invoice.lineItems.map(li => ({ ...li, _id: li._id || Date.now() + Math.random() }))
             : [emptyItem()],
@@ -137,6 +138,7 @@ export default function InvoiceForm({ invoice, clients = [], onSave, onClose }) 
                 ...form,
                 status: asDraft ? 'Draft' : (isEdit ? form.status : 'Sent'),
                 lineItems: form.lineItems.map(({ _id, ...rest }) => rest),
+                service: form.service || undefined,
             };
             let saved;
             if (isEdit) {
@@ -166,6 +168,7 @@ export default function InvoiceForm({ invoice, clients = [], onSave, onClose }) 
             onSave();
         } catch {
             setSaveError('Invoice saved but PDF download failed.');
+            onSave(); // invoice was created — refresh the badge
         }
     };
 
@@ -179,6 +182,7 @@ export default function InvoiceForm({ invoice, clients = [], onSave, onClose }) 
             setTimeout(() => onSave(), 1500);
         } catch (e) {
             setTgErr(e?.response?.data?.message || 'Failed to send to Telegram.');
+            onSave(); // invoice was created — refresh the badge
         } finally { setTgSending(false); }
     };
 

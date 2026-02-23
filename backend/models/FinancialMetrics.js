@@ -43,6 +43,13 @@ const financialMetricsSchema = new mongoose.Schema({
         description: 'Manual money added to Redix Caisse'
     },
 
+    // History of manual deposits
+    depositHistory: [{
+        amount: { type: Number, required: true },
+        description: { type: String, default: 'Manual deposit to Redix Caisse' },
+        date: { type: Date, default: Date.now }
+    }],
+
     // Total revenue from all sources
     totalRevenue: {
         type: Number,

@@ -67,12 +67,13 @@ export const getInvoiceStats = async (req, res) => {
 // ─── GET /api/invoices ────────────────────────────────────
 export const getInvoices = async (req, res) => {
     try {
-        const { status, category, client, search, from, to } = req.query;
+        const { status, category, client, search, from, to, service } = req.query;
         const filter = {};
 
         if (status   && status   !== 'All') filter.status   = status;
         if (category && category !== 'All') filter.category = category;
         if (client)  filter.client = client;
+        if (service) filter.service = service;
 
         if (from || to) {
             filter.issueDate = {};
@@ -83,6 +84,7 @@ export const getInvoices = async (req, res) => {
         let invoices = await Invoice.find(filter)
             .populate('client', 'businessName ownerName')
             .populate('createdBy', 'name')
+            .populate('service', 'projectName totalPrice amountPaid paymentStatus serviceProvided')
             .sort({ createdAt: -1 });
 
         if (search) {

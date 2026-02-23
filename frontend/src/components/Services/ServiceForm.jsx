@@ -268,8 +268,8 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
             }
         }
 
-        // Tools usage validation (for Marketing and Production)
-        if (['Marketing', 'Production'].includes(formData.serviceProvided)) {
+        // Tools usage validation (for Marketing, Production and Development)
+        if (['Marketing', 'Production', 'Development'].includes(formData.serviceProvided)) {
             if (formData.toolsUsage.length > 0) {
                 const toolsTotal = calculateToolsTotal();
                 if (Math.abs(toolsTotal - 100) > 0.01) {
@@ -315,7 +315,7 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
         }
     };
 
-    const showToolsUsage = ['Marketing', 'Production'].includes(formData.serviceProvided);
+    const showToolsUsage = ['Marketing', 'Production', 'Development'].includes(formData.serviceProvided);
 
     return (
         <div className={styles.overlay}>

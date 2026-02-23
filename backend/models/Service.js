@@ -65,7 +65,7 @@ const projectSchema = new mongoose.Schema({
         typeComplexity: { type: String, enum: ['Vitrine', 'Advanced'] }
     },
 
-    // Tools Usage (only for Marketing/Production, must total 100%)
+    // Tools Usage (Marketing, Production & Development — must total 100%)
     toolsUsage: [toolUsageSchema],
 
     // Team Assignment (must total 100%)

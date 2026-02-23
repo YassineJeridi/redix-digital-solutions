@@ -180,13 +180,6 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
 
-.chartCard h3 {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 24px;
-}
-
 /* Form Card */
 .modalOverlay {
     position: fixed;
@@ -479,6 +472,71 @@
     font-weight: 600;
 }
 
+/* Chart header with period filters */
+.chartHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.chartHeader h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.periodFilters {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.periodBtn {
+    padding: 8px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.periodBtn:hover {
+    border-color: #10b981;
+    color: #10b981;
+}
+
+.periodBtnActive {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    border-color: #10b981;
+    color: white;
+}
+
+.periodBtnActive:hover {
+    color: white;
+}
+
+/* Two-column tables row */
+.tablesRow {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+/* Deposit amount in caisse history */
+.depositAmount {
+    font-weight: 700;
+    color: #10b981;
+    font-size: 16px;
+}
+
 /* Mobile Responsive */
 @media (max-width: 768px) {
     .container {
@@ -526,5 +584,9 @@
     .table {
         display: block;
         overflow-x: auto;
+    }
+
+    .tablesRow {
+        grid-template-columns: 1fr;
     }
 }

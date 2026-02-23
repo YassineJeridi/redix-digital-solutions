@@ -19,6 +19,7 @@ import ActivityLog from './pages/ActivityLog';
 import KanbanBoard from './pages/KanbanBoard';
 import Backup from './pages/Backup';
 import Invoices from './pages/Invoices';
+import InvoiceStatus from './pages/InvoiceStatus';
 
 const ProtectedRoute = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
@@ -73,6 +74,7 @@ const AppRoutes = () => {
                                 <Route path="/activity" element={<ActivityLog />} />
                                 <Route path="/backup" element={<Backup />} />
                                 <Route path="/finance/invoices" element={<Invoices />} />
+                                <Route path="/work/invoice-status" element={<InvoiceStatus />} />
                                 <Route path="*" element={<NotFound />} />
                             </Routes>
                         </Layout>

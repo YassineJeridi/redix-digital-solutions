@@ -1,6 +1,7 @@
 import Service from '../models/Service.js';
 import Expense from '../models/Expense.js';
 import Tool from '../models/Tool.js';
+import FinancialMetrics from '../models/FinancialMetrics.js';
 
 export const getDashboardStats = async (req, res) => {
     try {
@@ -12,7 +13,12 @@ export const getDashboardStats = async (req, res) => {
         const allExpenses = await Expense.find().lean();
 
         const paidServices = allServices.filter(p => p.paymentStatus === 'Done');
-        const totalRevenue = paidServices.reduce((s, p) => s + (p.totalPrice || 0), 0);
+        const serviceRevenue = paidServices.reduce((s, p) => s + (p.totalPrice || 0), 0);
+
+        // Include manual deposits in total revenue
+        const metricsDoc = await FinancialMetrics.getInstance();
+        const manualDeposits = metricsDoc.manualDeposits || 0;
+        const totalRevenue = serviceRevenue + manualDeposits;
 
         let toolsReserve = 0, teamShare = 0, redixCaisse = 0;
         paidServices.forEach(p => {
@@ -21,6 +27,9 @@ export const getDashboardStats = async (req, res) => {
             teamShare += (p.totalPrice * (rd.teamShare || 0)) / 100;
             redixCaisse += (p.totalPrice * (rd.redixCaisse || 0)) / 100;
         });
+
+        // Include manual deposits in Redix Caisse
+        redixCaisse += manualDeposits;
 
         const totalExpenses = allExpenses.reduce((s, e) => s + (e.amount || 0), 0);
         const netProfit = totalRevenue - totalExpenses;

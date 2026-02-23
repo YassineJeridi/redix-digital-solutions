@@ -20,8 +20,8 @@ export const deleteExpense = async (id) => {
     return data;
 };
 
-export const getFinancialSummary = async () => {
-    const { data } = await api.get('/api/expenses/summary');
+export const getFinancialSummary = async (period = 'month') => {
+    const { data } = await api.get('/api/expenses/summary', { params: { period } });
     return data;
 };
 
