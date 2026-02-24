@@ -74,7 +74,7 @@
     max-width: 480px;
 }
 
-.searchIcon { font-size: 20px; color: var(--text-muted); }
+.searchIcon { font-size: 20px; color: var(--text-light, #6b7280); }
 
 .searchInput {
     border: none;
@@ -99,8 +99,8 @@
     padding: 8px 16px;
     border: 2px solid var(--border-color, #e5e7eb);
     border-radius: 8px;
-    background: transparent;
-    color: var(--text-muted);
+    background: var(--card-bg, white);
+    color: var(--text-light, #6b7280);
     font-size: 13px;
     font-weight: 600;
     cursor: pointer;
@@ -139,7 +139,7 @@
 }
 
 .table thead tr {
-    background: var(--bg-light, #f9fafb);
+    background: var(--table-header-bg, #f9fafb);
 }
 
 .table th {
@@ -149,7 +149,7 @@
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    color: var(--text-muted);
+    color: var(--text-light, #6b7280);
     white-space: nowrap;
     border-bottom: 1px solid var(--border-color, #e5e7eb);
 }
@@ -163,7 +163,7 @@
 
 .table tbody tr:last-child td { border-bottom: none; }
 
-.table tbody tr:hover { background: var(--bg-light, #f9fafb); }
+.table tbody tr:hover { background: var(--hover-bg, rgba(193,45,224,0.04)); }
 
 /* Cells */
 .invoiceNum {

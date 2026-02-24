@@ -192,14 +192,16 @@ const Expenses = () => {
 
             {/* Financial Summary Cards */}
             <div className={styles.summaryGrid}>
-                <div className={styles.summaryCard} style={{ borderColor: '#6366f1' }}>
-                    <div className={styles.cardIcon} style={{ background: 'rgba(99, 102, 241, 0.12)' }}>
-                        <MdAccountBalance style={{ color: '#6366f1' }} />
+                <div className={styles.summaryCard} style={{ borderColor: summary.balance >= 0 ? '#10b981' : '#ef4444' }}>
+                    <div className={styles.cardIcon} style={{ background: summary.balance >= 0 ? 'rgba(16, 185, 129, 0.12)' : 'rgba(239, 68, 68, 0.12)' }}>
+                        <MdAccountBalance style={{ color: summary.balance >= 0 ? '#10b981' : '#ef4444' }} />
                     </div>
                     <div className={styles.cardContent}>
-                        <span className={styles.cardLabel}>Gross Caisse</span>
-                        <span className={styles.cardValue}>{summary.totalRedixCaisse.toFixed(2)} TND</span>
-                        <span className={styles.cardSub}>Before deductions</span>
+                        <span className={styles.cardLabel}>Redix Caisse</span>
+                        <span className={styles.cardValue} style={{ color: summary.balance >= 0 ? '#10b981' : '#ef4444' }}>
+                            {summary.balance >= 0 ? '+' : ''}{summary.balance.toFixed(2)} TND
+                        </span>
+                        <span className={styles.cardSub}>Available balance</span>
                     </div>
                 </div>
 

@@ -31,6 +31,8 @@
     --modal-bg: #ffffff;
     --hover-bg: rgba(193, 45, 224, 0.03);
     --table-header-bg: #f8f7fa;
+    --text-muted: #6b7280;
+    --bg-light: #f9fafb;
 }
 
 [data-theme='dark'] {
@@ -48,6 +50,8 @@
     --modal-bg: rgba(26, 29, 46, 0.9);
     --hover-bg: rgba(193, 45, 224, 0.08);
     --table-header-bg: rgba(30, 34, 53, 0.7);
+    --text-muted: #9ca3af;
+    --bg-light: rgba(30, 34, 53, 0.5);
     --glass-blur: 16px;
     --glass-border: 1px solid rgba(193, 45, 224, 0.1);
 }

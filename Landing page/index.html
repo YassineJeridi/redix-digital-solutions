@@ -1,15 +1,127 @@
 <!DOCTYPE html>
+<!-- SEO: lang="en" explicitly declared for English-first content -->
 <html lang="en">
 
 <head>
+    <!-- SEO: UTF-8 charset for universal character support -->
     <meta charset="UTF-8" />
-    <link rel="icon" href="/assets/logos/Redix1.png" />
+
+    <!-- SEO: viewport for mobile-first indexing and responsive layout -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet">
-    <title>Redix Digital Solutions</title>
+
+    <!-- SEO: tell crawlers to index and follow all links -->
+    <meta name="robots" content="index, follow" />
+
+    <!-- SEO: optimised page title — brand + primary keyword cluster (≤60 chars) -->
+    <title>Redix Digital Solutions | Digital Marketing, Production &amp; Development Agency</title>
+
+    <!-- SEO: compelling meta description targeting core keywords (≤155 chars) -->
+    <meta name="description" content="Redix Digital Solutions — Tunisia's digital marketing, video production &amp; web development agency. We help brands grow and scale online." />
+
+    <!-- SEO: keyword meta for legacy/supplementary signals -->
+    <meta name="keywords" content="digital marketing agency Tunisia, web development, video production, social media marketing, SEO agency, branding, Redix Digital Solutions" />
+
+    <!-- SEO: canonical URL — prevents duplicate-content penalties -->
+    <link rel="canonical" href="https://redixdigitalsolutions.com/" />
+
+    <!-- SEO: sitemap discovery for Googlebot and other crawlers -->
+    <link rel="sitemap" type="application/xml" href="/sitemap.xml" />
+
+    <!-- ─── Open Graph ─────────────────────────────────────────────────────── -->
+    <!-- SEO: OG type -->
+    <meta property="og:type" content="website" />
+    <!-- SEO: OG canonical URL -->
+    <meta property="og:url" content="https://redixdigitalsolutions.com/" />
+    <!-- SEO: OG title mirrors <title> -->
+    <meta property="og:title" content="Redix Digital Solutions | Digital Marketing, Production &amp; Development Agency" />
+    <!-- SEO: OG description for social sharing previews -->
+    <meta property="og:description" content="Tunisia-based digital marketing, video production &amp; web development agency. We help brands grow, stand out, and scale online." />
+    <!-- SEO: OG image — 1200×630 recommended for all platforms -->
+    <meta property="og:image" content="https://redixdigitalsolutions.com/assets/logos/Redix1.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Redix Digital Solutions — Digital Agency Logo" />
+    <!-- SEO: OG locale and site name -->
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="Redix Digital Solutions" />
+
+    <!-- ─── Twitter Card ───────────────────────────────────────────────────── -->
+    <!-- SEO: Twitter card type — large image for maximum click-through -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <!-- SEO: Twitter title -->
+    <meta name="twitter:title" content="Redix Digital Solutions | Digital Marketing, Production &amp; Development Agency" />
+    <!-- SEO: Twitter description -->
+    <meta name="twitter:description" content="Tunisia-based digital marketing, video production &amp; web development agency. We help brands grow, stand out, and scale online." />
+    <!-- SEO: Twitter image matching OG image -->
+    <meta name="twitter:image" content="https://redixdigitalsolutions.com/assets/logos/Redix1.png" />
+    <meta name="twitter:image:alt" content="Redix Digital Solutions — Digital Agency Logo" />
+
+    <!-- ─── Favicon & Touch Icon ───────────────────────────────────────────── -->
+    <link rel="icon" href="/assets/logos/Redix1.png" />
+    <!-- SEO: Apple touch icon for iOS bookmarks -->
+    <link rel="apple-touch-icon" href="/assets/logos/Redix1.png" />
+
+    <!-- ─── Core Web Vitals / Performance ─────────────────────────────────── -->
+    <!-- SEO: preconnect to Google Fonts domains — eliminates DNS + TCP latency -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- SEO: preload LCP hero logo — fetchpriority=high prevents CLS and boosts LCP -->
+    <link rel="preload" as="image" href="/assets/logos/Redix1.png" fetchpriority="high" />
+
+    <!-- SEO: load Google Fonts non-render-blocking via rel=preload + onload swap -->
+    <link
+        rel="preload"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Plus+Jakarta+Sans:wght@400..800&display=swap"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'"
+    />
+    <!-- SEO: <noscript> fallback ensures fonts load when JS is disabled -->
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300..900&family=Plus+Jakarta+Sans:wght@400..800&display=swap" rel="stylesheet" />
+    </noscript>
+
+    <!-- ─── JSON-LD Structured Data ───────────────────────────────────────── -->
+    <!-- SEO: ProfessionalService schema — qualifies for rich results in Google Search -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "Redix Digital Solutions",
+      "url": "https://redixdigitalsolutions.com",
+      "logo": "https://redixdigitalsolutions.com/assets/logos/Redix1.png",
+      "image": "https://redixdigitalsolutions.com/assets/logos/Redix1.png",
+      "description": "Redix Digital Solutions is a Tunisia-based digital marketing, video production and web development agency helping brands grow and scale online.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "TN",
+        "addressLocality": "Tunisia"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+216-92-861-655",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "French", "Arabic"]
+      },
+      "serviceType": [
+        "Digital Marketing",
+        "Web Development",
+        "Video Production",
+        "Social Media Marketing",
+        "SEO",
+        "Branding"
+      ],
+      "sameAs": [
+        "https://www.instagram.com/redixdigitalsolutions/",
+        "https://www.facebook.com/profile.php?id=61560535962106",
+        "https://www.linkedin.com/company/redix-digital-solutions/posts/?feedView=all"
+      ]
+    }
+    </script>
 </head>
 
 <body>
+    <!-- SEO: inline theme script runs before paint — prevents flash of wrong theme (FOUT) -->
     <script>
         (function() {
             var theme = localStorage.getItem('theme');
@@ -19,6 +131,7 @@
             else document.documentElement.setAttribute('data-public-theme', 'dark');
         })();
     </script>
+    <!-- SEO: React SPA mount point — full semantic structure rendered by React components -->
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
 </body>
