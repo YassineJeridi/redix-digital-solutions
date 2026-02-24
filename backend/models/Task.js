@@ -6,6 +6,11 @@ const commentSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now }
 });
 
+const checklistItemSchema = new mongoose.Schema({
+    text: { type: String, required: true },
+    done: { type: Boolean, default: false }
+}, { _id: true });
+
 const taskSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -45,6 +50,7 @@ const taskSchema = new mongoose.Schema({
     attachments: [{
         type: String
     }],
+    checklist: [checklistItemSchema],
     comments: [commentSchema]
 }, {
     timestamps: true

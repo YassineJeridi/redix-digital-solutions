@@ -10,14 +10,14 @@ import {
     MdAddCircle
 } from 'react-icons/md';
 import {
-    LineChart,
-    Line,
+    AreaChart,
+    Area,
     XAxis,
     YAxis,
     CartesianGrid,
     Tooltip,
-    Legend,
-    ResponsiveContainer
+    ResponsiveContainer,
+    ReferenceLine
 } from 'recharts';
 import * as ExpensesService from '../services/ExpensesServices';
 import styles from './Expenses.module.css';
@@ -36,7 +36,7 @@ const Expenses = () => {
     });
     const [error, setError] = useState('');
     const [showDepositModal, setShowDepositModal] = useState(false);
-    const [depositData, setDepositData] = useState({ amount: '', description: '' });
+    const [depositData, setDepositData] = useState({ amount: '', description: '', source: '', date: new Date().toISOString().split('T')[0] });
     const [depositError, setDepositError] = useState('');
     const [chartPeriod, setChartPeriod] = useState('month');
 
@@ -143,9 +143,9 @@ const Expenses = () => {
         }
 
         try {
-            await ExpensesService.addManualDeposit(amount, depositData.description);
+            await ExpensesService.addManualDeposit(amount, depositData.description, depositData.source, depositData.date);
             setShowDepositModal(false);
-            setDepositData({ amount: '', description: '' });
+            setDepositData({ amount: '', description: '', source: '', date: new Date().toISOString().split('T')[0] });
             loadData();
         } catch (error) {
             console.error('Error adding deposit:', error);
@@ -192,34 +192,46 @@ const Expenses = () => {
 
             {/* Financial Summary Cards */}
             <div className={styles.summaryGrid}>
-                <div className={styles.summaryCard} style={{ borderColor: '#10b981' }}>
-                    <div className={styles.cardIcon} style={{ background: 'rgba(16, 185, 129, 0.1)' }}>
-                        <MdSavings style={{ color: '#10b981' }} />
+                <div className={styles.summaryCard} style={{ borderColor: '#6366f1' }}>
+                    <div className={styles.cardIcon} style={{ background: 'rgba(99, 102, 241, 0.12)' }}>
+                        <MdAccountBalance style={{ color: '#6366f1' }} />
                     </div>
                     <div className={styles.cardContent}>
-                        <span className={styles.cardLabel}>Redix Caisse</span>
-                        <span className={styles.cardValue}>{summary.balance.toFixed(2)} TND</span>
+                        <span className={styles.cardLabel}>Gross Caisse</span>
+                        <span className={styles.cardValue}>{summary.totalRedixCaisse.toFixed(2)} TND</span>
+                        <span className={styles.cardSub}>Before deductions</span>
                     </div>
                 </div>
 
                 <div className={styles.summaryCard} style={{ borderColor: '#ef4444' }}>
-                    <div className={styles.cardIcon} style={{ background: 'rgba(239, 68, 68, 0.1)' }}>
+                    <div className={styles.cardIcon} style={{ background: 'rgba(239, 68, 68, 0.12)' }}>
                         <MdReceipt style={{ color: '#ef4444' }} />
                     </div>
                     <div className={styles.cardContent}>
                         <span className={styles.cardLabel}>Total Expenses</span>
-                        <span className={styles.cardValue}>{summary.totalExpenses.toFixed(2)} TND</span>
+                        <span className={styles.cardValue} style={{ color: '#ef4444' }}>
+                            -{summary.totalExpenses.toFixed(2)} TND
+                        </span>
+                        <span className={styles.cardSub}>All recorded expenses</span>
                     </div>
                 </div>
-
             </div>
 
             {/* Evolution Chart */}
             <div className={styles.chartCard}>
                 <div className={styles.chartHeader}>
-                    <h3>Financial Evolution</h3>
+                    <div className={styles.chartTitleGroup}>
+                        <h3>Financial Evolution</h3>
+                        <div className={styles.chartLegendInline}>
+                            <span className={styles.legendDot} style={{ background: '#10b981' }} />
+                            <span>Caisse</span>
+                            <span className={styles.legendDot} style={{ background: '#ef4444' }} />
+                            <span>Expenses</span>
+
+                        </div>
+                    </div>
                     <div className={styles.periodFilters}>
-                        {[{ key: 'day', label: 'Day' }, { key: 'week', label: 'Week' }, { key: 'month', label: 'Month' }, { key: '3months', label: '3 Months' }, { key: '1year', label: '1 Year' }].map(p => (
+                        {[{ key: 'day', label: 'Day' }, { key: 'week', label: 'Week' }, { key: 'month', label: 'Month' }, { key: '3months', label: '3M' }, { key: '1year', label: '1Y' }].map(p => (
                             <button
                                 key={p.key}
                                 className={`${styles.periodBtn} ${chartPeriod === p.key ? styles.periodBtnActive : ''}`}
@@ -228,45 +240,66 @@ const Expenses = () => {
                         ))}
                     </div>
                 </div>
-                <ResponsiveContainer width="100%" height={400}>
-                    <LineChart data={summary.chartData || []}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="label" tick={{ fontSize: 12 }} />
-                        <YAxis label={{ value: 'Amount (TND)', angle: -90, position: 'insideLeft' }} />
-                        <Tooltip
-                            formatter={(value) => `${value.toFixed(2)} TND`}
-                            contentStyle={{
-                                background: 'white',
-                                border: '1px solid #e5e7eb',
-                                borderRadius: '8px'
-                            }}
+                <ResponsiveContainer width="100%" height={350}>
+                    <AreaChart data={summary.chartData || []} margin={{ top: 10, right: 20, left: 10, bottom: 0 }}>
+                        <defs>
+                            <linearGradient id="gradCaisse" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#10b981" stopOpacity={0.25} />
+                                <stop offset="95%" stopColor="#10b981" stopOpacity={0.02} />
+                            </linearGradient>
+                            <linearGradient id="gradExpenses" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#ef4444" stopOpacity={0.2} />
+                                <stop offset="95%" stopColor="#ef4444" stopOpacity={0.02} />
+                            </linearGradient>
+
+                        </defs>
+                        <CartesianGrid strokeDasharray="3 3" stroke="var(--border-color)" vertical={false} />
+                        <XAxis
+                            dataKey="label"
+                            tick={{ fontSize: 11, fill: 'var(--text-light)' }}
+                            tickLine={false}
+                            axisLine={false}
                         />
-                        <Legend />
-                        <Line
+                        <YAxis
+                            tick={{ fontSize: 11, fill: 'var(--text-light)' }}
+                            tickLine={false}
+                            axisLine={false}
+                            tickFormatter={(v) => `${v.toFixed(0)}`}
+                        />
+                        <Tooltip
+                            formatter={(value, name) => [`${value.toFixed(2)} TND`, name]}
+                            contentStyle={{
+                                background: 'var(--card-bg)',
+                                border: '1px solid var(--border-color)',
+                                borderRadius: '10px',
+                                boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+                                fontSize: '13px'
+                            }}
+                            labelStyle={{ fontWeight: 700, color: 'var(--text-dark)', marginBottom: 4 }}
+                        />
+                        <ReferenceLine y={0} stroke="var(--border-color)" strokeDasharray="3 3" />
+                        <Area
                             type="monotone"
                             dataKey="redixCaisse"
                             stroke="#10b981"
-                            strokeWidth={3}
-                            name="Redix Caisse"
-                            dot={{ r: 5 }}
+                            strokeWidth={2.5}
+                            fill="url(#gradCaisse)"
+                            name="Caisse"
+                            dot={false}
+                            activeDot={{ r: 5, fill: '#10b981' }}
                         />
-                        <Line
+                        <Area
                             type="monotone"
                             dataKey="expenses"
                             stroke="#ef4444"
-                            strokeWidth={3}
+                            strokeWidth={2.5}
+                            fill="url(#gradExpenses)"
                             name="Expenses"
-                            dot={{ r: 5 }}
+                            dot={false}
+                            activeDot={{ r: 5, fill: '#ef4444' }}
                         />
-                        <Line
-                            type="monotone"
-                            dataKey="balance"
-                            stroke="#6366f1"
-                            strokeWidth={3}
-                            name="Balance"
-                            dot={{ r: 5 }}
-                        />
-                    </LineChart>
+
+                    </AreaChart>
                 </ResponsiveContainer>
             </div>
 
@@ -344,29 +377,51 @@ const Expenses = () => {
                         <h3>Add Money to Redix Caisse</h3>
                         {depositError && <div className={styles.errorBox}>{depositError}</div>}
                         <form onSubmit={handleDepositSubmit} className={styles.form}>
-                            <div className={styles.formGroup}>
-                                <label>Amount (TND) *</label>
-                                <input
-                                    type="number"
-                                    value={depositData.amount}
-                                    onChange={(e) => setDepositData({ ...depositData, amount: e.target.value })}
-                                    required
-                                    min="0.01"
-                                    step="0.01"
-                                    placeholder="0.00"
-                                />
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>Amount (TND) *</label>
+                                    <input
+                                        type="number"
+                                        value={depositData.amount}
+                                        onChange={(e) => setDepositData({ ...depositData, amount: e.target.value })}
+                                        required
+                                        min="0.01"
+                                        step="0.01"
+                                        placeholder="0.00"
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>Date *</label>
+                                    <input
+                                        type="date"
+                                        value={depositData.date}
+                                        onChange={(e) => setDepositData({ ...depositData, date: e.target.value })}
+                                        required
+                                    />
+                                </div>
                             </div>
-                            <div className={styles.formGroup}>
-                                <label>Description</label>
-                                <input
-                                    type="text"
-                                    value={depositData.description}
-                                    onChange={(e) => setDepositData({ ...depositData, description: e.target.value })}
-                                    placeholder="e.g. Client payment, external income..."
-                                />
+                            <div className={styles.formRow}>
+                                <div className={styles.formGroup}>
+                                    <label>Source of Income</label>
+                                    <input
+                                        type="text"
+                                        value={depositData.source}
+                                        onChange={(e) => setDepositData({ ...depositData, source: e.target.value })}
+                                        placeholder="e.g. Client payment, freelance, investment..."
+                                    />
+                                </div>
+                                <div className={styles.formGroup}>
+                                    <label>Description</label>
+                                    <input
+                                        type="text"
+                                        value={depositData.description}
+                                        onChange={(e) => setDepositData({ ...depositData, description: e.target.value })}
+                                        placeholder="Additional notes..."
+                                    />
+                                </div>
                             </div>
                             <div className={styles.formActions}>
-                                <button type="button" className={styles.cancelBtn} onClick={() => { setShowDepositModal(false); setDepositData({ amount: '', description: '' }); setDepositError(''); }}>
+                                <button type="button" className={styles.cancelBtn} onClick={() => { setShowDepositModal(false); setDepositData({ amount: '', description: '', source: '', date: new Date().toISOString().split('T')[0] }); setDepositError(''); }}>
                                     Cancel
                                 </button>
                                 <button type="submit" className={styles.depositSubmitBtn}>
@@ -425,6 +480,7 @@ const Expenses = () => {
                             <thead>
                                 <tr>
                                     <th>Date</th>
+                                    <th>Source</th>
                                     <th>Description</th>
                                     <th>Amount</th>
                                 </tr>
@@ -433,7 +489,8 @@ const Expenses = () => {
                                 {summary.depositHistory.map((dep, idx) => (
                                     <tr key={idx}>
                                         <td>{new Date(dep.date).toLocaleDateString()}</td>
-                                        <td>{dep.description}</td>
+                                        <td>{dep.source || '—'}</td>
+                                        <td>{dep.description || '—'}</td>
                                         <td className={styles.depositAmount}>+{dep.amount.toFixed(2)} TND</td>
                                     </tr>
                                 ))}

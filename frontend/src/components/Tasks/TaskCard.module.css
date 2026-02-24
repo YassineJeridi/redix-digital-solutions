@@ -7,6 +7,7 @@
     cursor: grab;
     transition: box-shadow 0.2s, transform 0.2s;
     user-select: none;
+    flex-shrink: 0;
 }
 
 .card:hover {
@@ -119,6 +120,7 @@
     border: 2px solid var(--card-bg);
     margin-left: -8px;
     position: relative;
+    overflow: hidden;
 }
 
 .avatar:first-child {
@@ -164,3 +166,79 @@
     color: var(--text-light);
     margin-top: 2px;
 }
+
+/* Avatar profile image */
+.avatarImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+/* Checklist section on card */
+.checklistSection {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.checklistRow {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-light);
+}
+
+.checklistBar {
+    flex: 1;
+    height: 4px;
+    background: var(--border-color);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.checklistFill {
+    height: 100%;
+    background: #10b981;
+    border-radius: 4px;
+    transition: width 0.3s;
+}
+
+.checklistItems {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    padding-left: 2px;
+}
+
+.checklistItem {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    color: var(--text-dark);
+    line-height: 1.4;
+}
+
+.checklistItemDone span {
+    text-decoration: line-through;
+    color: var(--text-light);
+    opacity: 0.65;
+}
+
+.checklistMore {
+    font-size: 10px;
+    color: var(--text-light);
+    padding-left: 18px;
+    font-style: italic;
+}
+
+.checklistLabel {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--text-light);
+    min-width: 28px;
+    text-align: right;
+}
+

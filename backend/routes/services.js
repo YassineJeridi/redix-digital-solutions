@@ -11,7 +11,8 @@ import {
     exportToPDF,
     getServiceStats,
     updateServiceStatus,
-    recordPartialPayment
+    recordPartialPayment,
+    updateInvoiceIssued
 } from '../controllers/servicesController.js';
 // import { protect, authorize } from '../middleware/auth.js';
 
@@ -41,6 +42,9 @@ router.put('/:id', updateService);
 
 // Inline status update
 router.patch('/:id/status', updateServiceStatus);
+
+// Toggle invoice issued status
+router.patch('/:id/invoice-issued', updateInvoiceIssued);
 
 // Record partial payment
 router.post('/:id/partial-payment', recordPartialPayment);

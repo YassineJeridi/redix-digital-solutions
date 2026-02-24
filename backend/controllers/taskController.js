@@ -14,11 +14,18 @@ export const getBoardLists = async (req, res) => {
         // Seed defaults if none exist
         if (lists.length === 0) {
             const defaults = [
-                { name: 'Todo', order: 0, color: '#6b7280', emoji: '📋' },
-                { name: 'Doing', order: 1, color: '#f59e0b', emoji: '🔧' },
-                { name: 'Done', order: 2, color: '#10b981', emoji: '✅' }
+                { name: 'Todo', order: 0, color: '#6b7280', emoji: '📋', isDefault: true },
+                { name: 'Doing', order: 1, color: '#f59e0b', emoji: '🔧', isDefault: true },
+                { name: 'Done', order: 2, color: '#10b981', emoji: '✅', isDefault: true }
             ];
             lists = await BoardList.insertMany(defaults);
+        } else {
+            // Backfill isDefault for existing default lists
+            await BoardList.updateMany(
+                { name: { $in: ['Todo', 'Doing', 'Done'] }, isDefault: { $ne: true } },
+                { $set: { isDefault: true } }
+            );
+            lists = await BoardList.find().sort({ order: 1 });
         }
 
         res.json(lists);
@@ -85,6 +92,10 @@ export const deleteBoardList = async (req, res) => {
     try {
         const list = await BoardList.findById(req.params.id);
         if (!list) return res.status(404).json({ message: 'List not found' });
+
+        if (list.isDefault) {
+            return res.status(400).json({ message: 'Cannot delete a default list (Todo, Doing, Done)' });
+        }
 
         const remainingLists = await BoardList.find({ _id: { $ne: list._id } }).sort({ order: 1 });
         if (remainingLists.length === 0) {
@@ -320,10 +331,10 @@ export const updateTaskStatus = async (req, res) => {
 // @route   PATCH /api/tasks/reorder
 export const reorderTasks = async (req, res) => {
     try {
-        const { tasks } = req.body; // [{ _id, status, order }]
+        const { tasks } = req.body; // [{ _id or id, status, order }]
         const ops = tasks.map(t => ({
             updateOne: {
-                filter: { _id: t._id },
+                filter: { _id: t._id || t.id },
                 update: { $set: { status: t.status, order: t.order } }
             }
         }));

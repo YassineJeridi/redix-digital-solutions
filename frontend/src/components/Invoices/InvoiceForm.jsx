@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MdClose, MdAdd, MdDelete, MdSend, MdSave, MdDownload, MdCode } from 'react-icons/md';
 import { SiTelegram } from 'react-icons/si';
 import { createInvoice, updateInvoice, exportInvoicePdf, sendInvoiceTelegram } from '../../services/InvoiceServices';
+import { updateInvoiceIssued } from '../../services/ServicesServices';
 import styles from './InvoiceForm.module.css';
 
 // ── Service template line items ──────────────────────────────────────────────
@@ -165,11 +166,12 @@ export default function InvoiceForm({ invoice, clients = [], onSave, onClose }) 
         if (!saved) return;
         try {
             await exportInvoicePdf(saved._id, saved.invoiceNumber);
-            onSave();
+            const serviceId = saved.service?._id || saved.service;
+            if (serviceId) updateInvoiceIssued(serviceId, true).catch(() => {});
         } catch {
             setSaveError('Invoice saved but PDF download failed.');
-            onSave(); // invoice was created — refresh the badge
         }
+        onSave();
     };
 
     const handleSendTelegram = async () => {
@@ -179,6 +181,8 @@ export default function InvoiceForm({ invoice, clients = [], onSave, onClose }) 
         try {
             const r = await sendInvoiceTelegram(saved._id, {});
             setTgMsg(r.message || 'Sent!');
+            const serviceId = saved.service?._id || saved.service;
+            if (serviceId) updateInvoiceIssued(serviceId, true).catch(() => {});
             setTimeout(() => onSave(), 1500);
         } catch (e) {
             setTgErr(e?.response?.data?.message || 'Failed to send to Telegram.');

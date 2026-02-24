@@ -7,6 +7,7 @@ import {
     exportInvoicePdf,
     sendInvoiceTelegram,
 } from '../../services/InvoiceServices';
+import { updateInvoiceIssued } from '../../services/ServicesServices';
 import styles from './InvoiceDetail.module.css';
 
 const STATUS_COLORS = {
@@ -107,9 +108,21 @@ export default function InvoiceDetail({ invoiceId, onClose, onEdit, onStatusChan
 
     const handleExportPdf = async () => {
         setExporting('pdf'); setExportErr('');
-        try { await exportInvoicePdf(invoiceId, invoice.invoiceNumber); }
-        catch { setExportErr('Failed to export PDF.'); }
-        finally { setExporting(''); }
+        try {
+            await exportInvoicePdf(invoiceId, invoice.invoiceNumber);
+        } catch {
+            setExportErr('Failed to export PDF.');
+            return;
+        } finally {
+            setExporting('');
+        }
+        // Update invoice status on the linked service (best-effort, after confirmed download)
+        try {
+            const serviceId = invoice.service?._id || invoice.service;
+            if (serviceId) await updateInvoiceIssued(serviceId, true);
+        } catch (e) {
+            console.warn('Could not update invoice status on service:', e?.message);
+        }
     };
 
     const handleSendTelegram = async () => {
@@ -117,6 +130,13 @@ export default function InvoiceDetail({ invoiceId, onClose, onEdit, onStatusChan
         try {
             const r = await sendInvoiceTelegram(invoiceId, {});
             setTgMsg(r.message || 'Sent successfully!');
+            // Update invoice status on the linked service after confirmed send
+            try {
+                const serviceId = invoice?.service?._id || invoice?.service;
+                if (serviceId) await updateInvoiceIssued(serviceId, true);
+            } catch (e) {
+                console.warn('Could not update invoice status on service:', e?.message);
+            }
         } catch (e) {
             setTgErr(e?.response?.data?.message || 'Failed to send to Telegram.');
         } finally { setTgSending(false); }

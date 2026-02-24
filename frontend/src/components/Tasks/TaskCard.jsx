@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { MdAccessTime, MdFlag, MdPerson } from 'react-icons/md';
+import { MdAccessTime, MdFlag, MdPerson, MdChecklist, MdChatBubble, MdCheckBox, MdCheckBoxOutlineBlank } from 'react-icons/md';
 import styles from './TaskCard.module.css';
 
 const priorityConfig = {
@@ -91,7 +91,10 @@ const TaskCard = ({ task, onClick }) => {
                                 style={{ zIndex: 3 - i }}
                                 title={member.name}
                             >
-                                {member.name?.charAt(0)?.toUpperCase() || '?'}
+                                {member.profileImage
+                                    ? <img src={member.profileImage} alt={member.name} className={styles.avatarImg} />
+                                    : member.name?.charAt(0)?.toUpperCase() || '?'
+                                }
                             </div>
                         ))}
                         {(task.assignedTo || []).length > 3 && (
@@ -110,10 +113,43 @@ const TaskCard = ({ task, onClick }) => {
                     )}
                 </div>
 
+                {/* Checklist preview */}
+                {task.checklist && task.checklist.length > 0 && (() => {
+                    const done = task.checklist.filter(i => i.done).length;
+                    const total = task.checklist.length;
+                    const pct = Math.round((done / total) * 100);
+                    const preview = task.checklist.slice(0, 4);
+                    return (
+                        <div className={styles.checklistSection}>
+                            <div className={styles.checklistRow}>
+                                <MdChecklist size={13} style={{ color: '#10b981', flexShrink: 0 }} />
+                                <div className={styles.checklistBar}>
+                                    <div className={styles.checklistFill} style={{ width: `${pct}%` }} />
+                                </div>
+                                <span className={styles.checklistLabel}>{done}/{total}</span>
+                            </div>
+                            <div className={styles.checklistItems}>
+                                {preview.map((item, i) => (
+                                    <div key={i} className={`${styles.checklistItem} ${item.done ? styles.checklistItemDone : ''}`}>
+                                        {item.done
+                                            ? <MdCheckBox size={13} style={{ color: '#10b981', flexShrink: 0 }} />
+                                            : <MdCheckBoxOutlineBlank size={13} style={{ color: '#9ca3af', flexShrink: 0 }} />
+                                        }
+                                        <span>{item.text}</span>
+                                    </div>
+                                ))}
+                                {total > 4 && (
+                                    <span className={styles.checklistMore}>+{total - 4} more</span>
+                                )}
+                            </div>
+                        </div>
+                    );
+                })()}
+
                 {/* Comments count indicator */}
                 {task.comments?.length > 0 && (
                     <div className={styles.commentCount}>
-                        💬 {task.comments.length}
+                        <MdChatBubble size={12} /> {task.comments.length}
                     </div>
                 )}
             </div>

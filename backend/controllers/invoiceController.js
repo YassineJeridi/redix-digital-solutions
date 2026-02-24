@@ -107,6 +107,7 @@ export const getInvoice = async (req, res) => {
     try {
         const invoice = await Invoice.findById(req.params.id)
             .populate('client')
+            .populate('service', 'projectName totalPrice amountPaid paymentStatus serviceProvided')
             .populate('createdBy', 'name email');
 
         if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
@@ -171,12 +172,22 @@ export const updateInvoice = async (req, res) => {
 export const updateInvoiceStatus = async (req, res) => {
     try {
         const { status } = req.body;
-        const invoice = await Invoice.findById(req.params.id);
-        if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
+        const validStatuses = ['Draft', 'Sent', 'Paid', 'Overdue', 'Cancelled'];
+        if (!validStatuses.includes(status)) {
+            return res.status(400).json({ message: 'Invalid status' });
+        }
 
-        invoice.status = status;
-        if (status === 'Paid' && !invoice.paidAt) invoice.paidAt = new Date();
-        await invoice.save();
+        const update = { status };
+        if (status === 'Paid') update.paidAt = new Date();
+
+        // Use findByIdAndUpdate to bypass the pre-save auto-overdue hook
+        // so the user's explicit status choice is always respected
+        const invoice = await Invoice.findByIdAndUpdate(
+            req.params.id,
+            { $set: update },
+            { new: true, runValidators: false }
+        );
+        if (!invoice) return res.status(404).json({ message: 'Invoice not found' });
 
         await logAudit({
             action: 'update',

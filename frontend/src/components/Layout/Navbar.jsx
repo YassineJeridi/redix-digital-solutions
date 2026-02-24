@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MdNotifications, MdDarkMode, MdLightMode, MdPerson, MdLogout, MdClose } from 'react-icons/md';
+import { MdNotifications, MdDarkMode, MdLightMode, MdPerson, MdLogout, MdClose, MdAssignment } from 'react-icons/md';
 import { useAuth } from '../../context/AuthContext';
 import * as NotificationServices from '../../services/NotificationServices';
+import { getTeamMembers } from '../../services/SettingsServices';
 import styles from './Navbar.module.css';
 
 const ICON_MAP = {
-    info: 'ℹ️',
+    info: <MdAssignment style={{ color: '#6366f1', fontSize: 18 }} />,
     warning: '⚠️',
     success: '✅',
 };
@@ -26,6 +27,9 @@ const Navbar = () => {
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const profileRef = useRef(null);
 
+    // Profile image from TeamMember
+    const [profileImage, setProfileImage] = useState(null);
+
     useEffect(() => {
         document.documentElement.setAttribute('data-theme', darkMode ? 'dark' : 'light');
         localStorage.setItem('theme', darkMode ? 'dark' : 'light');
@@ -37,6 +41,16 @@ const Navbar = () => {
         fetchNotifications();
         const interval = setInterval(fetchNotifications, 30000);
         return () => clearInterval(interval);
+    }, [user]);
+
+    // Load profile image from TeamMember record
+    useEffect(() => {
+        if (!user?.email) return;
+        getTeamMembers().then(members => {
+            const arr = members.data || members || [];
+            const me = arr.find(m => m.email === user.email);
+            if (me?.profileImage) setProfileImage(me.profileImage);
+        }).catch(() => {});
     }, [user]);
 
     // Close dropdowns on outside click
@@ -93,9 +107,9 @@ const Navbar = () => {
     const handleNotifClick = (notif) => {
         if (!notif.isRead) handleMarkAsRead(notif._id);
 
-        // Navigate based on whether there's a relatedId
-        if (notif.relatedId) {
-            navigate('/services');
+        // Navigate based on notification content
+        if (notif.message?.toLowerCase().includes('task') || notif.relatedId) {
+            navigate('/tasks');
         }
         setShowNotifications(false);
     };
@@ -184,7 +198,10 @@ const Navbar = () => {
                         onClick={() => { setShowProfileMenu(!showProfileMenu); setShowNotifications(false); }}
                     >
                         <div className={styles.profileAvatar}>
-                            {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                            {profileImage
+                                ? <img src={profileImage} alt={user?.name} className={styles.avatarImg} />
+                                : (user?.name?.charAt(0)?.toUpperCase() || 'U')
+                            }
                         </div>
                     </button>
 
@@ -192,7 +209,10 @@ const Navbar = () => {
                         <div className={styles.profileDropdown}>
                             <div className={styles.profileInfo}>
                                 <div className={styles.profileAvatarLg}>
-                                    {user?.name?.charAt(0)?.toUpperCase() || 'U'}
+                                    {profileImage
+                                        ? <img src={profileImage} alt={user?.name} className={styles.avatarImg} />
+                                        : (user?.name?.charAt(0)?.toUpperCase() || 'U')
+                                    }
                                 </div>
                                 <div>
                                     <span className={styles.profileName}>{user?.name || 'User'}</span>

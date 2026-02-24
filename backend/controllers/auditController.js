@@ -7,6 +7,7 @@ export const getAuditLogs = async (req, res) => {
             page = 1,
             limit = 50,
             entityType = '',
+            entityId = '',
             action = '',
             startDate = '',
             endDate = '',
@@ -16,6 +17,7 @@ export const getAuditLogs = async (req, res) => {
         let query = {};
 
         if (entityType) query.entityType = entityType;
+        if (entityId) query.entityId = entityId;
         if (action) query.action = action;
 
         if (startDate || endDate) {

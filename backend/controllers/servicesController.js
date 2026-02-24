@@ -821,4 +821,27 @@ export const getServiceStats = async (req, res) => {
     }
 };
 
+// Toggle or set invoiceIssued flag on a service (PATCH)
+export const updateInvoiceIssued = async (req, res) => {
+    try {
+        const { invoiceIssued } = req.body;
+        // Use findByIdAndUpdate to avoid triggering the full pre-save validation hooks
+        const project = await Service.findByIdAndUpdate(
+            req.params.id,
+            { $set: { invoiceIssued: invoiceIssued !== undefined ? invoiceIssued : true } },
+            { new: true }
+        );
+        if (!project) return res.status(404).json({ message: 'Service not found' });
+        await logAudit({
+            action: 'update',
+            entityType: 'Service',
+            entityId: project._id,
+            details: { invoiceIssued: project.invoiceIssued }
+        }, req);
+        res.json({ invoiceIssued: project.invoiceIssued });
+    } catch (error) {
+        console.error('Error updating invoiceIssued:', error);
+        res.status(500).json({ message: error.message });
+    }
+};
 

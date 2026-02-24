@@ -107,13 +107,14 @@ export const deleteExpense = async (req, res) => {
 // Add manual deposit to Redix Caisse
 export const addManualDeposit = async (req, res) => {
     try {
-        const { amount, description } = req.body;
+        const { amount, description, source, date } = req.body;
 
         if (!amount || amount <= 0) {
             return res.status(400).json({ message: 'Amount must be greater than 0' });
         }
 
         const parsedAmount = parseFloat(amount);
+        const depositDate = date ? new Date(date) : new Date();
         const metrics = await FinancialMetrics.getInstance();
         metrics.manualDeposits = (metrics.manualDeposits || 0) + parsedAmount;
         metrics.totalRevenue = (metrics.totalRevenue || 0) + parsedAmount;
@@ -121,7 +122,8 @@ export const addManualDeposit = async (req, res) => {
         metrics.depositHistory.push({
             amount: parsedAmount,
             description: description || 'Manual deposit to Redix Caisse',
-            date: new Date()
+            source: source || '',
+            date: depositDate
         });
         await metrics.save();
 

@@ -25,7 +25,7 @@ export const getFinancialSummary = async (period = 'month') => {
     return data;
 };
 
-export const addManualDeposit = async (amount, description) => {
-    const { data } = await api.post('/api/expenses/deposit', { amount, description });
+export const addManualDeposit = async (amount, description, source, date) => {
+    const { data } = await api.post('/api/expenses/deposit', { amount, description, source, date });
     return data;
 };

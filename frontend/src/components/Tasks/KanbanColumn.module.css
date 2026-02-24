@@ -6,9 +6,11 @@
     border-radius: 14px;
     display: flex;
     flex-direction: column;
-    max-height: calc(100vh - 140px);
+    height: calc(100vh - 220px);
+    min-height: 300px;
     border: 1px solid var(--border-color);
     transition: box-shadow 0.2s, border-color 0.2s;
+    overflow: hidden;
 }
 
 .columnOver {
@@ -113,11 +115,12 @@
 .taskList {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 12px;
     display: flex;
     flex-direction: column;
     gap: 10px;
-    min-height: 100px;
+    min-height: 0;
 }
 
 .taskList::-webkit-scrollbar {

@@ -11,6 +11,7 @@ import * as ServicesService from '../../services/ServicesServices';
 import * as ClientsService from '../../services/ClientsServices';
 import * as InvoiceService from '../../services/InvoiceServices';
 import { verifyPasskey } from '../../services/SettingsServices';
+import { updateInvoiceIssued } from '../../services/ServicesServices';
 import styles from './ServicesList.module.css';
 
 const ServicesList = () => {
@@ -233,6 +234,9 @@ const ServicesList = () => {
             } else if (action === 'detach' && invoice) {
                 await InvoiceService.updateInvoice(invoice._id, { service: null });
                 await loadInvoiceMap();
+            } else if (action === 'toggleInvoice') {
+                await updateInvoiceIssued(service._id, !service.invoiceIssued);
+                fetchServices();
             }
         } catch {
             setPasskeyError('Verification failed. Try again.');
@@ -440,23 +444,19 @@ const ServicesList = () => {
                                             </td>
                                             <td className={styles.price}>{service.totalPrice.toLocaleString()} TND</td>
                                             <td className={styles.invoiceCol} onClick={(e) => e.stopPropagation()}>
-                                                {invoiceMap[service._id] ? (
+                                                {service.invoiceIssued ? (
                                                     <button
-                                                        className={`${styles.invoiceBadge} ${invoiceMap[service._id].status === 'Sent' ? styles.invoiceBadge_Given : styles['invoiceBadge_' + (invoiceMap[service._id].status || 'Draft').replace(/\s/g, '')]}`}
-                                                        title="Click to detach invoice (passkey required)"
-                                                        onClick={() => openPasskeyModal(service, 'detach', invoiceMap[service._id])}
+                                                        className={`${styles.invoiceBadge} ${styles.invoiceBadge_Given}`}
+                                                        title="Invoice issued — click to toggle (passkey required)"
+                                                        onClick={() => openPasskeyModal(service, 'toggleInvoice')}
                                                     >
-                                                        {invoiceMap[service._id].status === 'Sent' ? (
-                                                            <><MdCheckCircle style={{ fontSize: 13, marginRight: 4 }} /> Given<span style={{ opacity: 0.7, marginLeft: 4, fontSize: 11 }}>{invoiceMap[service._id].invoiceNumber}</span></>
-                                                        ) : (
-                                                            invoiceMap[service._id].invoiceNumber
-                                                        )}
+                                                        <MdCheckCircle style={{ fontSize: 13, marginRight: 4 }} /> Invoice
                                                     </button>
                                                 ) : (
                                                     <button
                                                         className={styles.invoiceBadgeNone}
-                                                        title="Click to generate invoice (passkey required)"
-                                                        onClick={() => openPasskeyModal(service, 'generate')}
+                                                        title="No invoice issued — click to toggle (passkey required)"
+                                                        onClick={() => openPasskeyModal(service, 'toggleInvoice')}
                                                     >
                                                         No Invoice
                                                     </button>
@@ -465,9 +465,9 @@ const ServicesList = () => {
                                             <td className={styles.actions} onClick={(e) => e.stopPropagation()}>
                                                 {canCreateEdit && (
                                                     <button
-                                                        onClick={() => handleGenerateInvoice(service)}
+                                                        onClick={() => openPasskeyModal(service, 'generate')}
                                                         className={styles.invoiceBtn}
-                                                        title="Generate Invoice"
+                                                        title="Generate Invoice (passkey required)"
                                                     >
                                                         <MdReceiptLong />
                                                     </button>
@@ -567,12 +567,20 @@ const ServicesList = () => {
                             {passkeyModal.action === 'detach' ? <MdLinkOff /> : <MdLock />}
                         </div>
                         <h3 className={styles.passkeyTitle}>
-                            {passkeyModal.action === 'detach' ? 'Detach Invoice' : 'Generate Invoice'}
+                            {passkeyModal.action === 'detach'
+                                ? 'Detach Invoice'
+                                : passkeyModal.action === 'toggleInvoice'
+                                    ? 'Toggle Invoice Status'
+                                    : 'Generate Invoice'}
                         </h3>
                         <p className={styles.passkeyDesc}>
                             {passkeyModal.action === 'detach'
                                 ? `Remove the invoice link from "${passkeyModal.service.projectName}"?`
-                                : `Create an invoice for "${passkeyModal.service.projectName}"?`}
+                                : passkeyModal.action === 'toggleInvoice'
+                                    ? passkeyModal.service.invoiceIssued
+                                        ? `Mark "${passkeyModal.service.projectName}" as No Invoice?`
+                                        : `Mark "${passkeyModal.service.projectName}" as Invoice Issued?`
+                                    : `Create an invoice for "${passkeyModal.service.projectName}"?`}
                         </p>
                         <input
                             type="password"
@@ -591,7 +599,11 @@ const ServicesList = () => {
                                 onClick={handlePasskeyConfirm}
                                 disabled={passkeyLoading}
                             >
-                                {passkeyLoading ? '...' : passkeyModal.action === 'detach' ? <><MdLinkOff /> Detach</> : <><MdReceiptLong /> Generate</>}
+                                {passkeyLoading ? '...' : passkeyModal.action === 'detach'
+                                    ? <><MdLinkOff /> Detach</>
+                                    : passkeyModal.action === 'toggleInvoice'
+                                        ? <><MdCheckCircle /> Confirm</>
+                                        : <><MdReceiptLong /> Generate</>}
                             </button>
                         </div>
                     </div>

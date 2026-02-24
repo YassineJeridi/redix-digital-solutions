@@ -26,9 +26,11 @@ import {
 } from '../services/TasksServices';
 import { getClients } from '../services/ClientsServices';
 import { getTeamMembers } from '../services/SettingsServices';
+import { useAuth } from '../context/AuthContext';
 import styles from './KanbanBoard.module.css';
 
 const KanbanBoard = () => {
+    const { user } = useAuth();
     const [tasks, setTasks] = useState([]);
     const [clients, setClients] = useState([]);
     const [teamMembers, setTeamMembers] = useState([]);
@@ -40,6 +42,7 @@ const KanbanBoard = () => {
     const [modalOpen, setModalOpen] = useState(false);
     const [editingTask, setEditingTask] = useState(null);
     const [defaultStatus, setDefaultStatus] = useState('Todo');
+    const [defaultAssignees, setDefaultAssignees] = useState([]);
 
     // Drag state
     const [activeTask, setActiveTask] = useState(null);
@@ -180,6 +183,10 @@ const KanbanBoard = () => {
     const handleDeleteList = async (statusName) => {
         const list = boardLists.find(l => l.name === statusName);
         if (!list) return;
+        if (list.isDefault) {
+            alert('Cannot delete a default list (Todo, Doing, Done)');
+            return;
+        }
         if (boardLists.length <= 1) {
             alert('Cannot delete the last list');
             return;
@@ -289,6 +296,9 @@ const KanbanBoard = () => {
     const handleAddTask = (status = statuses[0] || 'Todo') => {
         setEditingTask(null);
         setDefaultStatus(status);
+        // Auto-assign the current user
+        const currentMember = teamMembers.find(m => m.email === user?.email);
+        setDefaultAssignees(currentMember ? [currentMember._id] : []);
         setModalOpen(true);
     };
 
@@ -494,17 +504,21 @@ const KanbanBoard = () => {
                 onDragEnd={handleDragEnd}
             >
                 <div className={styles.board}>
-                    {statuses.map(status => (
-                        <KanbanColumn
-                            key={status}
-                            status={status}
-                            tasks={getTasksByStatus(status)}
-                            onTaskClick={handleTaskClick}
-                            onAddTask={handleAddTask}
-                            listConfig={listConfigMap[status]}
-                            onDeleteList={boardLists.length > 1 ? handleDeleteList : undefined}
-                        />
-                    ))}
+                    {statuses.map(status => {
+                        const listInfo = boardLists.find(l => l.name === status);
+                        return (
+                            <KanbanColumn
+                                key={status}
+                                status={status}
+                                tasks={getTasksByStatus(status)}
+                                onTaskClick={handleTaskClick}
+                                onAddTask={handleAddTask}
+                                listConfig={listConfigMap[status]}
+                                isDefault={listInfo?.isDefault || false}
+                                onDeleteList={boardLists.length > 1 ? handleDeleteList : undefined}
+                            />
+                        );
+                    })}
 
                     {/* Add List Button */}
                     <div className={styles.addListColumn}>
@@ -561,6 +575,7 @@ const KanbanBoard = () => {
                         setEditingTask(null);
                     }}
                     defaultStatus={defaultStatus}
+                    defaultAssignees={defaultAssignees}
                 />
             )}
         </div>

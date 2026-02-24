@@ -237,6 +237,7 @@
 /* Board */
 .board {
     display: flex;
+    align-items: flex-start;
     gap: 20px;
     overflow-x: auto;
     padding-bottom: 16px;

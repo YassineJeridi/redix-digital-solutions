@@ -47,6 +47,7 @@ const financialMetricsSchema = new mongoose.Schema({
     depositHistory: [{
         amount: { type: Number, required: true },
         description: { type: String, default: 'Manual deposit to Redix Caisse' },
+        source: { type: String, default: '' },
         date: { type: Date, default: Date.now }
     }],
 

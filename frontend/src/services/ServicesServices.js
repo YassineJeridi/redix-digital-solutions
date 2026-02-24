@@ -92,6 +92,12 @@ export const updateServiceStatus = async (id, statusData) => {
     return response.data;
 };
 
+// Update invoice issued flag
+export const updateInvoiceIssued = async (id, invoiceIssued) => {
+    const response = await api.patch(`${API_URL}/${id}/invoice-issued`, { invoiceIssued });
+    return response.data;
+};
+
 // Record a partial payment
 export const recordPartialPayment = async (id, amount) => {
     const response = await api.post(`${API_URL}/${id}/partial-payment`, { amount });

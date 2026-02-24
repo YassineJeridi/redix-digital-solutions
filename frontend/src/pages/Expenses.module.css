@@ -590,3 +590,42 @@
         grid-template-columns: 1fr;
     }
 }
+
+/* Chart title + inline legend group */
+.chartTitleGroup {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.chartTitleGroup h3 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+}
+
+.chartLegendInline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.legendDot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-left: 6px;
+}
+
+/* Summary card sub-label */
+.cardSub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}

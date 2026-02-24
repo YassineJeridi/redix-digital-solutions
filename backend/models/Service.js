@@ -78,7 +78,10 @@ const projectSchema = new mongoose.Schema({
 
     // Metadata
     createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'TeamMember' },
-    lastModifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'TeamMember' }
+    lastModifiedBy: { type: mongoose.Schema.Types.ObjectId, ref: 'TeamMember' },
+
+    // Invoice tracking
+    invoiceIssued: { type: Boolean, default: false }
 }, { timestamps: true });
 
 // Validation: End date must be after start date

@@ -18,6 +18,10 @@ const boardListSchema = new mongoose.Schema({
     emoji: {
         type: String,
         default: '📋'
+    },
+    isDefault: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 

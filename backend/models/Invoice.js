@@ -30,7 +30,7 @@ const invoiceSchema = new mongoose.Schema(
         },
         service: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Service',
+            ref: 'Project',
             default: null,
         },
         issueDate: { type: Date, default: Date.now },

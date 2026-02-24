@@ -8,7 +8,7 @@ import { MdAdd, MdDelete } from 'react-icons/md';
 import TaskCard from './TaskCard';
 import styles from './KanbanColumn.module.css';
 
-const KanbanColumn = ({ status, tasks, onTaskClick, onAddTask, listConfig, onDeleteList }) => {
+const KanbanColumn = ({ status, tasks, onTaskClick, onAddTask, listConfig, onDeleteList, isDefault }) => {
     const config = listConfig || { label: status, color: '#6b7280', emoji: '📋' };
     const taskIds = tasks.map(t => t._id);
 
@@ -36,7 +36,7 @@ const KanbanColumn = ({ status, tasks, onTaskClick, onAddTask, listConfig, onDel
                     >
                         <MdAdd size={18} />
                     </button>
-                    {onDeleteList && (
+                    {onDeleteList && !isDefault && (
                         <button
                             className={styles.deleteListBtn}
                             onClick={() => onDeleteList(status)}
