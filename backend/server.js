@@ -21,6 +21,7 @@ import chargesRoutes from './routes/charges.js';
 import taskRoutes from './routes/tasks.js';
 import backupRoutes from './routes/backup.js';
 import invoiceRoutes from './routes/invoices.js';
+import upgradeRoutes from './routes/upgrade.js';
 import { performBackup } from './controllers/backupController.js';
 
 const app = express();
@@ -49,15 +50,29 @@ app.use('/api/charges', chargesRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/backup', backupRoutes);
 app.use('/api/invoices', invoiceRoutes);
+app.use('/api/upgrade', upgradeRoutes);
 
 // Schedule automatic backup every 24 hours at midnight
 cron.schedule('0 0 * * *', async () => {
     console.log('⏰ Running scheduled daily backup...');
     try {
-        await performBackup('Scheduled (Daily)');
+        const result = await performBackup('Scheduled (Daily)');
         console.log('✅ Scheduled backup completed successfully');
+        // Log scheduled backup to audit history
+        const { logAudit } = await import('./utils/auditLogger.js');
+        await logAudit({
+            action: 'backup_triggered',
+            entityType: 'Backup',
+            details: { triggeredBy: 'Scheduled (Daily)', method: 'scheduled', ...result }
+        });
     } catch (error) {
         console.error('❌ Scheduled backup failed:', error.message);
+        const { logAudit } = await import('./utils/auditLogger.js');
+        await logAudit({
+            action: 'backup_triggered',
+            entityType: 'Backup',
+            details: { triggeredBy: 'Scheduled (Daily)', method: 'scheduled', status: 'failed', error: error.message }
+        }).catch(() => {});
     }
 });
 

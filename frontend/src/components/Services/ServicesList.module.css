@@ -1045,3 +1045,30 @@
 :global([data-theme='dark']) .price {
     color: #4ade80;
 }
+
+/* Total price row */
+.totalRow td {
+    background: var(--primary-color, #2563eb);
+    color: #fff;
+    font-weight: 700;
+    padding: 12px 16px;
+    border-top: 2px solid var(--primary-color, #2563eb);
+}
+
+.totalLabel {
+    text-align: right;
+    letter-spacing: 0.08em;
+    font-size: 13px;
+    text-transform: uppercase;
+    opacity: 0.9;
+}
+
+.totalValue {
+    font-size: 15px;
+    color: #fff !important;
+    white-space: nowrap;
+}
+
+:global([data-theme='dark']) .totalRow td {
+    background: var(--primary-color, #7c3aed);
+}

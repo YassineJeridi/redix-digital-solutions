@@ -178,6 +178,7 @@ const ToolsList = () => {
                     onSubmit={editingTool ? handleUpdateTool : handleAddTool}
                     onClose={handleCloseForm}
                     editData={editingTool}
+                    existingCategories={categories}
                 />
             )}
 

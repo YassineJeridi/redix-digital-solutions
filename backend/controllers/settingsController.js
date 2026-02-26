@@ -227,6 +227,145 @@ export const addWithdrawal = async (req, res) => {
     }
 };
 
+// ── Redix Caisse management ──────────────────────────────────
+
+export const getCaisseBalance = async (req, res) => {
+    try {
+        const projects = await Service.find({ paymentStatus: 'Done' }).lean();
+        const totalRedixCaisse = projects.reduce((sum, project) => {
+            const redixAmount = (project.totalPrice * (project.revenueDistribution?.redixCaisse || 0)) / 100;
+            return sum + redixAmount;
+        }, 0);
+        const Expense = (await import('../models/Expense.js')).default;
+        const allExpenses = await Expense.find().lean();
+        const totalExpenses = allExpenses.reduce((sum, exp) => sum + exp.amount, 0);
+        const metrics = await FinancialMetrics.getInstance();
+        const tipsGiven = metrics.tipsGiven || 0;
+        const manualDeposits = metrics.manualDeposits || 0;
+        const balance = totalRedixCaisse - totalExpenses - tipsGiven + manualDeposits;
+        res.json({
+            balance,
+            tipsGiven,
+            manualDeposits,
+            totalRedixCaisse,
+            totalExpenses,
+            depositHistory: (metrics.depositHistory || []).slice(-20).reverse()
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching caisse balance', error: error.message });
+    }
+};
+
+export const addCaisseDeposit = async (req, res) => {
+    try {
+        const { amount, description, source } = req.body;
+        if (!amount || Number(amount) <= 0) {
+            return res.status(400).json({ message: 'Amount must be greater than 0' });
+        }
+        const metrics = await FinancialMetrics.getInstance();
+        metrics.manualDeposits = (metrics.manualDeposits || 0) + Number(amount);
+        metrics.depositHistory.push({
+            amount: Number(amount),
+            description: description || 'Manual deposit',
+            source: source || 'Manual',
+            date: new Date()
+        });
+        metrics.lastUpdated = new Date();
+        await metrics.save();
+
+        await logAudit({
+            action: 'caisse_deposit',
+            entityType: 'FinancialMetrics',
+            entityId: metrics._id,
+            details: { amount: Number(amount), description, source }
+        }, req);
+
+        const Expense = (await import('../models/Expense.js')).default;
+        const allProjects = await Service.find({ paymentStatus: 'Done' }).lean();
+        const totalRedixCaisse = allProjects.reduce((sum, p) => sum + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+        const allExpenses = await Expense.find().lean();
+        const totalExpenses = allExpenses.reduce((sum, e) => sum + e.amount, 0);
+        const balance = totalRedixCaisse - totalExpenses - (metrics.tipsGiven || 0) + metrics.manualDeposits;
+        res.json({ message: 'Deposit added successfully', balance, depositHistory: (metrics.depositHistory || []).slice(-20).reverse() });
+    } catch (error) {
+        res.status(400).json({ message: 'Error adding deposit', error: error.message });
+    }
+};
+
+export const addCaisseDeduction = async (req, res) => {
+    try {
+        const { amount, description } = req.body;
+        if (!amount || Number(amount) <= 0) {
+            return res.status(400).json({ message: 'Amount must be greater than 0' });
+        }
+        const metrics = await FinancialMetrics.getInstance();
+        metrics.manualDeposits = (metrics.manualDeposits || 0) - Number(amount);
+        metrics.depositHistory.push({
+            amount: -Number(amount),
+            description: description || 'Manual deduction',
+            source: 'Manual Deduction',
+            date: new Date()
+        });
+        metrics.lastUpdated = new Date();
+        await metrics.save();
+
+        await logAudit({
+            action: 'caisse_deduction',
+            entityType: 'FinancialMetrics',
+            entityId: metrics._id,
+            details: { amount: Number(amount), description }
+        }, req);
+
+        const Expense = (await import('../models/Expense.js')).default;
+        const allProjects = await Service.find({ paymentStatus: 'Done' }).lean();
+        const totalRedixCaisse = allProjects.reduce((sum, p) => sum + (p.totalPrice * (p.revenueDistribution?.redixCaisse || 0)) / 100, 0);
+        const allExpenses = await Expense.find().lean();
+        const totalExpenses = allExpenses.reduce((sum, e) => sum + e.amount, 0);
+        const balance = totalRedixCaisse - totalExpenses - (metrics.tipsGiven || 0) + metrics.manualDeposits;
+        res.json({ message: 'Deduction applied successfully', balance, depositHistory: (metrics.depositHistory || []).slice(-20).reverse() });
+    } catch (error) {
+        res.status(400).json({ message: 'Error applying deduction', error: error.message });
+    }
+};
+
+// ── Pending Earnings management ───────────────────────────────
+
+export const adjustPendingEarnings = async (req, res) => {
+    try {
+        const { amount, type, description } = req.body; // type: 'add' | 'subtract' | 'set'
+        if (!['add', 'subtract', 'set'].includes(type)) {
+            return res.status(400).json({ message: 'type must be add, subtract, or set' });
+        }
+        if (amount == null || Number(amount) < 0) {
+            return res.status(400).json({ message: 'Amount must be 0 or greater' });
+        }
+        const member = await TeamMember.findById(req.params.id);
+        if (!member) {
+            return res.status(404).json({ message: 'Team member not found' });
+        }
+        const oldValue = member.pendingEarnings;
+        if (type === 'set') {
+            member.pendingEarnings = Number(amount);
+        } else if (type === 'add') {
+            member.pendingEarnings = (member.pendingEarnings || 0) + Number(amount);
+        } else {
+            member.pendingEarnings = Math.max(0, (member.pendingEarnings || 0) - Number(amount));
+        }
+        await member.save();
+
+        await logAudit({
+            action: 'adjust_pending_earnings',
+            entityType: 'TeamMember',
+            entityId: member._id,
+            details: { type, amount: Number(amount), description, from: oldValue, to: member.pendingEarnings }
+        }, req);
+
+        res.json(member);
+    } catch (error) {
+        res.status(400).json({ message: 'Error adjusting pending earnings', error: error.message });
+    }
+};
+
 // ── Passkey management ────────────────────────────────────────
 
 // POST /api/settings/verify-passkey  (public — no auth required)

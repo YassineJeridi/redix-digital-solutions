@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MdClose, MdAdd, MdDelete, MdBuild, MdCategory, MdAttachMoney, MdInventory } from 'react-icons/md';
 import styles from './ToolForm.module.css';
 
-const ToolForm = ({ onSubmit, onClose, editData = null }) => {
+const ToolForm = ({ onSubmit, onClose, editData = null, existingCategories = [] }) => {
     const [formData, setFormData] = useState({
         name: editData?.name || '',
         basePrice: editData?.basePrice || 0,
@@ -144,7 +144,26 @@ const ToolForm = ({ onSubmit, onClose, editData = null }) => {
                                 onChange={handleChange}
                                 placeholder="e.g., Video Equipment"
                                 className={styles.input}
+                                list="categoryOptions"
+                                autoComplete="off"
                             />
+                            {existingCategories.length > 0 && (
+                                <datalist id="categoryOptions">
+                                    {existingCategories.map(c => <option key={c} value={c} />)}
+                                </datalist>
+                            )}
+                            {existingCategories.length > 0 && (
+                                <div className={styles.catSuggestions}>
+                                    {existingCategories.map(c => (
+                                        <button
+                                            key={c}
+                                            type="button"
+                                            className={`${styles.catChip} ${formData.category === c ? styles.catChipActive : ''}`}
+                                            onClick={() => setFormData(prev => ({ ...prev, category: c }))}
+                                        >{c}</button>
+                                    ))}
+                                </div>
+                            )}
                             {errors.category && <span className={styles.errorText}>{errors.category}</span>}
                         </div>
                     </div>

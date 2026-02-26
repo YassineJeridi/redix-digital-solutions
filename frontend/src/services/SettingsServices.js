@@ -50,3 +50,25 @@ export const updatePasskey = async (passkey, currentPasskey) => {
     const response = await api.put(`${TEAM_API}/passkey`, { passkey, currentPasskey });
     return response.data;
 };
+
+// ── Redix Caisse ──────────────────────────────────────────────
+export const getCaisseBalance = async () => {
+    const response = await api.get(`${TEAM_API}/caisse`);
+    return response.data;
+};
+
+export const addCaisseDeposit = async (data) => {
+    const response = await api.post(`${TEAM_API}/caisse/deposit`, data);
+    return response.data;
+};
+
+export const addCaisseDeduction = async (data) => {
+    const response = await api.post(`${TEAM_API}/caisse/deduct`, data);
+    return response.data;
+};
+
+// ── Pending Earnings ──────────────────────────────────────────
+export const adjustPendingEarnings = async (memberId, data) => {
+    const response = await api.post(`${TEAM_API}/${memberId}/pending-earnings`, data);
+    return response.data;
+};

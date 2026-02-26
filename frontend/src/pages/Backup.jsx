@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { MdBackup, MdCloudDone, MdError, MdSchedule, MdStorage, MdHistory, MdSend } from 'react-icons/md';
+import { MdBackup, MdCloudDone, MdError, MdSchedule, MdStorage, MdHistory, MdSend, MdSmartToy } from 'react-icons/md';
 import { getBackupStatus, getBackupHistory, triggerBackup } from '../services/BackupServices';
 import styles from './Backup.module.css';
 
@@ -7,6 +7,7 @@ const Backup = () => {
     const [status, setStatus] = useState(null);
     const [nextScheduled, setNextScheduled] = useState(null);
     const [history, setHistory] = useState([]);
+    const [historyFilter, setHistoryFilter] = useState('all'); // 'all' | 'manual' | 'scheduled'
     const [loading, setLoading] = useState(true);
     const [triggering, setTriggering] = useState(false);
     const [toast, setToast] = useState(null);
@@ -155,44 +156,69 @@ const Backup = () => {
 
             {/* History */}
             <div className={styles.historySection}>
-                <h2><MdHistory style={{ verticalAlign: 'middle', marginRight: 8 }} />Backup History</h2>
+                <div className={styles.historyHeader}>
+                    <h2><MdHistory style={{ verticalAlign: 'middle', marginRight: 8 }} />Backup History</h2>
+                    <div className={styles.historyTabs}>
+                        <button className={`${styles.histTab} ${historyFilter === 'all' ? styles.histTabActive : ''}`} onClick={() => setHistoryFilter('all')}>All</button>
+                        <button className={`${styles.histTab} ${historyFilter === 'manual' ? styles.histTabActive : ''}`} onClick={() => setHistoryFilter('manual')}>👤 Manual</button>
+                        <button className={`${styles.histTab} ${historyFilter === 'scheduled' ? styles.histTabActive : ''}`} onClick={() => setHistoryFilter('scheduled')}><MdSmartToy style={{ verticalAlign: 'middle' }} /> Bot / Scheduled</button>
+                    </div>
+                </div>
                 {history.length === 0 ? (
                     <div className={styles.emptyState}>
                         <div className={styles.emptyIcon}>📋</div>
                         <p>No backup history yet. Trigger your first backup above!</p>
                     </div>
-                ) : (
-                    <table className={styles.historyTable}>
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Triggered By</th>
-                                <th>Method</th>
-                                <th>Collections</th>
-                                <th>Documents</th>
-                                <th>Size</th>
-                                <th>Duration</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {history.map((entry) => (
-                                <tr key={entry._id}>
-                                    <td>{fmt(entry.createdAt)}</td>
-                                    <td>{entry.performedBy?.name || entry.details?.triggeredBy || 'System'}</td>
-                                    <td>
-                                        <span className={`${styles.badge} ${entry.details?.method === 'manual' ? styles.manual : styles.scheduled}`}>
-                                            {entry.details?.method || 'manual'}
-                                        </span>
-                                    </td>
-                                    <td>{entry.details?.collectionsCount ?? entry.details?.collections ?? '—'}</td>
-                                    <td>{entry.details?.totalDocuments ?? entry.details?.documents ?? '—'}</td>
-                                    <td>{entry.details?.fileSize || '—'}</td>
-                                    <td>{entry.details?.duration || '—'}</td>
+                ) : (() => {
+                    const filtered = history.filter(e => {
+                        if (historyFilter === 'all') return true;
+                        const method = e.details?.method || 'manual';
+                        return method === historyFilter;
+                    });
+                    return filtered.length === 0 ? (
+                        <div className={styles.emptyState}>
+                            <div className={styles.emptyIcon}>🔍</div>
+                            <p>No {historyFilter} backups found.</p>
+                        </div>
+                    ) : (
+                        <table className={styles.historyTable}>
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Triggered By</th>
+                                    <th>Method</th>
+                                    <th>Collections</th>
+                                    <th>Documents</th>
+                                    <th>Size</th>
+                                    <th>Duration</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                )}
+                            </thead>
+                            <tbody>
+                                {filtered.map((entry) => {
+                                    const isScheduled = entry.details?.method === 'scheduled';
+                                    return (
+                                        <tr key={entry._id} className={isScheduled ? styles.scheduledRow : ''}>
+                                            <td>{fmt(entry.createdAt)}</td>
+                                            <td>
+                                                {isScheduled && <MdSmartToy style={{ verticalAlign: 'middle', marginRight: 4, color: '#22c55e' }} />}
+                                                {entry.performedBy?.name || entry.details?.triggeredBy || 'System'}
+                                            </td>
+                                            <td>
+                                                <span className={`${styles.badge} ${isScheduled ? styles.scheduled : styles.manual}`}>
+                                                    {isScheduled ? '🤖 Scheduled' : '👤 Manual'}
+                                                </span>
+                                            </td>
+                                            <td>{entry.details?.collectionsCount ?? entry.details?.collections ?? '—'}</td>
+                                            <td>{entry.details?.totalDocuments ?? entry.details?.documents ?? '—'}</td>
+                                            <td>{entry.details?.fileSize || '—'}</td>
+                                            <td>{entry.details?.duration || '—'}</td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </table>
+                    );
+                })()}
             </div>
         </div>
     );

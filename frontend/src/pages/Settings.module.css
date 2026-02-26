@@ -153,3 +153,353 @@
     font-weight: 500;
     margin: 0;
 }
+
+/* ── Financial Management Card ─────────────────────────────── */
+.finCard {
+    grid-column: 1 / -1; /* full width */
+}
+
+.finLockWrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 24px 0 8px;
+}
+
+.finLockIcon {
+    font-size: 40px;
+}
+
+.finLockHint {
+    font-size: 14px;
+    color: var(--text-muted, #6b7280);
+}
+
+.finLockRow {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 360px;
+}
+
+.finPasskeyInput {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    font-size: 14px;
+    outline: none;
+    background: var(--input-bg, white);
+    color: var(--text-dark);
+    transition: border-color 0.2s;
+}
+
+.finPasskeyInput:focus { border-color: var(--primary-color); }
+.inputError { border-color: #dc2626 !important; }
+
+.unlockBtn {
+    padding: 10px 18px;
+    background: linear-gradient(135deg, #c12de0, #7817b6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+.unlockBtn:hover { opacity: 0.88; }
+.unlockBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.finPanel {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-top: 8px;
+}
+
+.lockBtn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 6px 14px;
+    background: var(--light-bg, #f3f4f6);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-dark);
+    transition: background 0.2s;
+}
+.lockBtn:hover { background: var(--hover-bg, #e5e7eb); }
+
+.finSection {
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px 20px;
+    background: var(--light-bg, #fafafa);
+}
+
+.finSectionTitle {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0 0 14px;
+}
+
+.finMsg {
+    font-size: 13px;
+    font-weight: 600;
+    color: #16a34a;
+    margin: 0 0 10px;
+}
+
+.finEmpty {
+    font-size: 13px;
+    color: var(--text-muted, #6b7280);
+    text-align: center;
+    padding: 12px 0;
+}
+
+/* Pending Earnings table */
+.peTable {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.peRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--card-bg, white);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.peMemberInfo {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 120px;
+}
+
+.peName {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.peRole {
+    font-size: 12px;
+    color: var(--text-muted, #6b7280);
+}
+
+.peBadge {
+    padding: 4px 12px;
+    background: rgba(234, 179, 8, 0.12);
+    color: #b45309;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.peBadgeZero {
+    background: var(--light-bg, #f3f4f6);
+    color: var(--text-muted, #6b7280);
+    font-weight: 500;
+}
+
+.peEditBtn {
+    padding: 6px 10px;
+    background: none;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+.peEditBtn:hover { background: var(--hover-bg, #f3f4f6); }
+
+.peEditRow {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.peSelect {
+    padding: 7px 10px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 13px;
+    background: var(--input-bg, white);
+    color: var(--text-dark);
+    outline: none;
+}
+
+.peInput {
+    padding: 7px 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 13px;
+    background: var(--input-bg, white);
+    color: var(--text-dark);
+    outline: none;
+    flex: 1;
+    min-width: 80px;
+    transition: border-color 0.2s;
+}
+.peInput:focus { border-color: var(--primary-color); }
+
+.peEditBtns {
+    display: flex;
+    gap: 6px;
+}
+
+.peConfirmBtn {
+    width: 32px;
+    height: 32px;
+    background: #16a34a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 700;
+    transition: opacity 0.2s;
+}
+.peConfirmBtn:hover { opacity: 0.85; }
+.peConfirmBtn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.peCancelBtn {
+    width: 32px;
+    height: 32px;
+    background: #ef4444;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: opacity 0.2s;
+}
+.peCancelBtn:hover { opacity: 0.85; }
+
+.allMembersToggle {
+    margin-top: 8px;
+}
+.allMembersToggle summary {
+    font-size: 13px;
+    color: var(--primary-color);
+    cursor: pointer;
+    user-select: none;
+    padding: 6px 0;
+    font-weight: 600;
+}
+.allMembersToggle summary:hover { opacity: 0.8; }
+
+/* Caisse */
+.caisseBalance {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding: 14px 18px;
+    background: linear-gradient(135deg, rgba(193,45,224,0.06), rgba(120,23,182,0.06));
+    border-radius: 10px;
+    margin-bottom: 14px;
+    border: 1px solid rgba(193,45,224,0.15);
+}
+
+.caisseBalanceLabel {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-muted, #6b7280);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}
+
+.caisseBalanceValue {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--primary-color);
+}
+
+.caisseTabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.caisseTab {
+    padding: 8px 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--light-bg, #f3f4f6);
+    color: var(--text-dark);
+    transition: all 0.2s;
+}
+.caisseTab:hover { background: var(--hover-bg, #e5e7eb); }
+.caisseTabActive {
+    background: linear-gradient(135deg, #c12de0, #7817b6) !important;
+    color: white !important;
+    border-color: transparent !important;
+}
+
+.caisseForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.deductBtn {
+    background: linear-gradient(135deg, #ef4444, #b91c1c) !important;
+}
+
+.caisseHistory {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.caisseHistoryRow {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 12px;
+    background: var(--card-bg, white);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.caisseHistAmt {
+    font-weight: 700;
+    white-space: nowrap;
+    min-width: 80px;
+}
+
+.caisseHistDesc {
+    flex: 1;
+    color: var(--text-light, #374151);
+}
+
+.caisseHistDate {
+    color: var(--text-muted, #6b7280);
+    white-space: nowrap;
+}
+
+.positive { color: #16a34a; }
+.negative { color: #dc2626; }

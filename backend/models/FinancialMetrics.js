@@ -69,6 +69,20 @@ const financialMetricsSchema = new mongoose.Schema({
         default: 0
     },
 
+    // Upgrade Investment Fund — money the team allocates for future upgrades
+    upgradeInvestmentFund: {
+        type: Number,
+        default: 0,
+        description: 'Amount designated by team for purchasing new equipment'
+    },
+
+    // History of deposits/withdrawals to the upgrade fund
+    upgradeInvestmentHistory: [{
+        amount: { type: Number, required: true },
+        description: { type: String, default: 'Fund deposit' },
+        date: { type: Date, default: Date.now }
+    }],
+
     // Last updated timestamp
     lastUpdated: {
         type: Date,

@@ -389,6 +389,24 @@ export const deleteService = async (req, res) => {
             return res.status(400).json({ message: 'Project name does not match. Deletion cancelled.' });
         }
 
+        // Clean up team member financials before deleting
+        if (project.teamMemberShares && project.teamMemberShares.length > 0) {
+            for (const share of project.teamMemberShares) {
+                if (!share.memberId || !share.amount || share.amount <= 0) continue;
+                const member = await TeamMember.findById(share.memberId);
+                if (!member) continue;
+
+                if (project.paymentStatus === 'Done') {
+                    // Reverse confirmed earnings
+                    member.reverseEarning(share.amount, project._id);
+                } else {
+                    // Remove pending earnings
+                    member.pendingEarnings = Math.max(0, member.pendingEarnings - share.amount);
+                }
+                await member.save();
+            }
+        }
+
         // Delete the project
         await Service.findByIdAndDelete(req.params.id);
 

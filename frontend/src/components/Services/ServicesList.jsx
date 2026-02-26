@@ -504,6 +504,17 @@ const ServicesList = () => {
                                     ))
                                 )}
                             </tbody>
+                            {services && services.length > 0 && (
+                                <tfoot>
+                                    <tr className={styles.totalRow}>
+                                        <td colSpan="6" className={styles.totalLabel}>TOTAL PRICE</td>
+                                        <td className={styles.totalValue}>
+                                            {services.reduce((sum, s) => sum + (s.totalPrice || 0), 0).toLocaleString()} TND
+                                        </td>
+                                        <td colSpan="2"></td>
+                                    </tr>
+                                </tfoot>
+                            )}
                         </table>
                     </div>
 

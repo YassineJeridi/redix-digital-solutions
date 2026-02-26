@@ -195,6 +195,56 @@
     border-bottom: 2px solid var(--border-color);
 }
 
+.historyHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.historyHeader h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.historyTabs {
+    display: flex;
+    gap: 6px;
+}
+
+.histTab {
+    padding: 6px 14px;
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    background: var(--light-bg, #f3f4f6);
+    color: var(--text-dark);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.histTab:hover { background: var(--hover-bg, #e5e7eb); }
+.histTabActive {
+    background: linear-gradient(135deg, #c12de0, #7817b6) !important;
+    color: white !important;
+    border-color: transparent !important;
+}
+
+.scheduledRow {
+    background: rgba(34, 197, 94, 0.04) !important;
+}
+
 .historyTable {
     width: 100%;
     border-collapse: collapse;
