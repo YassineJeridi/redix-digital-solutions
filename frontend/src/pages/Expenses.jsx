@@ -610,6 +610,40 @@ const Expenses = () => {
 
       {/* Tables Row */}
       <div className={styles.tablesRow}>
+        {/* Redix Caisse History */}
+        <div className={styles.tableCard}>
+          <h3>Redix Caisse History</h3>
+          {summary.depositHistory && summary.depositHistory.length > 0 ? (
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Source</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                {summary.depositHistory.map((dep, idx) => (
+                  <tr key={idx}>
+                    <td>{new Date(dep.date).toLocaleDateString()}</td>
+                    <td>{dep.source || "—"}</td>
+                    <td>{dep.description || "—"}</td>
+                    <td className={styles.depositAmount}>
+                      +{dep.amount.toFixed(2)} TND
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <div className={styles.emptyState}>
+              <MdSavings />
+              <p>No deposits yet</p>
+            </div>
+          )}
+        </div>
+
         {/* Expenses History */}
         <div className={styles.tableCard}>
           <h3>Expenses History</h3>
@@ -661,40 +695,6 @@ const Expenses = () => {
             <div className={styles.emptyState}>
               <MdReceipt />
               <p>No expenses recorded yet</p>
-            </div>
-          )}
-        </div>
-
-        {/* Redix Caisse History */}
-        <div className={styles.tableCard}>
-          <h3>Redix Caisse History</h3>
-          {summary.depositHistory && summary.depositHistory.length > 0 ? (
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Source</th>
-                  <th>Description</th>
-                  <th>Amount</th>
-                </tr>
-              </thead>
-              <tbody>
-                {summary.depositHistory.map((dep, idx) => (
-                  <tr key={idx}>
-                    <td>{new Date(dep.date).toLocaleDateString()}</td>
-                    <td>{dep.source || "—"}</td>
-                    <td>{dep.description || "—"}</td>
-                    <td className={styles.depositAmount}>
-                      +{dep.amount.toFixed(2)} TND
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          ) : (
-            <div className={styles.emptyState}>
-              <MdSavings />
-              <p>No deposits yet</p>
             </div>
           )}
         </div>
