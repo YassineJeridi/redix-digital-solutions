@@ -9,7 +9,7 @@ import {
 import * as ClientsService from "../services/ClientsServices";
 import styles from "./Receipt.module.css";
 
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const API_BASE = import.meta.env.VITE_API_URL || "";
 
 const Receipt = () => {
   const [clients, setClients] = useState([]);
