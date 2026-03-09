@@ -104,7 +104,10 @@ const Dashboard = () => {
 
       {/* Key Metrics */}
       <div className={styles.metricsGrid}>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/services")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(193, 45, 224, 0.1)" }}
@@ -118,7 +121,10 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/expenses")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(239, 68, 68, 0.1)" }}
@@ -132,7 +138,10 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/team")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(16, 185, 129, 0.1)" }}
@@ -146,7 +155,10 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/expenses")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(120, 23, 182, 0.1)" }}
@@ -160,7 +172,10 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/ads")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(6, 182, 212, 0.1)" }}
@@ -170,14 +185,17 @@ const Dashboard = () => {
           <div className={styles.metricContent}>
             <span className={styles.metricLabel}>Remaining Balance (Ads)</span>
             <span className={styles.metricValue}>
-              {(metrics.adsRemainingBalance || 0).toLocaleString(undefined, {
+              {(metrics.adsRemainingBalanceUSD || 0).toLocaleString(undefined, {
                 maximumFractionDigits: 2,
               })}{" "}
-              TND
+              USD
             </span>
           </div>
         </div>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/ads")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(245, 158, 11, 0.1)" }}
@@ -193,7 +211,10 @@ const Dashboard = () => {
             </span>
           </div>
         </div>
-        <div className={styles.metricCard}>
+        <div
+          className={`${styles.metricCard} ${styles.metricCardClickable}`}
+          onClick={() => navigate("/tools")}
+        >
           <div
             className={styles.metricIcon}
             style={{ background: "rgba(16, 185, 129, 0.1)" }}

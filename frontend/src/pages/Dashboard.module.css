@@ -99,6 +99,10 @@
   box-shadow: 0 12px 24px rgba(193, 45, 224, 0.1);
 }
 
+.metricCardClickable {
+  cursor: pointer;
+}
+
 .metricIcon {
   width: 56px;
   height: 56px;

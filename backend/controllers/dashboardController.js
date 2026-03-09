@@ -175,7 +175,8 @@ export const getDashboardStats = async (req, res) => {
     const totalSpentUSD = allAdsTx
       .filter((t) => t.entryType === "spend")
       .reduce((s, t) => s + t.amountUSD, 0);
-    const adsRemainingBalance = (totalFundedUSD - totalSpentUSD) * USD_TO_TND;
+    const adsRemainingBalanceUSD = totalFundedUSD - totalSpentUSD;
+    const adsRemainingBalance = adsRemainingBalanceUSD * USD_TO_TND;
     const adsReservedTND = adsSettings?.reservedTND ?? 0;
 
     res.json({
@@ -185,6 +186,7 @@ export const getDashboardStats = async (req, res) => {
       toolsReserve,
       teamShare,
       redixCaisse,
+      adsRemainingBalanceUSD,
       adsRemainingBalance,
       adsReservedTND,
       toolsRevenue: toolsReservedTotal,
