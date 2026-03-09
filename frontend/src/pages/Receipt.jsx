@@ -69,7 +69,7 @@ const Receipt = () => {
     setSuccess(false);
 
     try {
-      const res = await fetch(`${API_BASE}/api/receipts/generate`, {
+      const res = await fetch(`${API_BASE}/api/receipts/export-pdf`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

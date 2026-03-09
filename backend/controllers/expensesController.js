@@ -376,14 +376,8 @@ const buildChartData = async (
       });
     }
   }
-  // Caisse: running balance (cumulative inflow minus cumulative expenses) — line holds when no activity
   // Expenses: stay as per-period raw amount for the bar chart
-  let cumBalance = 0;
-  for (const d of chartData) {
-    cumBalance += d.redixCaisse - d.expenses;
-    d.caisseBalance = Math.max(0, cumBalance);
-    // d.expenses is intentionally left as the raw per-period amount
-  }
+  // caisseBalance is computed in getFinancialSummary so it starts from the real overall balance
   return chartData;
 };
 
@@ -423,6 +417,18 @@ export const getFinancialSummary = async (req, res) => {
       allExpenses,
       depositHistory,
     );
+
+    // Compute caisseBalance as a running balance anchored to the real current balance.
+    // Start from (balance - net flow in chart window) so the last point == actual current caisse.
+    const chartNetFlow = chartData.reduce(
+      (s, d) => s + d.redixCaisse - d.expenses,
+      0,
+    );
+    let cumBalance = balance - chartNetFlow;
+    for (const d of chartData) {
+      cumBalance += d.redixCaisse - d.expenses;
+      d.caisseBalance = Math.max(0, cumBalance);
+    }
 
     res.json({
       totalRedixCaisse,

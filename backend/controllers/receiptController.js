@@ -2,7 +2,7 @@ import { PassThrough } from "stream";
 import { buildReceiptPdf } from "../utils/receiptPdf.js";
 
 /**
- * POST /api/receipts/generate
+ * POST /api/receipts/export-pdf
  * Body: { clientName, amountPaid, date, thankingOption }
  * Returns: PDF binary stream
  */
