@@ -175,7 +175,15 @@ const Sidebar = ({ collapsed, onToggle }) => {
           {user && !collapsed && (
             <div className={styles.userInfo}>
               <div className={styles.userAvatar}>
-                {user.name?.charAt(0)?.toUpperCase() || "U"}
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className={styles.userAvatarImg}
+                  />
+                ) : (
+                  user.name?.charAt(0)?.toUpperCase() || "U"
+                )}
               </div>
               <div className={styles.userDetails}>
                 <span className={styles.userName}>{user.name || "User"}</span>
@@ -186,7 +194,15 @@ const Sidebar = ({ collapsed, onToggle }) => {
           {user && collapsed && (
             <div className={styles.avatarOnly} title={user.name}>
               <div className={styles.userAvatar}>
-                {user.name?.charAt(0)?.toUpperCase() || "U"}
+                {user.avatar ? (
+                  <img
+                    src={user.avatar}
+                    alt={user.name}
+                    className={styles.userAvatarImg}
+                  />
+                ) : (
+                  user.name?.charAt(0)?.toUpperCase() || "U"
+                )}
               </div>
             </div>
           )}

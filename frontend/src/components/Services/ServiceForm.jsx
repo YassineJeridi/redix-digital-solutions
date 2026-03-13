@@ -10,15 +10,27 @@ import {
   MdBuildCircle,
   MdPieChart,
   MdCampaign,
+  MdVideocam,
+  MdCode,
+  MdNavigateBefore,
+  MdNavigateNext,
 } from "react-icons/md";
 import * as ClientsService from "../../services/ClientsServices";
 import * as ToolsServices from "../../services/ToolsServices";
 import * as SettingsServices from "../../services/SettingsServices";
 import styles from "./ServiceForm.module.css";
 
+const TABS = [
+  { id: "basic", label: "Basic Info", icon: MdBusiness },
+  { id: "revenue", label: "Revenue", icon: MdAttachMoney },
+  { id: "details", label: "Details", icon: MdBuildCircle },
+  { id: "team", label: "Team", icon: MdGroup },
+];
+
 const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [activeTab, setActiveTab] = useState("basic");
 
   // Dropdown options
   const [clients, setClients] = useState([]);
@@ -100,10 +112,12 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
           typeComplexity: "Vitrine",
         },
         toolsUsage:
-          editData.toolsUsage?.map((t) => ({
-            tool: t.tool._id || t.tool,
-            percentage: t.percentage,
-          })) || [],
+          editData.toolsUsage
+            ?.filter((t) => t.tool != null)
+            .map((t) => ({
+              tool: t.tool._id || t.tool,
+              percentage: t.percentage,
+            })) || [],
         teamMembers: editData.teamMembers?.map((m) => m._id || m) || [],
         teamMemberShares:
           editData.teamMemberShares?.map((s) => ({
@@ -341,6 +355,22 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
       }
     }
 
+    // Marketing / Production: require videos OR shooting sessions
+    if (formData.serviceProvided === "Marketing") {
+      const { videosCount, shootingSessionsCount } = formData.marketing;
+      if (!videosCount && !shootingSessionsCount) {
+        newErrors.marketingRequired =
+          "At least Videos Count or Shooting Sessions must be greater than 0";
+      }
+    }
+    if (formData.serviceProvided === "Production") {
+      const { videosCount, shootingSessionsCount } = formData.production;
+      if (!videosCount && !shootingSessionsCount) {
+        newErrors.productionRequired =
+          "At least Videos Count or Shooting Sessions must be greater than 0";
+      }
+    }
+
     // Tools usage validation (for Marketing, Production and Development)
     if (
       ["Marketing", "Production", "Development"].includes(
@@ -355,6 +385,11 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
       }
     }
 
+    // Team member required
+    if (formData.teamMembers.length === 0) {
+      newErrors.teamMemberShares = "At least one team member must be assigned";
+    }
+
     // Team member shares validation
     if (formData.teamMembers.length > 0) {
       const sharesTotal = calculateTeamSharesTotal();
@@ -364,13 +399,30 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
     }
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+    return newErrors;
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (!validate()) {
+  const handleSubmit = async () => {
+    const newErrors = validate();
+    if (Object.keys(newErrors).length > 0) {
+      if (
+        ["serviceName", "client", "startDate", "endDate", "totalPrice"].some(
+          (k) => newErrors[k],
+        )
+      ) {
+        setActiveTab("basic");
+      } else if (newErrors.revenueDistribution) {
+        setActiveTab("revenue");
+      } else if (
+        newErrors.toolsUsage ||
+        newErrors.developmentDescription ||
+        newErrors.marketingRequired ||
+        newErrors.productionRequired
+      ) {
+        setActiveTab("details");
+      } else if (newErrors.teamMemberShares) {
+        setActiveTab("team");
+      }
       return;
     }
 
@@ -415,6 +467,21 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
     formData.serviceProvided,
   );
 
+  const tabErrors = {
+    basic: ["serviceName", "client", "startDate", "endDate", "totalPrice"].some(
+      (k) => errors[k],
+    ),
+    revenue: !!errors.revenueDistribution,
+    details: !!(
+      errors.toolsUsage ||
+      errors.developmentDescription ||
+      errors.marketingRequired ||
+      errors.productionRequired
+    ),
+    team: !!errors.teamMemberShares,
+  };
+  const activeTabIndex = TABS.findIndex((t) => t.id === activeTab);
+
   return (
     <div className={styles.overlay}>
       <div className={styles.modal}>
@@ -435,634 +502,797 @@ const ServiceForm = ({ onSubmit, onClose, editData, userRole }) => {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {/* Basic Information */}
-          <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <MdBusiness /> Basic Information
-            </h3>
-
-            <div className={styles.row}>
-              <div className={styles.formGroup}>
-                <label>Service Name *</label>
-                <input
-                  type="text"
-                  name="serviceName"
-                  value={formData.serviceName}
-                  onChange={handleChange}
-                  className={errors.serviceName ? styles.error : ""}
-                />
-                {errors.serviceName && (
-                  <span className={styles.errorText}>{errors.serviceName}</span>
-                )}
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Client *</label>
-                <select
-                  name="client"
-                  value={formData.client}
-                  onChange={handleChange}
-                  className={errors.client ? styles.error : ""}
-                >
-                  <option value="">Select Client</option>
-                  {clients.map((client) => (
-                    <option key={client._id} value={client._id}>
-                      {client.businessName}
-                    </option>
-                  ))}
-                </select>
-                {errors.client && (
-                  <span className={styles.errorText}>{errors.client}</span>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.row}>
-              <div className={styles.formGroup}>
-                <label>Start Date *</label>
-                <input
-                  type="date"
-                  name="startDate"
-                  value={formData.startDate}
-                  onChange={handleChange}
-                  className={errors.startDate ? styles.error : ""}
-                />
-                {errors.startDate && (
-                  <span className={styles.errorText}>{errors.startDate}</span>
-                )}
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>End Date *</label>
-                <input
-                  type="date"
-                  name="endDate"
-                  value={formData.endDate}
-                  onChange={handleChange}
-                  className={errors.endDate ? styles.error : ""}
-                />
-                {errors.endDate && (
-                  <span className={styles.errorText}>{errors.endDate}</span>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.row}>
-              <div className={styles.formGroup}>
-                <label>Service Provided *</label>
-                <select
-                  name="serviceProvided"
-                  value={formData.serviceProvided}
-                  onChange={handleChange}
-                >
-                  <option value="Marketing">Marketing</option>
-                  <option value="Production">Production</option>
-                  <option value="Development">Development</option>
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Total Price *</label>
-                <input
-                  type="number"
-                  name="totalPrice"
-                  value={formData.totalPrice}
-                  onChange={handleChange}
-                  min="0"
-                  step="0.01"
-                  className={errors.totalPrice ? styles.error : ""}
-                />
-                {errors.totalPrice && (
-                  <span className={styles.errorText}>{errors.totalPrice}</span>
-                )}
-              </div>
-            </div>
-
-            <div className={styles.row}>
-              <div className={styles.formGroup}>
-                <label>Payment Status *</label>
-                <select
-                  name="paymentStatus"
-                  value={formData.paymentStatus}
-                  onChange={handleChange}
-                >
-                  <option value="Pending">Pending</option>
-                  <option value="Done">Done</option>
-                </select>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Service Status *</label>
-                <select
-                  name="serviceStatus"
-                  value={formData.serviceStatus}
-                  onChange={handleChange}
-                >
-                  <option value="Not Started">Not Started</option>
-                  <option value="In Progress">In Progress</option>
-                  <option value="Completed">Completed</option>
-                </select>
-              </div>
-            </div>
-          </section>
-
-          {/* Ads Fees */}
-          <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <MdCampaign /> Ads Fees
-            </h3>
-            <div className={styles.adsFeeCheckRow}>
-              <input
-                type="checkbox"
-                id="adsFeesEnabled"
-                checked={formData.adsFees.enabled}
-                onChange={(e) =>
-                  handleAdsFeeChange("enabled", e.target.checked)
-                }
-              />
-              <label htmlFor="adsFeesEnabled">
-                Include Ads Fees (deducted before revenue distribution)
-              </label>
-            </div>
-            {formData.adsFees.enabled && (
-              <div className={styles.adsFeeSection}>
-                <div className={styles.adsFeeRow}>
-                  <div className={styles.formGroup}>
-                    <label>Ads Spend (USD)</label>
-                    <input
-                      type="number"
-                      value={formData.adsFees.amountUSD}
-                      onChange={(e) =>
-                        handleAdsFeeChange("amountUSD", e.target.value)
-                      }
-                      min="0"
-                      step="0.01"
-                      placeholder="0.00"
-                    />
-                  </div>
-                  <div className={styles.formGroup}>
-                    <label>1 USD = ? TND</label>
-                    <input
-                      type="number"
-                      value={formData.adsFees.usdToTND}
-                      onChange={(e) =>
-                        handleAdsFeeChange("usdToTND", e.target.value)
-                      }
-                      min="0"
-                      step="0.01"
-                      placeholder="3.50"
-                    />
-                  </div>
-                </div>
-                {adsFeesTND > 0 && (
-                  <div className={styles.adsFeeHint}>
-                    Ads Fees: <strong>{adsFeesTND.toFixed(2)} TND</strong> —
-                    will be added to TND Reserved in Ads page
-                    <br />
-                    Effective price for distribution:{" "}
-                    <strong>{effectivePrice.toFixed(2)} TND</strong>
-                  </div>
-                )}
-              </div>
-            )}
-          </section>
-
-          {/* Revenue Distribution */}
-          <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <MdPieChart /> Revenue Distribution (must total 100%)
-            </h3>
-            {errors.revenueDistribution && (
-              <div className={styles.errorBox}>
-                {errors.revenueDistribution}
-              </div>
-            )}
-
-            <div className={styles.revenueGrid}>
-              <div className={styles.formGroup}>
-                <label>Tools & Charges (%)</label>
-                <input
-                  type="number"
-                  value={formData.revenueDistribution.toolsAndCharges}
-                  onChange={(e) =>
-                    handleRevenueChange("toolsAndCharges", e.target.value)
-                  }
-                  min="0"
-                  max="100"
-                  step="0.01"
-                />
-                <span className={styles.distAmount}>
-                  ={" "}
-                  {(
-                    (effectivePrice *
-                      formData.revenueDistribution.toolsAndCharges) /
-                    100
-                  ).toFixed(2)}{" "}
-                  TND
-                </span>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Team Share (%)</label>
-                <input
-                  type="number"
-                  value={formData.revenueDistribution.teamShare}
-                  onChange={(e) =>
-                    handleRevenueChange("teamShare", e.target.value)
-                  }
-                  min="0"
-                  max="100"
-                  step="0.01"
-                />
-                <span className={styles.distAmount}>
-                  ={" "}
-                  {(
-                    (effectivePrice * formData.revenueDistribution.teamShare) /
-                    100
-                  ).toFixed(2)}{" "}
-                  TND
-                </span>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label>Redix Caisse (%)</label>
-                <input
-                  type="number"
-                  value={formData.revenueDistribution.redixCaisse}
-                  onChange={(e) =>
-                    handleRevenueChange("redixCaisse", e.target.value)
-                  }
-                  min="0"
-                  max="100"
-                  step="0.01"
-                />
-                <span className={styles.distAmount}>
-                  ={" "}
-                  {(
-                    (effectivePrice *
-                      formData.revenueDistribution.redixCaisse) /
-                    100
-                  ).toFixed(2)}{" "}
-                  TND
-                </span>
-              </div>
-            </div>
-
-            <div
-              className={`${styles.totalBadge} ${Math.abs(calculateRevenueTotal() - 100) < 0.01 ? styles.valid : styles.invalid}`}
+        {/* Tab Navigation */}
+        <div className={styles.tabNav}>
+          {TABS.map((tab, idx) => (
+            <button
+              key={tab.id}
+              type="button"
+              className={`${styles.tabBtn} ${activeTab === tab.id ? styles.tabBtnActive : ""} ${tabErrors[tab.id] ? styles.tabBtnError : ""}`}
+              onClick={() => setActiveTab(tab.id)}
             >
-              Total: {calculateRevenueTotal().toFixed(2)}%
-            </div>
-          </section>
+              <span className={styles.tabStepNum}>{idx + 1}</span>
+              <tab.icon />
+              <span className={styles.tabLabel}>{tab.label}</span>
+              {tabErrors[tab.id] && <span className={styles.tabErrorDot} />}
+            </button>
+          ))}
+        </div>
 
-          {/* Service-Specific Fields */}
-          {formData.serviceProvided === "Marketing" && (
-            <section className={styles.section}>
-              <h3 className={styles.sectionTitle}>Marketing Details</h3>
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Videos Count</label>
-                  <input
-                    type="number"
-                    value={formData.marketing.videosCount}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "marketing",
-                        "videosCount",
-                        parseInt(e.target.value) || 0,
-                      )
-                    }
-                    min="0"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Posts Count</label>
-                  <input
-                    type="number"
-                    value={formData.marketing.postsCount}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "marketing",
-                        "postsCount",
-                        parseInt(e.target.value) || 0,
-                      )
-                    }
-                    min="0"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Shooting Sessions</label>
-                  <input
-                    type="number"
-                    value={formData.marketing.shootingSessionsCount}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "marketing",
-                        "shootingSessionsCount",
-                        parseInt(e.target.value) || 0,
-                      )
-                    }
-                    min="0"
-                  />
-                </div>
-              </div>
-            </section>
-          )}
-
-          {formData.serviceProvided === "Production" && (
-            <section className={styles.section}>
-              <h3 className={styles.sectionTitle}>Production Details</h3>
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Videos Count</label>
-                  <input
-                    type="number"
-                    value={formData.production.videosCount}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "production",
-                        "videosCount",
-                        parseInt(e.target.value) || 0,
-                      )
-                    }
-                    min="0"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Pictures Count</label>
-                  <input
-                    type="number"
-                    value={formData.production.picturesCount}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "production",
-                        "picturesCount",
-                        parseInt(e.target.value) || 0,
-                      )
-                    }
-                    min="0"
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Shooting Sessions</label>
-                  <input
-                    type="number"
-                    value={formData.production.shootingSessionsCount}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "production",
-                        "shootingSessionsCount",
-                        parseInt(e.target.value) || 0,
-                      )
-                    }
-                    min="0"
-                  />
-                </div>
-              </div>
-            </section>
-          )}
-
-          {formData.serviceProvided === "Development" && (
-            <section className={styles.section}>
-              <h3 className={styles.sectionTitle}>Development Details</h3>
-              <div className={styles.formGroup}>
-                <label>Service Description *</label>
-                <textarea
-                  value={formData.development.description}
-                  onChange={(e) =>
-                    handleNestedChange(
-                      "development",
-                      "description",
-                      e.target.value,
-                    )
-                  }
-                  rows="4"
-                  className={errors.developmentDescription ? styles.error : ""}
-                />
-                {errors.developmentDescription && (
-                  <span className={styles.errorText}>
-                    {errors.developmentDescription}
-                  </span>
-                )}
-              </div>
-              <div className={styles.row}>
-                <div className={styles.formGroup}>
-                  <label>Platform *</label>
-                  <select
-                    value={formData.development.platform}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "development",
-                        "platform",
-                        e.target.value,
-                      )
-                    }
-                  >
-                    <option value="Web">Web</option>
-                    <option value="Mobile">Mobile</option>
-                  </select>
-                </div>
-                <div className={styles.formGroup}>
-                  <label>Type/Complexity *</label>
-                  <select
-                    value={formData.development.typeComplexity}
-                    onChange={(e) =>
-                      handleNestedChange(
-                        "development",
-                        "typeComplexity",
-                        e.target.value,
-                      )
-                    }
-                  >
-                    <option value="Vitrine">Vitrine</option>
-                    <option value="Advanced">Advanced</option>
-                  </select>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* Tools Usage */}
-          {showToolsUsage && (
+        <form id="serviceForm" className={styles.form}>
+          {/* ── Tab 1: Basic Info ── */}
+          {activeTab === "basic" && (
             <section className={styles.section}>
               <h3 className={styles.sectionTitle}>
-                <MdBuildCircle /> Tools Usage (auto-calculated by purchase
-                price)
+                <MdBusiness /> Basic Information
               </h3>
-              {errors.toolsUsage && (
-                <div className={styles.errorBox}>{errors.toolsUsage}</div>
+
+              <div className={styles.row}>
+                <div className={styles.formGroup}>
+                  <label>Service Name *</label>
+                  <input
+                    type="text"
+                    name="serviceName"
+                    value={formData.serviceName}
+                    onChange={handleChange}
+                    placeholder="e.g. Social Media Management"
+                    className={errors.serviceName ? styles.error : ""}
+                  />
+                  {errors.serviceName && (
+                    <span className={styles.errorText}>
+                      {errors.serviceName}
+                    </span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Client *</label>
+                  <select
+                    name="client"
+                    value={formData.client}
+                    onChange={handleChange}
+                    className={errors.client ? styles.error : ""}
+                  >
+                    <option value="">Select Client</option>
+                    {clients.map((client) => (
+                      <option key={client._id} value={client._id}>
+                        {client.businessName}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.client && (
+                    <span className={styles.errorText}>{errors.client}</span>
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.formGroup}>
+                  <label>Start Date *</label>
+                  <input
+                    type="date"
+                    name="startDate"
+                    value={formData.startDate}
+                    onChange={handleChange}
+                    className={errors.startDate ? styles.error : ""}
+                  />
+                  {errors.startDate && (
+                    <span className={styles.errorText}>{errors.startDate}</span>
+                  )}
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>End Date *</label>
+                  <input
+                    type="date"
+                    name="endDate"
+                    value={formData.endDate}
+                    onChange={handleChange}
+                    className={errors.endDate ? styles.error : ""}
+                  />
+                  {errors.endDate && (
+                    <span className={styles.errorText}>{errors.endDate}</span>
+                  )}
+                </div>
+              </div>
+
+              <div
+                className={styles.formGroup}
+                style={{ marginBottom: "18px" }}
+              >
+                <label>Service Type *</label>
+                <div className={styles.typeSelector}>
+                  <button
+                    type="button"
+                    className={`${styles.typeBtn} ${formData.serviceProvided === "Marketing" ? styles.typeBtnActive : ""}`}
+                    onClick={() =>
+                      handleChange({
+                        target: { name: "serviceProvided", value: "Marketing" },
+                      })
+                    }
+                  >
+                    <MdCampaign /> Marketing
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.typeBtn} ${formData.serviceProvided === "Production" ? styles.typeBtnActive : ""}`}
+                    onClick={() =>
+                      handleChange({
+                        target: {
+                          name: "serviceProvided",
+                          value: "Production",
+                        },
+                      })
+                    }
+                  >
+                    <MdVideocam /> Production
+                  </button>
+                  <button
+                    type="button"
+                    className={`${styles.typeBtn} ${formData.serviceProvided === "Development" ? styles.typeBtnActive : ""}`}
+                    onClick={() =>
+                      handleChange({
+                        target: {
+                          name: "serviceProvided",
+                          value: "Development",
+                        },
+                      })
+                    }
+                  >
+                    <MdCode /> Development
+                  </button>
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.formGroup}>
+                  <label>Total Price (TND) *</label>
+                  <input
+                    type="number"
+                    name="totalPrice"
+                    value={formData.totalPrice}
+                    onChange={handleChange}
+                    min="0"
+                    step="0.01"
+                    placeholder="0.00"
+                    className={errors.totalPrice ? styles.error : ""}
+                  />
+                  {errors.totalPrice && (
+                    <span className={styles.errorText}>
+                      {errors.totalPrice}
+                    </span>
+                  )}
+                </div>
+              </div>
+
+              <div className={styles.row}>
+                <div className={styles.formGroup}>
+                  <label>Payment Status *</label>
+                  <div className={styles.statusGroup}>
+                    <button
+                      type="button"
+                      className={`${styles.statusBtn} ${styles.statusPending} ${formData.paymentStatus === "Pending" ? styles.statusBtnActive : ""}`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          paymentStatus: "Pending",
+                        }))
+                      }
+                    >
+                      Pending
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.statusBtn} ${styles.statusDone} ${formData.paymentStatus === "Done" ? styles.statusBtnActive : ""}`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          paymentStatus: "Done",
+                        }))
+                      }
+                    >
+                      Done
+                    </button>
+                  </div>
+                </div>
+
+                <div className={styles.formGroup}>
+                  <label>Service Status *</label>
+                  <div className={styles.statusGroup}>
+                    <button
+                      type="button"
+                      className={`${styles.statusBtn} ${styles.statusNotStarted} ${formData.serviceStatus === "Not Started" ? styles.statusBtnActive : ""}`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          serviceStatus: "Not Started",
+                        }))
+                      }
+                    >
+                      Not Started
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.statusBtn} ${styles.statusInProgress} ${formData.serviceStatus === "In Progress" ? styles.statusBtnActive : ""}`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          serviceStatus: "In Progress",
+                        }))
+                      }
+                    >
+                      In Progress
+                    </button>
+                    <button
+                      type="button"
+                      className={`${styles.statusBtn} ${styles.statusCompleted} ${formData.serviceStatus === "Completed" ? styles.statusBtnActive : ""}`}
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          serviceStatus: "Completed",
+                        }))
+                      }
+                    >
+                      Completed
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {/* ── Tab 2: Revenue ── */}
+          {activeTab === "revenue" && (
+            <>
+              {/* Ads Fees */}
+              <section className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  <MdCampaign /> Ads Fees
+                </h3>
+                <div className={styles.adsFeeCheckRow}>
+                  <input
+                    type="checkbox"
+                    id="adsFeesEnabled"
+                    checked={formData.adsFees.enabled}
+                    onChange={(e) =>
+                      handleAdsFeeChange("enabled", e.target.checked)
+                    }
+                  />
+                  <label htmlFor="adsFeesEnabled">
+                    Include Ads Fees (deducted before revenue distribution)
+                  </label>
+                </div>
+                {formData.adsFees.enabled && (
+                  <div className={styles.adsFeeSection}>
+                    <div className={styles.adsFeeRow}>
+                      <div className={styles.formGroup}>
+                        <label>Ads Spend (USD)</label>
+                        <input
+                          type="number"
+                          value={formData.adsFees.amountUSD}
+                          onChange={(e) =>
+                            handleAdsFeeChange("amountUSD", e.target.value)
+                          }
+                          min="0"
+                          step="0.01"
+                          placeholder="0.00"
+                        />
+                      </div>
+                      <div className={styles.formGroup}>
+                        <label>1 USD = ? TND</label>
+                        <input
+                          type="number"
+                          value={formData.adsFees.usdToTND}
+                          onChange={(e) =>
+                            handleAdsFeeChange("usdToTND", e.target.value)
+                          }
+                          min="0"
+                          step="0.01"
+                          placeholder="3.50"
+                        />
+                      </div>
+                    </div>
+                    {adsFeesTND > 0 && (
+                      <div className={styles.adsFeeHint}>
+                        Ads Fees: <strong>{adsFeesTND.toFixed(2)} TND</strong> —
+                        will be added to TND Reserved in Ads page
+                        <br />
+                        Effective price for distribution:{" "}
+                        <strong>{effectivePrice.toFixed(2)} TND</strong>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </section>
+
+              {/* Revenue Distribution */}
+              <section className={styles.section}>
+                <h3 className={styles.sectionTitle}>
+                  <MdPieChart /> Revenue Distribution (must total 100%)
+                </h3>
+                {errors.revenueDistribution && (
+                  <div className={styles.errorBox}>
+                    {errors.revenueDistribution}
+                  </div>
+                )}
+
+                <div className={styles.revenueGrid}>
+                  <div className={styles.formGroup}>
+                    <label>Tools & Charges (%)</label>
+                    <input
+                      type="number"
+                      value={formData.revenueDistribution.toolsAndCharges}
+                      onChange={(e) =>
+                        handleRevenueChange("toolsAndCharges", e.target.value)
+                      }
+                      min="0"
+                      max="100"
+                      step="0.01"
+                    />
+                    <span className={styles.distAmount}>
+                      ={" "}
+                      {(
+                        (effectivePrice *
+                          formData.revenueDistribution.toolsAndCharges) /
+                        100
+                      ).toFixed(2)}{" "}
+                      TND
+                    </span>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Team Share (%)</label>
+                    <input
+                      type="number"
+                      value={formData.revenueDistribution.teamShare}
+                      onChange={(e) =>
+                        handleRevenueChange("teamShare", e.target.value)
+                      }
+                      min="0"
+                      max="100"
+                      step="0.01"
+                    />
+                    <span className={styles.distAmount}>
+                      ={" "}
+                      {(
+                        (effectivePrice *
+                          formData.revenueDistribution.teamShare) /
+                        100
+                      ).toFixed(2)}{" "}
+                      TND
+                    </span>
+                  </div>
+
+                  <div className={styles.formGroup}>
+                    <label>Redix Caisse (%)</label>
+                    <input
+                      type="number"
+                      value={formData.revenueDistribution.redixCaisse}
+                      onChange={(e) =>
+                        handleRevenueChange("redixCaisse", e.target.value)
+                      }
+                      min="0"
+                      max="100"
+                      step="0.01"
+                    />
+                    <span className={styles.distAmount}>
+                      ={" "}
+                      {(
+                        (effectivePrice *
+                          formData.revenueDistribution.redixCaisse) /
+                        100
+                      ).toFixed(2)}{" "}
+                      TND
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  className={`${styles.totalBadge} ${Math.abs(calculateRevenueTotal() - 100) < 0.01 ? styles.valid : styles.invalid}`}
+                >
+                  Total: {calculateRevenueTotal().toFixed(2)}%
+                </div>
+              </section>
+            </>
+          )}
+
+          {/* ── Tab 3: Details ── */}
+          {activeTab === "details" && (
+            <>
+              {/* Service-Specific Fields */}
+              {formData.serviceProvided === "Marketing" && (
+                <section className={styles.section}>
+                  <h3 className={styles.sectionTitle}>
+                    <MdCampaign /> Marketing Details
+                  </h3>
+                  {errors.marketingRequired && (
+                    <div className={styles.errorBox}>
+                      {errors.marketingRequired}
+                    </div>
+                  )}
+                  <div className={styles.row}>
+                    <div className={styles.formGroup}>
+                      <label>Videos Count</label>
+                      <input
+                        type="number"
+                        value={formData.marketing.videosCount}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "marketing",
+                            "videosCount",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
+                        min="0"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Posts Count</label>
+                      <input
+                        type="number"
+                        value={formData.marketing.postsCount}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "marketing",
+                            "postsCount",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
+                        min="0"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Shooting Sessions</label>
+                      <input
+                        type="number"
+                        value={formData.marketing.shootingSessionsCount}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "marketing",
+                            "shootingSessionsCount",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </section>
               )}
 
-              {formData.toolsUsage.length > 0 && (
+              {formData.serviceProvided === "Production" && (
+                <section className={styles.section}>
+                  <h3 className={styles.sectionTitle}>
+                    <MdVideocam /> Production Details
+                  </h3>
+                  {errors.productionRequired && (
+                    <div className={styles.errorBox}>
+                      {errors.productionRequired}
+                    </div>
+                  )}
+                  <div className={styles.row}>
+                    <div className={styles.formGroup}>
+                      <label>Videos Count</label>
+                      <input
+                        type="number"
+                        value={formData.production.videosCount}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "production",
+                            "videosCount",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
+                        min="0"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Pictures Count</label>
+                      <input
+                        type="number"
+                        value={formData.production.picturesCount}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "production",
+                            "picturesCount",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
+                        min="0"
+                      />
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Shooting Sessions</label>
+                      <input
+                        type="number"
+                        value={formData.production.shootingSessionsCount}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "production",
+                            "shootingSessionsCount",
+                            parseInt(e.target.value) || 0,
+                          )
+                        }
+                        min="0"
+                      />
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {formData.serviceProvided === "Development" && (
+                <section className={styles.section}>
+                  <h3 className={styles.sectionTitle}>
+                    <MdCode /> Development Details
+                  </h3>
+                  <div className={styles.formGroup}>
+                    <label>Service Description *</label>
+                    <textarea
+                      value={formData.development.description}
+                      onChange={(e) =>
+                        handleNestedChange(
+                          "development",
+                          "description",
+                          e.target.value,
+                        )
+                      }
+                      rows="4"
+                      placeholder="Describe the development project..."
+                      className={
+                        errors.developmentDescription ? styles.error : ""
+                      }
+                    />
+                    {errors.developmentDescription && (
+                      <span className={styles.errorText}>
+                        {errors.developmentDescription}
+                      </span>
+                    )}
+                  </div>
+                  <div className={styles.row}>
+                    <div className={styles.formGroup}>
+                      <label>Platform *</label>
+                      <select
+                        value={formData.development.platform}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "development",
+                            "platform",
+                            e.target.value,
+                          )
+                        }
+                      >
+                        <option value="Web">Web</option>
+                        <option value="Mobile">Mobile</option>
+                      </select>
+                    </div>
+                    <div className={styles.formGroup}>
+                      <label>Type/Complexity *</label>
+                      <select
+                        value={formData.development.typeComplexity}
+                        onChange={(e) =>
+                          handleNestedChange(
+                            "development",
+                            "typeComplexity",
+                            e.target.value,
+                          )
+                        }
+                      >
+                        <option value="Vitrine">Vitrine</option>
+                        <option value="Advanced">Advanced</option>
+                      </select>
+                    </div>
+                  </div>
+                </section>
+              )}
+
+              {showToolsUsage && (
+                <section className={styles.section}>
+                  <h3 className={styles.sectionTitle}>
+                    <MdBuildCircle /> Tools Usage (auto-calculated by purchase
+                    price)
+                  </h3>
+                  {errors.toolsUsage && (
+                    <div className={styles.errorBox}>{errors.toolsUsage}</div>
+                  )}
+                  {formData.toolsUsage.length > 0 && (
+                    <div className={styles.infoBox}>
+                      <strong>Total Equipment Cost:</strong>{" "}
+                      {formData.toolsUsage
+                        .reduce((sum, tu) => {
+                          const tool = tools.find((t) => t._id === tu.tool);
+                          return sum + (tool?.purchasePrice || 0);
+                        }, 0)
+                        .toLocaleString()}{" "}
+                      TND
+                    </div>
+                  )}
+                  <div className={styles.toolsGrid}>
+                    {tools.map((tool) => {
+                      const usage = formData.toolsUsage.find(
+                        (t) => t.tool === tool._id,
+                      );
+                      return (
+                        <div
+                          key={tool._id}
+                          className={`${styles.toolItem} ${usage ? styles.toolItemActive : ""}`}
+                        >
+                          <label className={styles.toolLabel}>
+                            <input
+                              type="checkbox"
+                              checked={!!usage}
+                              onChange={() => toggleToolUsage(tool._id)}
+                            />
+                            <div className={styles.toolNamePrice}>
+                              <span>{tool.name}</span>
+                              <span className={styles.toolPrice}>
+                                {(tool.purchasePrice || 0).toLocaleString()} TND
+                              </span>
+                            </div>
+                          </label>
+                          {usage && (
+                            <span className={styles.toolPercentBadge}>
+                              {usage.percentage.toFixed(1)}%
+                            </span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {formData.toolsUsage.length > 0 && (
+                    <div
+                      className={`${styles.totalBadge} ${Math.abs(calculateToolsTotal() - 100) < 0.01 ? styles.valid : styles.invalid}`}
+                    >
+                      Total: {calculateToolsTotal().toFixed(2)}%
+                    </div>
+                  )}
+                </section>
+              )}
+            </>
+          )}
+
+          {/* ── Tab 4: Team ── */}
+          {activeTab === "team" && (
+            <section className={styles.section}>
+              <h3 className={styles.sectionTitle}>
+                <MdGroup /> Team Assignment &amp; Share Distribution (must total
+                100%)
+              </h3>
+              {errors.teamMemberShares && (
+                <div className={styles.errorBox}>{errors.teamMemberShares}</div>
+              )}
+
+              {formData.teamMembers.length > 0 && (
                 <div className={styles.infoBox}>
-                  <strong>Total Equipment Cost:</strong>{" "}
-                  {formData.toolsUsage
-                    .reduce((sum, tu) => {
-                      const tool = tools.find((t) => t._id === tu.tool);
-                      return sum + (tool?.purchasePrice || 0);
-                    }, 0)
-                    .toLocaleString()}{" "}
-                  TND
+                  <strong>Total Team Share Amount:</strong>{" "}
+                  {getTotalTeamAmount().toFixed(2)} TND
+                  <span className={styles.muted}>
+                    {" "}
+                    (from {formData.revenueDistribution.teamShare}% of{" "}
+                    {formData.totalPrice} TND)
+                  </span>
                 </div>
               )}
 
-              <div className={styles.toolsGrid}>
-                {tools.map((tool) => {
-                  const usage = formData.toolsUsage.find(
-                    (t) => t.tool === tool._id,
+              <div className={styles.teamGrid}>
+                {teamMembers.map((member) => {
+                  const isSelected = formData.teamMembers.includes(member._id);
+                  const memberShare = formData.teamMemberShares.find(
+                    (s) => s.memberId === member._id,
                   );
+
                   return (
-                    <div
-                      key={tool._id}
-                      className={`${styles.toolItem} ${usage ? styles.toolItemActive : ""}`}
-                    >
-                      <label className={styles.toolLabel}>
+                    <div key={member._id} className={styles.teamMemberCard}>
+                      <label className={styles.teamMemberHeader}>
                         <input
                           type="checkbox"
-                          checked={!!usage}
-                          onChange={() => toggleToolUsage(tool._id)}
+                          checked={isSelected}
+                          onChange={() => handleTeamMemberToggle(member._id)}
                         />
-                        <div className={styles.toolNamePrice}>
-                          <span>{tool.name}</span>
-                          <span className={styles.toolPrice}>
-                            {(tool.purchasePrice || 0).toLocaleString()} TND
+                        <div className={styles.memberInfo}>
+                          <span className={styles.memberName}>
+                            {member.name}
+                          </span>
+                          <span className={styles.memberRole}>
+                            {member.role}
                           </span>
                         </div>
                       </label>
-                      {usage && (
-                        <span className={styles.toolPercentBadge}>
-                          {usage.percentage.toFixed(1)}%
-                        </span>
+
+                      {isSelected && memberShare && (
+                        <div className={styles.memberShareInputs}>
+                          <div className={styles.shareInput}>
+                            <label>Share %</label>
+                            <input
+                              type="number"
+                              value={memberShare.percentage}
+                              onChange={(e) =>
+                                handleTeamMemberShareChange(
+                                  member._id,
+                                  e.target.value,
+                                )
+                              }
+                              min="0"
+                              max="100"
+                              step="0.01"
+                              placeholder="0"
+                            />
+                          </div>
+                          <div className={styles.shareAmount}>
+                            <label>Amount</label>
+                            <span className={styles.amountValue}>
+                              {memberShare.amount.toFixed(2)} TND
+                            </span>
+                          </div>
+                        </div>
                       )}
                     </div>
                   );
                 })}
               </div>
 
-              {formData.toolsUsage.length > 0 && (
+              {formData.teamMembers.length > 0 && (
                 <div
-                  className={`${styles.totalBadge} ${Math.abs(calculateToolsTotal() - 100) < 0.01 ? styles.valid : styles.invalid}`}
+                  className={`${styles.totalBadge} ${Math.abs(calculateTeamSharesTotal() - 100) < 0.01 ? styles.valid : styles.invalid}`}
                 >
-                  Total: {calculateToolsTotal().toFixed(2)}%
+                  Total Shares: {calculateTeamSharesTotal().toFixed(2)}%
                 </div>
               )}
             </section>
           )}
-
-          {/* Team Assignment */}
-          <section className={styles.section}>
-            <h3 className={styles.sectionTitle}>
-              <MdGroup /> Team Assignment &amp; Share Distribution (must total
-              100%)
-            </h3>
-            {errors.teamMemberShares && (
-              <div className={styles.errorBox}>{errors.teamMemberShares}</div>
-            )}
-
-            {formData.teamMembers.length > 0 && (
-              <div className={styles.infoBox}>
-                <strong>Total Team Share Amount:</strong>{" "}
-                {getTotalTeamAmount().toFixed(2)} TND
-                <span className={styles.muted}>
-                  {" "}
-                  (from {formData.revenueDistribution.teamShare}% of{" "}
-                  {formData.totalPrice} TND)
-                </span>
-              </div>
-            )}
-
-            <div className={styles.teamGrid}>
-              {teamMembers.map((member) => {
-                const isSelected = formData.teamMembers.includes(member._id);
-                const memberShare = formData.teamMemberShares.find(
-                  (s) => s.memberId === member._id,
-                );
-
-                return (
-                  <div key={member._id} className={styles.teamMemberCard}>
-                    <label className={styles.teamMemberHeader}>
-                      <input
-                        type="checkbox"
-                        checked={isSelected}
-                        onChange={() => handleTeamMemberToggle(member._id)}
-                      />
-                      <div className={styles.memberInfo}>
-                        <span className={styles.memberName}>{member.name}</span>
-                        <span className={styles.memberRole}>{member.role}</span>
-                      </div>
-                    </label>
-
-                    {isSelected && memberShare && (
-                      <div className={styles.memberShareInputs}>
-                        <div className={styles.shareInput}>
-                          <label>Share %</label>
-                          <input
-                            type="number"
-                            value={memberShare.percentage}
-                            onChange={(e) =>
-                              handleTeamMemberShareChange(
-                                member._id,
-                                e.target.value,
-                              )
-                            }
-                            min="0"
-                            max="100"
-                            step="0.01"
-                            placeholder="0"
-                          />
-                        </div>
-                        <div className={styles.shareAmount}>
-                          <label>Amount</label>
-                          <span className={styles.amountValue}>
-                            {memberShare.amount.toFixed(2)} TND
-                          </span>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            {formData.teamMembers.length > 0 && (
-              <div
-                className={`${styles.totalBadge} ${Math.abs(calculateTeamSharesTotal() - 100) < 0.01 ? styles.valid : styles.invalid}`}
-              >
-                Total Shares: {calculateTeamSharesTotal().toFixed(2)}%
-              </div>
-            )}
-          </section>
-
-          {/* Form Actions */}
-          <div className={styles.footer}>
-            <button
-              type="button"
-              className={styles.cancelBtn}
-              onClick={onClose}
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className={styles.submitBtn}
-              disabled={loading}
-            >
-              {loading ? (
-                <span className={styles.spinner} />
-              ) : editData ? (
-                <MdSave />
-              ) : (
-                <MdAdd />
-              )}
-              {loading
-                ? "Saving..."
-                : editData
-                  ? "Update Service"
-                  : "Create Service"}
-            </button>
-          </div>
         </form>
+
+        {/* Footer */}
+        <div className={styles.footer}>
+          <button type="button" className={styles.cancelBtn} onClick={onClose}>
+            Cancel
+          </button>
+          <div className={styles.footerNav}>
+            {activeTabIndex > 0 && (
+              <button
+                type="button"
+                className={styles.navBtn}
+                onClick={() => {
+                  setErrors({});
+                  setActiveTab(TABS[activeTabIndex - 1].id);
+                }}
+              >
+                <MdNavigateBefore /> Back
+              </button>
+            )}
+            {activeTab !== "team" ? (
+              <button
+                type="button"
+                className={styles.navBtn}
+                onClick={() => {
+                  setErrors({});
+                  setActiveTab(TABS[activeTabIndex + 1].id);
+                }}
+              >
+                Next <MdNavigateNext />
+              </button>
+            ) : (
+              <button
+                type="button"
+                className={styles.submitBtn}
+                disabled={loading}
+                onClick={handleSubmit}
+              >
+                {loading ? (
+                  <span className={styles.spinner} />
+                ) : editData ? (
+                  <MdSave />
+                ) : (
+                  <MdAdd />
+                )}
+                {loading
+                  ? "Saving..."
+                  : editData
+                    ? "Update Service"
+                    : "Create Service"}
+              </button>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );
